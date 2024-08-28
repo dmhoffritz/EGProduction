@@ -1,0 +1,6 @@
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="addBiddersScreenFlowComponent" ref="addBiddersScreenFlowComponent" label="Add Bidders Screen Flow Component">
+		Example Description
+	</aura:example>
+</aura:documentation>

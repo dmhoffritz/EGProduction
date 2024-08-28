@@ -1,0 +1,5 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+        <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    	<aura:attribute access="global" type="String" name="recordId"/>
+        <lightning:flow aura:id="flowData"/>
+</aura:component>
