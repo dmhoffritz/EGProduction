@@ -253,7 +253,7 @@
             </script>    
             
             <script async="async" defer="defer"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1LzmP-MEyPNoOelRYwzZrLTf8bDn7ogU&callback=initMap&libraries=&v=weekly">
+            src="https://maps.googleapis.com/maps/api/js?key=GOOGLEAPIKEYHERE&callback=initMap&libraries=&v=weekly">
                 </script>
             <script 
             src="https://polyfill.io/v3/polyfill.min.js?features=default">
