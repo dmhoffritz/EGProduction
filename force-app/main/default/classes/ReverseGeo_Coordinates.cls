@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : Derek Hoffritz
+ * @group             : 
+ * @last modified on  : 08-28-2024
+ * @last modified by  : Derek Hoffritz
+**/
 public class ReverseGeo_Coordinates  {
     
     public static String jsonResults;
@@ -30,10 +37,10 @@ public class ReverseGeo_Coordinates  {
     //method used to parse the JSON response from google's geocode HTTP callout
     public static void parseJSONResponse(String address, String locationId) {
         //FreightTM Key (Not Working)
-        //String key='AIzaSyA1LzmP-MEyPNoOelRYwzZrLTf8bDn7ogU';
+        //String key='';
         
         //Map Plotter Key (Working)
-        String key = 'AIzaSyCuWLezbnyCuIUslh6xk32QPp7aDtpAiUM';
+        String key = 'GOOGLEAPIKEYHERE';
         Http httpProtocol = new Http();
         // Create HTTP request to send.
         HttpRequest request = new HttpRequest();
