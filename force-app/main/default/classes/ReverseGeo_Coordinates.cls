@@ -40,7 +40,11 @@ public class ReverseGeo_Coordinates  {
         //String key='';
         
         //Map Plotter Key (Working)
+<<<<<<< HEAD
         String key = 'GOOGLEAPIKEYHERE';
+=======
+        String key = 'GoogleAPIKeyHere';
+>>>>>>> 65603b36ee90e3b1a840270f87e964a3685668cc
         Http httpProtocol = new Http();
         // Create HTTP request to send.
         HttpRequest request = new HttpRequest();
