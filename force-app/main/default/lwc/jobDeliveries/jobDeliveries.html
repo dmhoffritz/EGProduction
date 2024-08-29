@@ -1,0 +1,151 @@
+<!--
+  @description       : 
+  @author            : Ethan Myers
+  @group             : 
+  @last modified on  : 02-20-2023
+  @last modified by  : Ethan Myers
+-->
+<template>
+    <!-- AUTOLAUNCHED FLOW SHOWS HERE -->
+    <template if:true={autoLaunchFlow}>
+        <lightning-flow onstatuschange={handleFlowStatusChange} flow-api-name={flowApiName}
+            flow-input-variables={inputVariables}>
+        </lightning-flow>
+    </template>
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container">
+                            <lightning-icon icon-name={headerIcon} size="medium"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate"
+                                        title={listLabel}>{listLabel}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <ul class="slds-button-group-list">
+                            <!-- ORGANIZE LOAD ACTIONS HERE -->
+                            <li>
+                                <button class="slds-button slds-button_neutral" onclick={downloadLoadData}>Export to
+                                    Excel</button>
+                            </li>
+                            <li>
+                                <lightning-button variant="brand" label="Batch BOLs" onclick={batchBOL}></lightning-button>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-page-header__row slds-page-header__row_gutters">
+            <div class="slds-page-header__col-details">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-8">
+                        <!-- Status dropdown list here -->
+                        <template if:true={statusOptions}>
+                            <lightning-combobox name="statusPiclist" label="Status" value={statusSelection}
+                                placeholder="Select a Status" options={statusOptions} onchange={updateStatus}>
+                            </lightning-combobox>
+                        </template>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8">
+                        <lightning-input type="date" name="startDate" label="Received After" value={startDate}
+                            onchange={updateStartDate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8">
+                        <lightning-input type="date" name="endDate" label="Received Before" value={endDate}
+                            onchange={updateEndDate}></lightning-input>
+                    </div>
+                    <div class="tableControls">
+                        <lightning-button-icon class="refreshBtn" icon-name="utility:refresh" variant="border-filled"
+                            alternative-text="Refresh" title="Refresh" onclick={refreshData}></lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-page-header__row slds-page-header__row_gutters">
+            <div class="slds-page-header__col-details">
+                <ul class="slds-page-header__detail-row">
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Total Mat Qty">Total Mat Qty</div>
+                        <div class="slds-truncate" title={totalMatQty}>{totalMatQty}</div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Total Rate">Total Rate</div>
+                        <div class="slds-truncate" title={totalCarrierRate}>{totalCarrierRate}</div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="Total Distance">Total Distance</div>
+                        <div class="slds-truncate" title={totalDistance}>{totalDistance}</div>
+                    </li>
+                    <li class="slds-page-header__detail-block">
+                        <div class="slds-text-title slds-truncate" title="$/mi.">
+                            $/mi. <lightning-helptext class="tooltip-css" content="Averaging loads with rate and distance data present."></lightning-helptext>
+                        </div>
+                        <div class="slds-truncate" title={ratePerMile}>{ratePerMile}</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOAD LIST HERE -->
+    <div class="itemTable">
+        <template if:true={items}>
+            <lightning-datatable key-field="itemId" data={items} columns={columns} show-row-number-column
+                column-widths-mode="auto" onrowselection={storeSelectedItems}
+                default-sort-direction={defaultSortDirection} sorted-direction={sortDirection} sorted-by={sortedBy}
+                onsort={onHandleSort}>
+            </lightning-datatable>
+        </template>
+    </div>
+
+    <!-- MODAL -->
+    <template if:true={screenFlow}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick={handleModalClose}>
+                    <lightning-icon icon-name="utility:close" size="medium" class="whiteIcon"></lightning-icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Update Invoice #</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-flow onstatuschange={handleFlowStatusChange} flow-api-name="Item_Log_Mat_Invoice"
+                        flow-input-variables={inputVariables}>
+                    </lightning-flow>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template if:false={isLoaded}>
+        <div class="demo-only demo-only_viewport demo--inverse" style="position:relative">
+            <div class="slds-spinner_container slds-is-fixed">
+                <div role="status" class="slds-spinner slds-spinner_medium">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

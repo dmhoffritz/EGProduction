@@ -1,0 +1,621 @@
+<aura:component controller="CarrierPortal_Cont">
+    <aura:attribute name="profile_id" type="String"/>
+    <aura:attribute name="userType" type="String"/>
+    <aura:attribute name="current_user" type="Portal_User_Registration__c"/>
+    <aura:attribute name="related_carrier" type="FreightTM__Carrier__c"/>
+    <aura:attribute name="related_factorer" type="Factoring_Company__c"/>
+    
+    <aura:attribute name="state_options" type="List" default="[]"/>
+    <aura:attribute name="country" type="String" default="United States"/>
+    
+    <aura:attribute name="disableEdit" type="Boolean" default="true"/>
+    <aura:attribute name="enableEdit" type="Boolean" default="false"/>
+    
+    <aura:attribute name="displaySuccess" type="Boolean" default="false"/>
+    <aura:attribute name="displayError" type="Boolean" default="false"/>
+    
+    
+    <aura:attribute name="disableBillingEdit" type="Boolean" default="true"/>
+    <aura:attribute name="enableBillingEdit" type="Boolean" default="false"/>
+    
+    <aura:attribute name="contact_toggle" type="Boolean" default="true"/>
+    <aura:attribute name="billing_toggle" type="Boolean" default="false"/>
+    <aura:attribute name="credential_toggle" type="Boolean" default="false"/>
+    <aura:attribute name="insurance_toggle" type="Boolean" default="false"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:if isTrue="{!v.userType != 'Factoring_Company'}">
+        <!-- TOAST MSGS -->
+        <aura:if isTrue="{!v.displaySuccess}">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                    <span class="slds-assistive-text">success</span>
+                    <lightning:icon class="success-icon" iconName="action:check" size="x-small"/>
+                    
+                    <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                    </span>
+                    
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">Successfully updated company profile</h2>
+                    </div>
+                    <div class="slds-notify__close">
+                        <a onclick="{!c.closeToast}" style="text-decoration: none; font-size: 20px">X</a>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        <!-- END TOAST MSGS -->
+        
+        <!-- CARRIER CONTACT INFO -->
+        <div class="demo-only info_panel">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                        <lightning:icon iconName="custom:custom98" size="large" alternativeText="Avatar"/>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="First Name Last Name">
+                        <a style="color:#62BF34; font-size: 16px;" onclick="{!c.toggleContact}">
+                            {!v.related_carrier.Name}
+                            <aura:if isTrue="{!v.contact_toggle}">
+                                <lightning:icon iconName="utility:arrowup" size="x-small" alternativeText="Collapse Contact Info"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.contact_toggle == false}">
+                                <lightning:icon iconName="utility:down" size="x-small" alternativeText="Drop Down Contact Info"/>
+                            </aura:if>
+                        </a>
+                    </h3>
+                    <div aura:id="displayContact">
+                        <aura:if isTrue="{!v.disableEdit}">
+                            <div class="pbBody">
+                                <div style="display: block" class="pbSubsection">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="text" name="primary_contact" label="Primary Contact" value="{!v.related_carrier.FreightTM__Primary_Contact__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input type="tel" style="color:black" name="phone" label="Phone" value="{!v.related_carrier.FreightTM__Phone__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="text" name="title" label="Title" value="{!v.related_carrier.FreightTM__Title__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input type="text" style="color:black" name="email" label="Email" value="{!v.related_carrier.FreightTM__Email__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="url" name="website" label="Website" value="{!v.related_carrier.FreightTM__Website__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input type="text" style="color:black" name="fax" label="Fax" value="{!v.related_carrier.FreightTM__Fax__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </aura:if>
+                    </div>
+                    <aura:if isTrue="{!v.enableEdit}">
+                        <div class="pbBody">
+                            <div style="display: block" class="pbSubsection">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="primary_contact" label="Primary Contact" value="{!v.related_carrier.FreightTM__Primary_Contact__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="tel" style="color:black" name="phone" label="Phone" value="{!v.related_carrier.FreightTM__Phone__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="title" label="Title" value="{!v.related_carrier.FreightTM__Title__c}" disabled="false"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="text" style="color:black" name="email" label="Email" value="{!v.related_carrier.FreightTM__Email__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="url" name="website" label="Website" value="{!v.related_carrier.FreightTM__Website__c}" disabled="false"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="text" style="color:black" name="fax" label="Fax" value="{!v.related_carrier.FreightTM__Fax__c}" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+                <aura:if isTrue="{!v.disableEdit}">
+                    <lightning:button label="Edit" iconName="utility:edit" iconPosition="left" variant="brand" onclick="{!c.editInfo}"/>
+                </aura:if>
+                <aura:if isTrue="{!v.enableEdit}">
+                    <lightning:button label="Save" variant="success" title="Save" onclick="{!c.handleSave}"/>
+                </aura:if>
+            </article>
+        </div>  
+        <!-- END CARRIER CONTACT INFO -->
+        <br/>
+        
+        <br/>
+        
+        <!-- CARRIER BILLING -->
+        <div class="demo-only info_panel">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                        <lightning:icon iconName="standard:currency" size="large" alternativeText="Billing"/>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="Billing">
+                        <a style="color:#62BF34; font-size: 16px;" onclick="{!c.toggleBilling}">
+                            Accounting
+                            <aura:if isTrue="{!v.billing_toggle}">
+                                <lightning:icon iconName="utility:arrowup" size="x-small" alternativeText="Collapse Billing Info"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.billing_toggle == false}">
+                                <lightning:icon iconName="utility:down" size="x-small" alternativeText="Drop Down Billing Info"/>
+                            </aura:if>
+                        </a>
+                    </h3>
+                    <div class="billing_panel" aura:id="displayBilling">
+                        <aura:if isTrue="{!v.disableBillingEdit}">
+                            <div class="pbBody">
+                                <div style="display: block" class="pbSubsection">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <colgroup>
+                                            <col span="1"/>
+                                            <col span="1"/>
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="text" name="billing_contact" label="Billing Contact" value="{!v.related_carrier.Billing_Contact__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                                <td class="table_data" rowspan="3">
+                                                    <span>
+                                                        <lightning:inputAddress style="float:right; color:rgb(116, 116, 116);"
+                                                                                streetLabel = "Billing Street"
+                                                                                cityLabel = "Billing City"
+                                                                                countryLabel="Country"
+                                                                                provinceLabel="Billing State"
+                                                                                postalCodeLabel="Billing Zip"
+                                                                                street = "{!v.related_carrier.FreightTM__Billing_Address__c}"
+                                                                                city = "{!v.related_carrier.FreightTM__Billing_City__c}"
+                                                                                province = "{!v.related_carrier.FreightTM__Billing_State_Province__c}"
+                                                                                postalCode="{!v.related_carrier.FreightTM__Billing_Zip_Code__c}"
+                                                                                country="{!v.country}"
+                                                                                provinceOptions="{!v.state_options}"
+                                                                                countryDisabled="true"
+                                                                                disabled="true"
+                                                                                />           
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="tel" name="billing_phone" label="Billing Phone" value="{!v.related_carrier.Billing_Phone__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="email" name="billing_email" label="Billing Email" value="{!v.related_carrier.Billing_Email__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </aura:if>
+                    </div>
+                    <aura:if isTrue="{!v.enableBillingEdit}">
+                        <div class="pbBody">
+                            <div style="display: block" class="pbSubsection">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <colgroup>
+                                        <col span="1"/>
+                                        <col span="1"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="billing_contact" label="Billing Contact" value="{!v.related_carrier.Billing_Contact__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data" rowspan="3">
+                                                <span>
+                                                    <lightning:inputAddress style="color:black"
+                                                                            addressLabel = "Billing Address"
+                                                                            streetLabel = "Billing Street"
+                                                                            cityLabel = "Billing City"
+                                                                            countryLabel="Country"
+                                                                            provinceLabel="Billing State"
+                                                                            postalCodeLabel="Billing Zip"
+                                                                            street = "{!v.related_carrier.FreightTM__Billing_Address__c}"
+                                                                            city = "{!v.related_carrier.FreightTM__Billing_City__c}"
+                                                                            province = "{!v.related_carrier.FreightTM__Billing_State_Province__c}"
+                                                                            postalCode="{!v.related_carrier.FreightTM__Billing_Zip_Code__c}"
+                                                                            country="{!v.country}"
+                                                                            provinceOptions="{!v.state_options}"
+                                                                            countryDisabled="true"
+                                                                            disabled="false"
+                                                                            required="true"
+                                                                            />           
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="tel" name="billing_phone" label="Billing Phone" value="{!v.related_carrier.Billing_Phone__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="email" name="billing_email" label="Billing Email" value="{!v.related_carrier.Billing_Email__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+                <aura:if isTrue="{!v.disableBillingEdit}">
+                    <lightning:button label="Edit" iconName="utility:edit" iconPosition="left" variant="brand" onclick="{!c.editBillingInfo}"/>
+                </aura:if>
+                <aura:if isTrue="{!v.enableBillingEdit}">
+                    <lightning:button label="Save" variant="success" title="Save" onclick="{!c.handleSave}"/>
+                </aura:if>
+            </article>
+        </div>  
+        <!-- END CARRIER BILLING -->
+        <br/>
+        
+        <br/>
+        
+        <!-- CARRIER CREDENTIALS -->
+        <div class="demo-only info_panel">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                        <lightning:icon iconName="standard:product" size="large" alternativeText="Credentials"/>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="Carrier Credentials">
+                        <a style="color:#62BF34; font-size: 16px" onclick="{!c.toggleCredentials}">
+                            Carrier Credentials
+                            <aura:if isTrue="{!v.credential_toggle}">
+                                <lightning:icon iconName="utility:arrowup" size="x-small" alternativeText="Collapse Credential Info"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.credential_toggle == false}">
+                                <lightning:icon iconName="utility:down" size="x-small" alternativeText="Drop Down Credential Info"/>
+                            </aura:if>
+                        </a>  
+                    </h3>
+                    <div class="credential_panel" aura:id="displayCredentials">
+                        <div class="pbBody">
+                            <div style="display: block" class="pbSubsection">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="status" label="Activity Status" value="{!v.related_carrier.FreightTM__On_boarding_Status__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="mc_num" label="MC/MC/FF #" value="{!v.related_carrier.FreightTM__MC_MX_FF_Number__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="number" style="color:black" name="num_drivers" label="Number of Drivers" value="{!v.related_carrier.FreightTM__Number_of_Drivers__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="usdot_num" label="USDOT #" value="{!v.related_carrier.FreightTM__USDOT_Number__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="text" style="color:black" name="scac_code" label="SCAC Code" value="{!v.related_carrier.FreightTM__SCAC_Code__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="text" style="color:black" name="fed_id" label="Federal ID #" value="{!v.related_carrier.FreightTM__Federal_ID__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>  
+        <!-- END CARRIER CREDENTIALS -->
+        
+        <br/>
+        
+        <br/>
+        
+        <!-- CARRIER INSURANCE -->
+        <div class="demo-only info_panel">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                        <lightning:icon iconName="standard:form" size="large" alternativeText="Insurance"/>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="Carrier Insurance">
+                        <a style="color:#62BF34; font-size: 16px" onclick="{!c.toggleInsurance}">
+                            Insurance
+                            <aura:if isTrue="{!v.insurance_toggle}">
+                                <lightning:icon iconName="utility:arrowup" size="x-small" alternativeText="Collapse Insurance Info"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.insurance_toggle == false}">
+                                <lightning:icon iconName="utility:down" size="x-small" alternativeText="Drop Down Insurance Info"/>
+                            </aura:if>
+                        </a>
+                    </h3>
+                    <div class="insurance_panel" aura:id="displayInsurance">
+                        <div class="pbBody">
+                            <div style="display: block" class="pbSubsection">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="number" name="cargo_ins" label="Cargo Insurance Amount" formatter="currency" value="{!v.related_carrier.FreightTM__Cargo_Insurance_Amount__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="number" name="liability_ins" label="Liability Insurance Amount" formatter="currency" value="{!v.related_carrier.FreightTM__Liability_Insurance_Amount__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="text" style="color:black" name="cargo_exp" label="Cargo Insurance Expiration" value="{!v.related_carrier.FreightTM__Cargo_Insurance_Expiration__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input type="text" style="color:black" name="liability_exp" label="Liability Insurance Expiration" value="{!v.related_carrier.FreightTM__Liability_Insurance_Expiration__c}" disabled="true"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div> 
+        <!-- END CARRIER INSURANCE -->
+    </aura:if>
+    
+    <aura:if isTrue="{!v.userType == 'Factoring_Company'}">
+        <!-- TOAST MSGS -->
+        <aura:if isTrue="{!v.displaySuccess}">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                    <span class="slds-assistive-text">success</span>
+                    <lightning:icon class="success-icon" iconName="action:check" size="x-small"/>
+                    
+                    <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                    </span>
+                    
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">Successfully updated company profile</h2>
+                    </div>
+                    <div class="slds-notify__close">
+                        <a onclick="{!c.closeToast}" style="text-decoration: none; font-size: 20px">X</a>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        <!-- END TOAST MSGS -->
+        
+        <!-- FACTORING CONTACT INFO -->
+        <div class="demo-only info_panel">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                        <lightning:icon iconName="standard:currency" size="large" alternativeText="Billing"/>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="Billing">
+                        <a style="color:#62BF34; font-size: 16px;">
+                            Accounting
+                        </a>
+                    </h3>
+                    <div>
+                        <aura:if isTrue="{!v.disableBillingEdit}">
+                            <div class="pbBody">
+                                <div style="display: block" class="pbSubsection">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <colgroup>
+                                            <col span="1"/>
+                                            <col span="1"/>
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="text" name="billing_contact" label="Billing Contact" value="{!v.related_factorer.PrimaryContact__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                                <td class="table_data" rowspan="3">
+                                                    <span>
+                                                        <lightning:inputAddress style="float:right; color:rgb(116, 116, 116);"
+                                                                                streetLabel = "Billing Street"
+                                                                                cityLabel = "Billing City"
+                                                                                countryLabel="Country"
+                                                                                provinceLabel="Billing State"
+                                                                                postalCodeLabel="Billing Zip"
+                                                                                street = "{!v.related_factorer.Street__c}"
+                                                                                city = "{!v.related_factorer.City__c}"
+                                                                                province = "{!v.related_factorer.State__c}"
+                                                                                postalCode="{!v.related_factorer.ZipCode__c}"
+                                                                                country="{!v.country}"
+                                                                                provinceOptions="{!v.state_options}"
+                                                                                countryDisabled="true"
+                                                                                disabled="true"
+                                                                                />           
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="tel" name="billing_phone" label="Billing Phone" value="{!v.related_factorer.Phone__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_data">
+                                                    <span>
+                                                        <lightning:input style="color:black" type="email" name="billing_email" label="Billing Email" value="{!v.related_factorer.Email__c}" disabled="true"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </aura:if>
+                    </div>
+                    <aura:if isTrue="{!v.enableBillingEdit}">
+                        <div class="pbBody">
+                            <div style="display: block" class="pbSubsection">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <colgroup>
+                                        <col span="1"/>
+                                        <col span="1"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="text" name="billing_contact" label="Billing Contact" value="{!v.related_factorer.PrimaryContact__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                            <td class="table_data" rowspan="3">
+                                                <span>
+                                                    <lightning:inputAddress style="color:black"
+                                                                            addressLabel = "Billing Address"
+                                                                            streetLabel = "Billing Street"
+                                                                            cityLabel = "Billing City"
+                                                                            countryLabel="Country"
+                                                                            provinceLabel="Billing State"
+                                                                            postalCodeLabel="Billing Zip"
+                                                                            street = "{!v.related_factorer.Street__c}"
+                                                                            city = "{!v.related_factorer.City__c}"
+                                                                            province = "{!v.related_factorer.State__c}"
+                                                                            postalCode="{!v.related_factorer.ZipCode__c}"
+                                                                            country="{!v.country}"
+                                                                            provinceOptions="{!v.state_options}"
+                                                                            countryDisabled="true"
+                                                                            disabled="false"
+                                                                            required="true"
+                                                                            />           
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="tel" name="billing_phone" label="Billing Phone" value="{!v.related_factorer.Phone__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table_data">
+                                                <span>
+                                                    <lightning:input style="color:black" type="email" name="billing_email" label="Billing Email" value="{!v.related_factorer.Email__c}" required="true" disabled="false"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+                <aura:if isTrue="{!v.disableBillingEdit}">
+                    <lightning:button label="Edit" iconName="utility:edit" iconPosition="left" variant="brand" onclick="{!c.editBillingInfo}"/>
+                </aura:if>
+                <aura:if isTrue="{!v.enableBillingEdit}">
+                    <lightning:button label="Save" variant="success" title="Save" onclick="{!c.handleSave}"/>
+                </aura:if>
+            </article>
+        </div>  
+        <!-- END FACTORING CONTACT INFO -->
+    </aura:if>
+    <br/>
+    
+</aura:component>

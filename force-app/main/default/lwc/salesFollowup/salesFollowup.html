@@ -1,0 +1,28 @@
+<template>
+    <template if:true={showBids}>
+    <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+        <span class="slds-assistive-text">warning</span>
+        <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+            title="Warning">
+            <lightning-icon icon-name="utility:warning" size="x-small"></lightning-icon>
+        </span>
+        <h2 style="font-weight: bold">The following bids show that their project starts in the next 30 days. Please update their status.
+        </h2>
+    </div>
+    </template>
+    <template if:false={showBids}>
+        <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+            <span class="slds-assistive-text">success</span>
+            <span class="slds-icon_container slds-icon-utility-success slds-m-right_x-small"
+                title="Success">
+                <lightning-icon icon-name="utility:success" size="x-small"></lightning-icon>
+            </span>
+            <h2 style="font-weight: bold">Congrats! You have successfully updated all of your bids closing in the next 30 days.</h2>
+        </div>
+    </template>
+    <template for:each={bids} for:item="bid">
+        <div key={bid.Id}>
+            <c-custom-bid-card bid={bid} onbidupdate={updateBidStatus}></c-custom-bid-card>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,42 @@
+.THIS {
+    
+}
+
+.THIS .slds-page-header {
+    background-color: #272727 !important;
+    color: white;
+    margin: 10px;
+    font-family: 'industry' !important;
+}
+
+.THIS span {
+    font-family: 'industry' !important;
+}
+
+.THIS .slds-page-header__detail-row {
+	background-color: #B6B6B6 !important;
+    color: black !important;
+}
+
+.THIS .slds-button_neutral {
+    margin: 5px !important;
+    background-color: #62BF34 !important;
+    color: black !important;
+    border: none !important;
+}
+
+.THIS .slds-button_neutral:hover {
+    background-color: #4d9729 !important;
+}
+
+.THIS .slds-button_destructive {
+    background-color: red !important;
+    border-color: rgb(186, 5, 23) !important;
+    text-color: white !important;
+}
+
+.THIS .slds-button_destructive:hover {
+	background-color: rgb(142, 3, 15) !important;
+    border-color: rgb(186, 5, 23) !important;
+    text-color: white !important;
+}

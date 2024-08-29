@@ -1,0 +1,132 @@
+<template>
+
+
+    <lightning-button-icon icon-name="utility:delete" onclick={deleteItem} title="Delete Item" class="deleteButton">
+    </lightning-button-icon>
+    <lightning-tile label={matItem.customCommodity} href="javascript: void(0)"
+        style="padding: 1rem; border-top: 3px solid black; border-bottom: 3px solid black; background: rgb(40%, 80%, 20%, 0.5); border-radius: 5px; font-weight: bold">
+        <div class="slds-grid slds-grid_pull-padded-medium">
+            <div class="slds-col slds-p-horizontal_medium">
+                <lightning-radio-group label="Quote As" variant="label-inline" options={sellTypeOptions}
+                    value={sellType} onchange={updateSellType} required type="radio"></lightning-radio-group>
+            </div>
+            <div class="slds-col slds-p-horizontal_medium" style="width: 25%">
+                <template if:true={leaseOrRental}>
+                    <lightning-input type="number" label="Duration (mo.)" value={duration} onchange={updateDuration}
+                        required>
+                    </lightning-input>
+                </template>
+            </div>
+        </div>
+        <br />
+        <dl class="slds-dl_horizontal">
+
+            <lightning-record-edit-form onsuccess={handleSuccess} object-api-name="RFP_Item__c" style="width: 100%;">
+                <dl class="slds-dl_horizontal">
+                    <lightning-messages></lightning-messages>
+
+
+
+                    <lightning-input-field field-name="Product_Family__c" value="Mat Sales" style="display:none"
+                        disabled>
+                    </lightning-input-field>
+
+
+                    <br />
+                    <dt class="slds-dl_horizontal__label">
+                        <p class="slds-truncate" title="Product Type">Product Type:</p>
+                    </dt>
+
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                        <lightning-input-field field-name="Product_Type__c" value={prodType}
+                            onchange={updateProductType} variant="label-hidden" required></lightning-input-field>
+                        <!--
+                        <lightning-input-field field-name="Product_Type__c" value={prodType} onchange={updateProductType}
+                            variant="label-hidden" required>
+                        </lightning-input-field>
+                        <lightning-combobox name="productType" label="Product Type" variant="label-hidden" value={prodType} 
+                            onchange={updateProductType} required></lightning-combobox>
+                        -->
+                    </dd>
+                    <br />
+                    <!-- VALIDATE DATA FROM APEX CONTROLLER & DISPLAY ERROR IF NO RESULTS -->
+                    <!--
+                    <template if:true={nameResponse.data}>
+                        <dt class="slds-dl_horizontal__label">
+                            <p class="slds-truncate" title="Size">Size:</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <lightning-combobox name="matItemSize" label="Size" variant="label-hidden" value={prodName}
+                                placeholder="Select Product" options={nameResponse.data} onchange={handleNameSelection}
+                                required>
+                            </lightning-combobox>
+                        </dd>
+                    </template>
+                    <template if:true={nameResponse.error}>
+                        <c-error-panel errors={nameResponse.error}></c-error-panel>
+                    </template>
+                -->
+                    <dt class="slds-dl_horizontal__label">
+                        <p class="slds-truncate" title="Size">Size:</p>
+                    </dt>
+                    <template if:true={nameResponse.data}>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <lightning-combobox name="matItemSize" label="Size" variant="label-hidden" value={prodId}
+                                placeholder="Select Product" options={nameResponse.data} onchange={handleNameSelection}
+                                required>
+                            </lightning-combobox>
+                        </dd>
+                    </template>
+                    <template if:true={nameResponse.error}>
+                        <c-error-panel errors={nameResponse.error}></c-error-panel>
+                    </template>
+                    <br />
+                    <dt class="slds-dl_horizontal__label">
+                        <p class="slds-truncate" title="Quantity">Qty:</p>
+                    </dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                        <lightning-input-field field-name="Quantity__c" value={qty} onchange={updateQty}
+                            variant="label-hidden"></lightning-input-field>
+                    </dd>
+                    <br />
+                    <dt class="slds-dl_horizontal__label">
+                        <p class="slds-truncate" title="Mat Grade">Mat Grade:</p>
+                    </dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                        <lightning-input-field field-name="MAT_Grade__c" value={grade} onchange={updateMatGrade}
+                            variant="label-hidden">
+                        </lightning-input-field>
+                    </dd>
+                    <dt class="slds-dl_horizontal__label">
+                        <p class="slds-truncate" title="Notes">Notes:</p>
+                    </dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                        <lightning-input-field field-name="Notes__c" value={notes} onchange={updateNotes}
+                            variant="label-hidden" placeholder="Provide any additional details here...">
+                        </lightning-input-field>
+                    </dd>
+                </dl>
+            </lightning-record-edit-form>
+            <!--
+            <br />
+            <dt class="slds-dl_horizontal__label">
+                <p class="slds-truncate" title="Qty">Qty:</p>
+            </dt>
+            <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                <lightning-input type="number" name="matItemQty" value={qty} variant="label-hidden"
+                    onchange={updateQty}></lightning-input>
+            </dd>
+            <br />
+            <dt class="slds-dl_horizontal__label">
+                <p class="slds-truncate" title="Grade">Grade:</p>
+            </dt>
+            <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                <lightning-combobox name="matItemGrade" label="Grade" value={grade} options={matGradeOptions}
+                    onchange={updateMatGrade} variant="label-hidden">
+                </lightning-combobox>
+            </dd>
+        -->
+        </dl>
+    </lightning-tile>
+
+</template>

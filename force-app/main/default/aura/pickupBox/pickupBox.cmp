@@ -1,0 +1,167 @@
+<aura:component controller="driverPortal_Cont">
+    <aura:attribute name="loadId" type="String" default="" />
+    <aura:attribute name="loadStatus" type="String" default="" />
+    <aura:attribute name="locationType" type="String" default="" />
+    <aura:attribute name="iconName" type="String" default="standard:proposition" />
+    <aura:attribute name="location" type="String" default="" />
+    <aura:attribute name="street" type="String" default="" />
+    <aura:attribute name="city" type="String" default="" />
+    <aura:attribute name="state" type="String" default="" />
+    <aura:attribute name="zip" type="String" default="" />
+    <aura:attribute name="lat" type="String" />
+    <aura:attribute name="long" type="String" />
+    <aura:attribute name="refNum" type="String" default="" />
+    <aura:attribute name="jobRef" type="String" default="" />
+    <aura:attribute name="instructions" type="String" default="" />
+    <aura:attribute name="contact" type="String" default="" />
+    <aura:attribute name="contactPhone" type="String" default="" />
+    <aura:attribute name="contactSignature" type="String" default="" />
+    <aura:attribute name="date" type="DateTime" default="" />
+
+
+    <aura:attribute name="mapMarkers" type="Object" />
+    <aura:attribute name="selectedMarkerValue" type="String" />
+
+    <aura:attribute name="notes" type="String" />
+
+    <aura:attribute name="buttonLabel" type="String" default=""/>
+    <aura:attribute name="buttonIcon" type="String" default="" />
+    <aura:attribute name="statusAction" type="Boolean" />
+    <aura:attribute name="signatureAction" type="Boolean" />
+    <aura:attribute name="buttonCSS" type="String" default="" />
+    <aura:attribute name="disableButton" type="Boolean" default="false" />
+
+    <aura:attribute name="showModal" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:registerEvent name="loadUpdating" type="c:loadUpdating" />
+    <aura:registerEvent name="loadUpdated" type="c:loadUpdated" />
+
+    <aura:dependency resource="markup://c:closePopup" type="EVENT" />
+    <aura:handler event="c:closePopup" action="{!c.closeModal}" />
+
+
+    <lightning:card title="{!v.locationType + ' Details'}" iconName="{!v.iconName}">
+        <aura:set attribute="actions">
+            <lightning:button label="{!'Go to ' + v.locationType + ' Location'}" iconName="utility:send" iconPosition="right" onclick="{!c.getDirections}"/>
+        </aura:set>
+        <aura:set attribute="body">
+            <div class="slds-grid slds-grid_vertical">
+
+            <div class="slds-col">
+                <lightning:tile label="{!v.location}">
+                    <aura:set attribute="media">
+                        <lightning:icon iconName="utility:info_alt" size="small"></lightning:icon>
+                    </aura:set>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.locationType + ' Contact'}">{!v.locationType + ' Contact'}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.contact}">{!v.contact}</p>
+                        </div>
+                    </div>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="Contact Cell">Contact Cell</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.contactPhone}">
+                                <lightning:formattedPhone value="{!v.contactPhone}"></lightning:formattedPhone>
+                            </p>                        
+                        </div>
+                    </div>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.locationType + ' By'}">{!v.locationType + ' By'}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.date}">
+                                <lightning:formattedDateTime value="{!v.date}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                    minute="2-digit" timeZoneName="short">
+                                </lightning:formattedDateTime>                            
+                            </p>
+                        </div>
+                    </div>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.locationType + ' Ref #'}">{!v.locationType + ' Ref #'}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <p class="slds-truncate" title="{!v.refNum}">{!v.refNum}</p>
+                        </div>
+
+                    </div>
+                    <!--
+                    <dl class="slds-dl_horizontal">
+                        <dt class="slds-dl_horizontal__label">
+                            <p title="Pickup Contact">Pickup Contact</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p title="{!v.contact}">{!v.contact}</p>
+                        </dd>
+                        <dt class="slds-dl_horizontal__label">
+                            <p title="Cell">Cell</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p title="{!v.contactPhone}">
+                                <lightning:formattedPhone value="{!v.contactPhone}"></lightning:formattedPhone>
+                            </p>
+                        </dd>
+                        <dt class="slds-dl_horizontal__label">
+                            <p title="Pickup By">Pickup By</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p title="{!v.date}">
+                                <lightning:formattedDateTime value="{!v.date}" year="numeric" month="numeric" day="numeric"
+                                    hour="2-digit" minute="2-digit" timeZoneName="short"></lightning:formattedDateTime>
+                            </p>
+                        </dd>
+                        <dt class="slds-dl_horizontal__label">
+                            <p title="Pickup Ref #">Pickup Ref #</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p title="{!v.refNum}">{!v.refNum}</p>
+                        </dd>
+                    </dl>
+                -->
+                </lightning:tile>
+
+            </div>
+
+                <div class="slds-col mapBox">
+                    <lightning:map
+                        mapMarkers="{!v.mapMarkers}"
+                        zoomLevel="16"
+                        markersTitle="{!v.locationType + ' Location'}"
+                        selectedMarkerValue="{!v.selectedMarkerValue}"
+                        onmarkerselect="{!c.handleMarkerSelect}"
+                        listView="visible"
+                    />
+                </div>
+
+                <div class="slds-col">
+                    <lightning:textarea name="instructions" label="{!v.locationType + ' Notes'}" value="{!v.instructions}" disabled="true"/>
+                </div>
+
+            </div>
+        </aura:set>
+        <aura:set attribute="footer">
+            <aura:if isTrue="{!v.statusAction}">
+            <lightning:button label="{!v.buttonLabel}" iconName="{!v.buttonIcon}" onclick="{!c.handleArrival}" class="{!v.buttonCSS}"
+                disabled="{!v.disableButton}" />
+            </aura:if>
+            <aura:if isTrue="{!v.signatureAction}">
+                <lightning:button label="{!v.buttonLabel}" iconName="{!v.buttonIcon}" onclick="{!c.getSignature}"
+                    class="{!v.buttonCSS}" disabled="{!v.disableButton}" />
+            </aura:if>
+        </aura:set>
+    </lightning:card>
+
+
+    
+    <aura:if isTrue="{!v.showModal}">
+        <c:Signature loadId="{!v.loadId}" signatureType="{!v.locationType}" contact="{!v.contact}" contactCell="{!v.contactPhone}"/>
+    </aura:if>
+</aura:component>

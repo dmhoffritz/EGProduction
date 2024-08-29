@@ -1,0 +1,1 @@
+<aura:event type="APPLICATION" description="Event used to catch event where modal needs to be closed"/>

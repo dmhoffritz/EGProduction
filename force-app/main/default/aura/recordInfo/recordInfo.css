@@ -1,0 +1,56 @@
+.THIS .slds-accordion__summary-content {
+    font-weight: bolder !important;
+}
+
+.THIS .slds-form-element__label {
+    font-weight: bold !important;
+    color: #62BF34 !important;
+}
+
+.THIS .slds-tabs_default__item {
+    font-family: 'industry' !important;
+}
+
+.THIS .slds-form-element__label {
+    font-family: 'open-sans' !important;
+}
+
+.THIS .slds-form-element__static span {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.pickup_email {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.pickup_phone {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.deliver_by {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.pickup_by {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.rate {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.delivery_phone {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.delivery_email {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.billing_phone {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.billing_email {
+    font-family: 'open-sans' !important;
+}

@@ -1,0 +1,15 @@
+<aura:component>
+    <aura:attribute name="userType" type="String" default=""/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="user_id" type="String" />
+    <aura:attribute name="loads" type="FreightTM__Load__c"/>
+    
+    <aura:attribute name="flowName" type="String" />
+    
+    <aura:dependency resource="markup://c:flowFinished" type="EVENT" />
+    <aura:registerEvent name="flowFinish" type="c:flowFinished"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}"/>
+</aura:component>

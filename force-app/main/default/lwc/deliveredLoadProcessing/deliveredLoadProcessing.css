@@ -1,0 +1,75 @@
+/* Base Picker CSS */
+.slds-visual-picker {
+    width: 24%;
+}
+.slds-visual-picker__figure {
+    padding: 0.5em;
+    margin-bottom: 0.75em;
+}
+
+/* Removes standard highlights for picker selection */
+.slds-visual-picker input:checked~label .slds-visual-picker__text:after {
+    display: none;
+}
+
+/* Controls Picker Selection */
+.slds-visual-picker input:checked~label .slds-visual-picker__text {
+    background: #66cc33;
+    border: 1.5px solid black;
+}
+
+.slds-visual-picker input:checked~label .slds-visual-picker__figure span {
+    color: black;
+    font-weight: bold;
+}
+
+
+/* Controls Picker Hover */
+.slds-visual-picker input:not(:disabled)~label:hover .slds-visual-picker__figure {
+    border: 1.5px solid #66cc33;
+    box-shadow: 0 0 0 1.5px #66cc33 inset;
+}
+
+.slds-visual-picker__figure span {
+    color: black;
+    font-weight: bold;
+}
+
+/* Alternate rejected picker styling */
+/* Base Picker CSS */
+.rejected-picker .slds-visual-picker {
+    width: 100%;
+}
+
+.rejected-picker .slds-visual-picker__figure {
+    background: #D94222;
+    padding: 0.5em;
+}
+
+/* Removes standard highlights for picker selection */
+.rejected-picker .slds-visual-picker input:checked~label .slds-visual-picker__text:after {
+    display: none;
+}
+
+/* Controls Picker Selection */
+.rejected-picker .slds-visual-picker input:checked~label .slds-visual-picker__text {
+    background: orange;
+    border: 1.5px solid black;
+}
+
+.rejected-picker .slds-visual-picker input:checked~label .slds-visual-picker__figure span {
+    color: black;
+    font-weight: bold;
+}
+
+
+/* Controls Picker Hover */
+.rejected-picker .slds-visual-picker input:not(:disabled)~label:hover .slds-visual-picker__figure {
+    border: 1.5px solid orange;
+    box-shadow: 0 0 0 1.5px orange inset;
+}
+
+.rejected-picker .slds-visual-picker__figure span {
+    color: white;
+    font-weight: bold;
+}

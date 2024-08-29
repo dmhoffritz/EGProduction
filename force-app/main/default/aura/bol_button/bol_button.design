@@ -1,0 +1,4 @@
+<design:component label="BOL Button">
+    <design:attribute name="recordId" label="Load Id" />
+    <design:attribute name="load_num" label="Load Number" />
+</design:component>

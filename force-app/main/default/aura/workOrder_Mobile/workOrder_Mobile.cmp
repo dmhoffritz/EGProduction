@@ -1,0 +1,190 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-31-2023
+  @last modified by  : Ethan Myers
+-->
+<aura:component controller="WorkOrder_Cont"
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId">
+
+    <aura:attribute name="jobId" type="String" default="" />
+    <aura:attribute name="order" type="WorkOrder" />
+    <aura:attribute name="orderNum" type="String" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <!-- LIST ATTRIBUTES -->
+    <aura:attribute name="purchaseItems" type="WorkOrderLineItem[]" />
+    <aura:attribute name="leaseItems" type="WorkOrderLineItem[]" />
+    <aura:attribute name="rentalItems" type="WorkOrderLineItem[]" />
+    <aura:attribute name="serviceItems" type="WorkOrderLineItem[]" />
+
+    <aura:attribute name="purchaseQuantity" type="Integer" default="0" />
+    <aura:attribute name="rentalQuantity" type="Integer" default="0" />
+    <aura:attribute name="leaseQuantity" type="Integer" default="0" />
+    <aura:attribute name="serviceQuantity" type="Integer" default="0" />
+
+    <aura:attribute name="activeItems" type="WorkOrderLineItem[]" />
+
+    <aura:attribute name="selectedItem" type="String" default="purchase" />
+
+    <!-- SPINNER ATTRIBUTES -->
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <!-- FLOW ATTRIBUTES -->
+    <aura:attribute name="displayFlow" type="Boolean" default="false" />
+    <aura:attribute name="modalHeader" type="String" default="" />
+
+    <aura:attribute name="tileSize" type="String" default="6" />
+
+    <aura:registerEvent name="reloadItems" type="c:flowFinished" />
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading...Please Wait" />
+    </aura:if>
+
+    <lightning:card class="orderCard">
+        <aura:set attribute="title">
+            <!-- ORDER HEADER -->
+            <div class="slds-page-header">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <div class="slds-media slds-no-space slds-grow">
+                            <div class="slds-media__figure">
+                                <lightning:icon iconName="standard:asset_action" />
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-title_caps slds-line-height_reset">Sales Order</p>
+                                <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate"
+                                    title="{!v.orderNum}">
+                                    <a href="{!v.order.Record_Link__c}" target="_blank">
+                                        {!v.orderNum}
+                                    </a>
+                                    <span aura:id="orderStatusBadge" class="slds-badge">{!v.order.Status}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ACTION BUTTONS -->
+                    <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                        <div class="slds-button-group" role="group">
+                            <lightning:buttonIcon iconName="utility:refresh" variant="bare" alternativeText="Refresh"
+                                title="Refresh" onclick="{!c.refreshData}" />
+                            <lightning:buttonIcon iconName="utility:add" variant="border-filled"
+                                alternativeText="Add Item" title="Add Item" name="{!v.order.Id}"
+                                onclick="{!c.addNewItem}" />
+                            <lightning:buttonIcon iconName="utility:transport_heavy_truck" variant="brand"
+                                alternativeText="Book New Load" title="New Load" onclick="{!c.bookNewLoad}" />
+                            <!--
+                            <lightning:button disabled="{!v.order.Status == 'Completed'}" label="Add Item" name="{!v.order.Id}"
+                                class="slds-button slds-button_neutral" onclick="{!c.addNewItem}" />
+                            <lightning:button label="Update Status" name="{!v.order.Id}" class="slds-button slds-button_neutral"
+                                onclick="{!c.updateOrderStatus}"></lightning:button>
+                            <lightning:button disabled="{!v.order.Status == 'Completed'}" label="Create Load Template"
+                                onclick="{!c.bookNewLoad}">
+                            </lightning:button>
+                        -->
+                        </div>
+                    </div>
+                    <!-- / ACTION BUTTONS -->
+
+                </div>
+            </div>
+            <!-- / ORDER HEADER -->
+        </aura:set>
+
+        <!-- PRODUCT LIST (CARD BODY)-->
+
+        <!--
+        <lightning:verticalNavigation selectedItem="{!v.selectedItem}" onbeforeselect="{! c.handleNavSelection}" class="horizontal-nav">
+            <lightning:verticalNavigationSection label="Order">
+                <lightning:verticalNavigationItemBadge label="Purchases" name="purchase" badgeCount="{!v.purchaseQuantity}" />
+                <lightning:verticalNavigationItemBadge label="Leases" name="lease" badgeCount="{!v.leaseQuantity}" />
+                <lightning:verticalNavigationItemBadge label="Rentals" name="rental" badgeCount="{!v.rentalQuantity}" />
+                <lightning:verticalNavigationItemBadge label="Services" name="service" badgeCount="{!v.serviceQuantity}" />
+            </lightning:verticalNavigationSection>
+        </lightning:verticalNavigation>
+    -->
+        <ul class="nav">
+            <li class="nav-item">
+                <a href="javascript:void(0)" aura:id="tab" name="purchase" onclick="{!c.handleTabClick}"
+                    class="nav-link active">{! 'Purchases (' + v.purchaseQuantity + ')'}</a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" aura:id="tab" name="lease" onclick="{!c.handleTabClick}"
+                    class="nav-link">{! 'Leases (' + v.leaseQuantity + ')'}</a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" aura:id="tab" name="rental" onclick="{!c.handleTabClick}"
+                    class="nav-link">{! 'Rentals (' + v.rentalQuantity + ')'}</a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" aura:id="tab" name="service" onclick="{!c.handleTabClick}"
+                    class="nav-link">{! 'Services (' + v.serviceQuantity + ')'}</a>
+            </li>
+        </ul>
+
+
+        <aura:iteration items="{!v.activeItems}" var="item">
+            <lightning:layoutItem size="{!v.tileSize}" padding="around-small">
+                <c:lineItemTile itemId="{!item.Id}" productType="{!item.Product__r.Family}" status="{!item.Status}"
+                    sellType="{!item.Sell_Type__c}" itemQuantity="{!item.Quantity}"
+                    commodity="{!item.Product__r.Name + ' - ' + item.Product__r.Product_Type__c}"
+                    pricePerUnit="{!item.UnitPrice}" grade="{!item.MatGrade__c}"
+                    freightBillingType="{!item.FreightCostType__c}" freightIn="{!item.FreightIn__c}"
+                    freightOut="{!item.FreightOut__c}" Item="{!item}" />
+            </lightning:layoutItem>
+        </aura:iteration>
+
+
+
+        <!--
+        <div class="productList">
+            <div>
+                <lightning:layout>
+                    <lightning:layoutItem>
+
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="layoutContent" padding="around-medium">
+                        <lightning:layout multipleRows="true">
+
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </div>
+    -->
+        <!-- / PRDOUCT LIST -->
+
+    </lightning:card>
+
+
+
+
+    <!-- Embedded Flow in Modal -->
+    <aura:if isTrue="{!v.displayFlow}">
+        <!--
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeModal }" alternativeText="close"
+                        variant="bare-inverse" class="slds-modal__close" />
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.modalHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}" />
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    -->
+        <div class="mobileOverlay">
+            <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeModal }" alternativeText="close"
+                variant="bare-inverse" iconClass="closeIcon" />
+            <lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}" />
+        </div>
+    </aura:if>
+    <!-- / Embedded Flow -->
+
+</aura:component>

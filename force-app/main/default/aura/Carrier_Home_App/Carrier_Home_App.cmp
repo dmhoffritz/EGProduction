@@ -1,0 +1,358 @@
+<!--
+  @description       : 
+  @author            : Ethan Myers
+  @group             : 
+  @last modified on  : 02-24-2023
+  @last modified by  : Ethan Myers
+-->
+<aura:component controller="CarrierPortal_Cont">
+    <ltng:require styles="{!$Resource.Portal_Fonts}" />
+    <!-- TOP LEVEL ATTRIBUTES -->
+    <aura:attribute name="user_id" type="String" default=""/>
+    <aura:attribute name="carrier_id" type="String" default=""/>
+    <aura:attribute name="record_id" type="String" default=""/>
+    <aura:attribute name="userType" type="String" default=""/>
+    <aura:attribute name="master_load_list" type="FreightTM__Load__c[]" default="[]"/>
+    <aura:attribute name="relative_load_list" type="FreightTM__Load__c[]"/>
+    <aura:attribute name="initialized" type="Boolean"/>
+    
+    <!-- LIST ATTRIBUTE TO STORE RELATIVE LOADS -->
+    <aura:attribute name="relativeLoadList" type="FreightTM__Load__c[]" default="[]"/>
+    <aura:attribute name="newLoads" type="FreightTM__Load__c[]" default="[]"/>
+    <aura:attribute name="workingLoads" type="FreightTM__Load__c[]" default="[]"/>
+    <aura:attribute name="deliveredLoads" type="FreightTM__Load__c[]" default="[]"/>
+    <aura:attribute name="billReceivedLoads" type="FreightTM__Load__c[]" default="[]"/>
+    <aura:attribute name="processedLoads" type="FreightTM__Load__c[]" default="[]"/>
+    
+    <!-- LIST TO STORE RELATIVE CARRIERS -->
+    <aura:attribute name="carrierList" type="FreightTM__Carrier__c[]" default="[]"/>
+    <aura:attribute name="selectedCarrier" type="FreightTM__Carrier__c" />
+    
+    <!-- DISPLAY HANDLERS -->
+    <aura:attribute name="showNew" type="Boolean" default="true"/>
+    <aura:attribute name="showWorking" type="Boolean"/>
+    <aura:attribute name="showDelivered" type="Boolean"/>
+    <aura:attribute name="showDelivered_Billing" type="Boolean"/>
+    <aura:attribute name="showBillReceived" type="Boolean"/>
+    <aura:attribute name="showProcessed" type="Boolean"/>
+    
+    <!-- ATTRIBUTE TO RERENDER DELIVERED LIST ON CARRIER SWAP -->
+    <aura:attribute name="rerender" type="Boolean" default="false"/>
+    
+    <!-- RERENDER EVENTS -->
+    <aura:dependency resource="markup://c:flowFinished" type="EVENT" />
+    <aura:dependency resource="markup://c:onsave" type="EVENT" />
+    <aura:dependency resource="markup://c:cmpLoad" type="EVENT" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler event="c:flowFinished" action="{!c.init}"/>
+    <aura:handler event="c:onsave" action="{!c.init}" />
+    <aura:handler event="c:cmpLoad" action="{!c.stopLoading}" />
+    
+    <aura:handler name="changeCarrier" value="{!v.selectedCarrier}" action="{!c.swapCarrier}"/>
+    
+    <aura:registerEvent name="loadNav" type="c:navEvent"/>
+
+    <aura:attribute name="loading" type="Boolean" default="true" />
+
+    <aura:if isTrue="{!v.loading == true}">
+        <lightning:spinner aura:id="loadingSpinner" variant="brand" title="Loading Content..." size="large"
+            alternativeText="Loading Content..." />
+    </aura:if>
+
+    
+    <!-- Carrier (with Factoring) Pickers -->
+    <aura:if isTrue="{!v.userType == 'Carrier_Factoring'}">
+        <div class="pickers_carrier-factoring">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label"></legend>
+                <div class="slds-form-element__control">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="newPicker" id="new_picker" value="new_picker" name="carrier-factoring_pickers" checked="checked" onchange="{!c.handleSelection}"/>
+                                        <label for="new_picker">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.newLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Assigned Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="workingPicker" id="working_picker" value="working_picker" name="carrier-factoring_pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="working_picker">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.workingLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">En Route Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="deliveredPicker" id="delivered_picker" value="delivered_picker" name="carrier-factoring_pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="delivered_picker">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.deliveredLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Delivered Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+    </aura:if>
+    <!-- END Carrier (with Factoring) Pickers -->
+    
+    <!-- Factorer Pickers -->
+    <aura:if isTrue="{!v.userType == 'Factoring_Company'}">
+        <div class="pickers_factoring-company">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_4-of-12">
+                    <lightning:select variant="label-hidden" name="carriers" label="Select a Carrier:" aura:id="carrierList" value="{!v.selectedCarrier}" onchange="{!c.swapCarrier}">
+                        <aura:iteration items="{!v.carrierList}" var="carrier">
+                            <option style="color:black" text="{!carrier.label}" value="{!carrier.value}" selected="{!carrier.selected}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label"></legend>
+                <div class="slds-form-element__control">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="deliveredPicker" id="delivered_picker" value="delivered_picker" name="factorer_pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="delivered_picker">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.deliveredLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Delivered Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <aura:if isTrue="{!or(v.userType == 'Carrier_Not_Factoring', v.userType == 'Factoring_Company')}">
+                                    <td>
+                                        <div class="slds-visual-picker slds-visual-picker_medium">
+                                            <input type="radio" aura:id="billPicker" id="bill_picker" value="bill_picker" name="factorer_pickers" onchange="{!c.handleSelection}"/>
+                                            <label for="bill_picker">
+                                                <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                    <span>
+                                                        <span class="slds-text-heading_large">{!v.billReceivedLoads.length}</span>
+                                                    </span>
+                                                </span>
+                                                <span class="slds-visual-picker__body">
+                                                    <span class="slds-text-heading_small">Bills Received</span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <!--
+                                    <td>
+                                        <div class="slds-visual-picker slds-visual-picker_medium">
+                                            <input type="radio" aura:id="paidPicker" id="paid_picker" value="paid_picker" name="factorer_pickers" onchange="{!c.handleSelection}"/>
+                                            <label for="paid_picker">
+                                                <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                    <span>
+                                                        <span class="slds-text-heading_large">{!v.processedLoads.length}</span>
+                                                    </span>
+                                                </span>
+                                                <span class="slds-visual-picker__body">
+                                                    <span class="slds-text-heading_small">Processed for Payment</span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                -->
+                                </aura:if>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+    </aura:if>
+    <!-- END Factorerer Pickers -->
+    
+    <!-- Carrier (not Factoring) Pickers -->
+    <aura:if isTrue="{!v.userType == 'Carrier_Not_Factoring'}">
+        <div class="pickers_carrier-not-factoring">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label"></legend>
+                <div class="slds-form-element__control">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="newPicker" id="visual-picker-94" value="visual-picker-94" checked="checked" name="carrier_not_factoring-pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="visual-picker-94">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.newLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Assigned Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="workingPicker" id="visual-picker-95" value="visual-picker-95" name="carrier_not_factoring-pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="visual-picker-95">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.workingLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">En Route Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="deliveredPicker" id="visual-picker-96" value="visual-picker-96" name="carrier_not_factoring-pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="visual-picker-96">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.deliveredLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Delivered Loads</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="billPicker" id="visual-picker-97" value="visual-picker-97" name="carrier_not_factoring-pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="visual-picker-97">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.billReceivedLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Bills Received</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <!--
+                                <td>
+                                    <div class="slds-visual-picker slds-visual-picker_medium">
+                                        <input type="radio" aura:id="paidPicker" id="visual-picker-98" value="visual-picker-96" name="carrier_not_factoring-pickers" onchange="{!c.handleSelection}"/>
+                                        <label for="visual-picker-98">
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span class="slds-text-heading_large">{!v.processedLoads.length}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                                <span class="slds-text-heading_small">Processed for Payment</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+    </aura:if>
+    <!-- END Carrier (not Factoring) Pickers -->
+    
+    <!-- SHOW NEW -->
+    <aura:if isTrue="{!and(v.showNew, v.userType != 'Factoring_Company')}">
+        <c:auraDataTable>
+            <aura:set attribute="data" value="{!v.newLoads}"/>
+            <aura:set attribute="loadType" value="New"/>
+            <aura:set attribute="recordId" value="{!v.record_id}"/>
+            <aura:set attribute="userId" value="{!v.user_id}"/>
+        </c:auraDataTable>
+    </aura:if>
+    <!-- END SHOW NEW -->
+    
+    <!-- SHOW WORKING -->
+    <aura:if isTrue="{!v.showWorking}">
+        <c:auraDataTable>
+            <aura:set attribute="data" value="{!v.workingLoads}"/>
+            <aura:set attribute="loadType" value="Working"/>
+            <aura:set attribute="recordId" value="{!v.carrier_id}"/>
+            <aura:set attribute="userId" value="{!v.user_id}"/>
+        </c:auraDataTable>
+    </aura:if>
+    <!-- END SHOW WORKING -->
+    
+    <!-- SHOW CARRIER FACTORING DELIVERED -->
+    <aura:if isTrue="{!and(v.showDelivered, v.userType == 'Carrier_Factoring')}">
+        <c:auraDataTable>
+            <aura:set attribute="data" value="{!v.deliveredLoads}"/>
+            <aura:set attribute="loadType" value="Delivered"/>
+            <aura:set attribute="recordId" value="{!v.carrier_id}"/>
+            <aura:set attribute="userId" value="{!v.user_id}"/>
+        </c:auraDataTable>
+    </aura:if>
+    <!-- END SHOW CARRIER FACTORING DELIVERED -->
+    
+    <!-- SHOW BATCH INVOICE -->
+    <aura:if isTrue="{!and(v.showDelivered, or(v.userType == 'Carrier_Not_Factoring', v.userType == 'Factoring_Company'))}">
+    	<c:batchDataTable>
+            <aura:set attribute="userId" value="{!v.userId}"/>
+            <aura:set attribute="data" value="{!v.deliveredLoads}"/>
+            <aura:set attribute="userId" value="{!v.user_id}"/>
+        </c:batchDataTable>
+    </aura:if>
+    <!-- END BATCH INVOICE -->
+
+    <!-- SHOW BILLS RECEIVED -->
+    <aura:if isTrue="{!v.showBillReceived}">
+        <c:auraDataTable>
+            <aura:set attribute="data" value="{!v.billReceivedLoads}"/>
+            <aura:set attribute="loadType" value="Bill"/>
+        </c:auraDataTable>
+    </aura:if>
+    <!-- END SHOW BILLS -->
+    
+    <!-- SHOW PROCESSED -->
+    <aura:if isTrue="{!v.showProcessed}">
+        <c:auraDataTable>
+            <aura:set attribute="data" value="{!v.processedLoads}"/>
+            <aura:set attribute="loadType" value="Paid"/>
+        </c:auraDataTable>
+    </aura:if>
+    
+</aura:component>

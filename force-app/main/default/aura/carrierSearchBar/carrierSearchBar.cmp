@@ -1,0 +1,62 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 02-24-2023
+  @last modified by  : Ethan Myers
+-->
+<aura:component controller="CarrierPortal_Cont">
+    <aura:attribute name="userType" type="String" />
+    <aura:attribute name="recordId" type="String" />
+
+    <c:CustomLookup carrierId="{!v.recordId}" placeholder="Search by our Load # or your Load #"/>
+
+    <!--
+    <aura:attribute name="master_load_list" type="FreightTM__Load__c[]"/>
+    <aura:attribute name="loadNames" type="List"/>
+    <aura:attribute name="relativeLoads" type="FreightTM__Load__c[]"/>
+    <aura:attribute name="selectedLoad" type="FreightTM__Load__c"/>
+    <aura:attribute name="showMenu" type="Boolean" default="true"/>
+    <aura:attribute name="loadId" type="Id" />
+    
+    <aura:attribute name="issearching" type="Boolean" default="false"/>
+    
+    <aura:registerEvent name="loadNav" type="c:navLoad"/>
+        
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <div onclick="{c.menuOff}">
+    <div onkeyup="{! c.handleKeyUp }">
+        <lightning:input value="{!v.selectedLoad}"
+                         aura:id="enter-search"
+                         name="enter-search"
+                         isLoading="{! v.issearching }"
+                         type="search"
+                         variant="label-hidden"
+                         placeholder="Search for Loads by Load # (L-0000)"
+                         oncommit="{!c.handleClear}"
+                         />
+    </div>
+
+	<aura:if isTrue="{!v.showMenu}">
+        
+    <div class="dropdown" aura:id="dropdown" id="dropdown">
+        <div aura:id="myDropdown" class="dropdown-content">
+            <aura:iteration items="{!v.relativeLoads}" var="load">
+                <a aura:id="{!load.Id}" id="{!load.Id}" onclick="{!c.handleSelection}">
+                    <div  class="slds-grid slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_1-of-3" style="text-align: left;">
+                            <lightning:icon iconName="custom:custom98" size="x-small" position="left"/> 
+                        </div>
+                        <div class="slds-col slds-size_2-of-3">
+                            <span style="color:black;">{!load.Name}</span>
+                        </div>
+                    </div>
+                </a>
+            </aura:iteration>
+            </div>
+        </div>
+        </aura:if>
+    </div>
+-->
+    
+</aura:component>

@@ -1,0 +1,31 @@
+.THIS .button-menu {
+    background-color: rgb(0, 0, 0, 0.85);
+    color: #62BF34;
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+.THIS .lgc-bc {
+    color: #62BF34;
+}
+
+.THIS.btn-label {
+    color: #62BF34;
+}
+
+.THIS .slds-button {
+    color: #62BF34;
+}
+
+.THIS .slds-button:hover,.THIS .slds-button:active {
+    color: white;
+}
+
+.THIS .slds-dropdown {
+    color: white;
+}
+
+.THIS label {
+    color: #62BF34;
+}

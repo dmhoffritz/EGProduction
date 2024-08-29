@@ -1,0 +1,72 @@
+.THIS.productItem{
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 6px;
+    flex: 1 0 300px;
+    box-sizing: border-box;
+    margin: 0.25em 0.25em;
+    box-shadow: 0 1px 12px rgb(0 0 0 / 50%),
+        0 1px 10px rgb(0 0 0 / 60%);
+}
+
+.THIS.productItem:nth-child(2n) {
+    page-break-after: always;
+    break-after: always;
+    wrap-after: flex;
+}
+
+.THIS .yellowBadge {
+    background: yellow !important;
+    color: black;
+}
+
+.THIS .greenBadge {
+    background: #66cc33 !important;
+    color: white;
+}
+
+.THIS .redBadge {
+    background: red !important;
+    color: white;
+}
+
+.THIS .purchaseBadge {
+    background: #4169e1;
+    color: white;
+}
+
+.THIS .leaseBadge {
+    background: brown;
+    color: white;
+}
+
+.THIS .rentalBadge {
+    background: #66cc33;
+    color: white;
+}
+
+.THIS .slds-shrink-none {
+    justify-content: end;
+}
+
+.THIS .detailButton {
+    width: 100%;
+    background: #66cc33;
+    color: white;
+    font-weight: bold;
+    margin-top: 1em;
+    border-left: 3px solid black;
+    border-top: 3px solid black;
+}
+
+.THIS .detailButton:hover {
+    background: lightgrey;
+}
+
+.THIS .itemData {
+    text-align: center;
+}
+
+.THIS .slds-progress-bar__value {
+    background: #66cc33 !important;
+}

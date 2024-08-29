@@ -1,0 +1,134 @@
+.THIS {
+}
+
+.THIS.company-header {
+    width: 100%;
+    background: white;
+    color: black;
+    font-size: 24px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+/* Header Styles */
+.THIS.lane-header .slds-page-header {
+  background: black;
+  color: white;
+}
+
+.THIS.lane-header .slds-icon-standard-tour {
+  background-color: #66cc33;
+}
+
+.THIS.lane-header .slds-button_neutral {
+  --slds-c-button-color-background: #66cc33;
+  color: black;
+}
+
+/* Table Styles */
+.THIS .tableCSS .slds-th__action {
+        background: #66cc33 !important;
+        color: black;
+    }
+    
+.THIS .tableCSS .slds-table td, .THIS .tableCSS .slds-table th {
+        background: lightgrey !important;
+    }
+    
+.THIS .tableCSS .slds-button_icon-border {
+        border-color: black !important;
+    }
+    
+.THIS .tableCSS .slds-button__icon {
+        fill: black;
+    }
+
+
+/*** STYLE ACTION MENU ***/
+/*
+.THIS .tableAction .slds-button{
+    background-color: white !important;
+    min-width: 30px;
+}
+
+.THIS.tableCSS_hideColumn tr td:first-child {
+    display:none;
+}
+.THIS.tableCSS_hideColumn tr th:first-child {
+    display:none;
+}
+.THIS lightning-primitive-header-actions {
+    display: none;
+} 
+
+.THIS.tableCSS_hideColumn table {
+    background-color: #dbcccc !important;
+    color: black !important;
+}
+
+.THIS.tableCSS_hideColumn thead th span{
+    background-color: #66CC33 !important;
+    color: black !important;
+}
+
+.THIS.tableCSS_hideColumn .slds-th__action:hover {
+    background-color: #66CC33 !important;
+}
+
+.THIS.tableCSS_hideColumn thead th hover {
+    background-color: #66CC33 !important;
+    color: white !important;
+    font-weight:bold !important;
+}
+.THIS.tableCSS_hideColumn tr:hover {
+    background-color: #dbcccc !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+.THIS.tableCSS_hideColumn td:hover {
+    background-color: #b8a9a9 !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+
+.THIS.tableCSS table {
+    background-color: #dbcccc !important;
+    color: black !important;
+}
+
+.THIS.tableCSS thead th span{
+    background-color: #66CC33 !important;
+    color: black !important;
+}
+
+.THIS.tableCSS .slds-th__action:hover {
+    background-color: #66CC33 !important;
+}
+
+.THIS.tableCSS thead th hover {
+    background-color: #66CC33 !important;
+    color: white !important;
+    font-weight:bold !important;
+}
+.THIS.tableCSS tr:hover {
+    background-color: #dbcccc !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+.THIS.tableCSS td:hover {
+    background-color: #b8a9a9 !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+
+*/
+
+
+
+/*** SUCCESS & ERROR TOASTS ***/
+.THIS .success-icon {
+    background-color: #66CC33;
+}
+.THIS .slds-notify__content {
+    width: fit-content;
+}

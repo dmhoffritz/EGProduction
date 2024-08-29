@@ -1,0 +1,6 @@
+<aura:documentation>
+	<aura:description>Provides email composer access using flow and can be added to a lightning page</aura:description>
+	<aura:example name="ExampleName" ref="exampleComponentName" label="Label">
+		Example Description
+	</aura:example>
+</aura:documentation>

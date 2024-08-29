@@ -1,0 +1,140 @@
+<aura:component controller="CarrierPortal_Cont">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="docLabel" type="String" />
+    
+    <aura:attribute name="relatedFiles" type="List" />
+    <aura:attribute name="invoices" type="List" />
+    <aura:attribute name="PoDs" type="List" />
+    <aura:attribute name="otherFiles" type="List" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    
+    <div class="slds-box">
+        <div class="slds-card">
+            <ul class="slds-accordion">
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <span class="slds-accordion__summary-content">Invoices</span>
+                            </h2>
+
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-24">
+                            <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                                <aura:iteration items="{!v.invoices}" var="invoice">
+                                    <li class="slds-p-horizontal_xx-small slds-size_1-of-2 slds-medium-size_1-of-3">
+                                        <div class="slds-file slds-file_card slds-has-title">
+                                            <figure>
+                                                <a href="{!invoice.fileURL}" target="_blank" class="slds-file__crop">
+                                                    <span class="slds-assistive-text">Preview:</span>
+                                                    <img src="{!invoice.fileURL}" alt="Empire Files" width="125"/>
+                                                </a>
+                                                <figcaption class="slds-file__title slds-file__title_card">
+                                                    <div class="slds-media slds-media_small slds-media_center">
+                                                        <div class="slds-media__figure slds-line-height_reset">
+                                                            <span class="slds-icon_container" title="pdf">
+                                                                <lightning:icon iconName="standard:currency"/>
+                                                                <span class="slds-assistive-text">Invoice</span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="slds-media__body">
+                                                            <span class="slds-file__text slds-truncate" title="{!invoice.fileName}">{!invoice.fileName}</span>
+                                                        </div>
+                                                    </div>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                                
+                            </ul>         
+                        </div>
+                    </section>
+                </li>
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <span class="slds-accordion__summary-content">PoDs</span>
+                            </h2>
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-24">
+                            <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                                <aura:iteration items="{!v.PoDs}" var="pod">
+                                    <li class="slds-p-horizontal_xx-small slds-size_1-of-2 slds-medium-size_1-of-3">
+                                        <div class="slds-file slds-file_card slds-has-title">
+                                            <figure>
+                                                <a href="{!pod.fileURL}" target="_blank" class="slds-file__crop">
+                                                    <span class="slds-assistive-text">Preview:</span>
+                                                    <img src="{!$Resource.Empire_Group_Wordmark}" alt="Empire Files" width="125"/>
+                                                </a>
+                                                <figcaption class="slds-file__title slds-file__title_card">
+                                                    <div class="slds-media slds-media_small slds-media_center">
+                                                        <div class="slds-media__figure slds-line-height_reset">
+                                                            <span class="slds-icon_container" title="pdf">
+                                                                <lightning:icon iconName="standard:product_service_campaign"/>
+                                                                
+                                                                <span class="slds-assistive-text">PoD</span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="slds-media__body">
+                                                            <span class="slds-file__text slds-truncate" title="{!pod.fileName}">{!pod.fileName}</span>
+                                                        </div>
+                                                    </div>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                                
+                            </ul>         
+                        </div>
+                    </section>
+                </li>
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <span class="slds-accordion__summary-content">Other Files</span>
+                            </h2>
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-24">
+                            <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                                <aura:iteration items="{!v.otherFiles}" var="file">
+                                    <li class="slds-p-horizontal_xx-small slds-size_1-of-2 slds-medium-size_1-of-3">
+                                        <div class="slds-file slds-file_card slds-has-title">
+                                            <figure>
+                                                <a href="{!file.fileURL}" target="_blank" class="slds-file__crop">
+                                                    <span class="slds-assistive-text">Preview:</span>
+                                                    <img src="{!$Resource.Empire_Group_Wordmark}" alt="Empire Files" width="125"/>
+                                                </a>
+                                                <figcaption class="slds-file__title slds-file__title_card">
+                                                    <div class="slds-media slds-media_small slds-media_center">
+                                                        <div class="slds-media__figure slds-line-height_reset">
+                                                            <span class="slds-icon_container" title="pdf">
+                                                                <lightning:icon iconName="standard:file"/>
+                                                                
+                                                                <span class="slds-assistive-text">file</span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="slds-media__body">
+                                                            <span class="slds-file__text slds-truncate" title="{!file.fileName}">{!file.fileName}</span>
+                                                        </div>
+                                                    </div>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                                
+                            </ul>         
+                        </div>
+                    </section>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+</aura:component>

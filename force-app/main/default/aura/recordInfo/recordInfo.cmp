@@ -1,0 +1,555 @@
+<aura:component controller="CarrierPortal_Cont">
+    <ltng:require styles="{!$Resource.Portal_Fonts}" />
+
+    <aura:attribute name="userType" type="String" />
+    <aura:attribute name="load" type="FreightTM__Load__c" />
+    <aura:attribute name="relatedFiles" type="List" access="public" />
+
+    <!-- TAB TOGGLES -->
+    <aura:attribute name="loadToggle" type="Boolean" default="true" />
+    <aura:attribute name="locationToggle" type="Boolean" default="false" />
+    <aura:attribute name="billingToggle" type="Boolean" default="false" />
+    <aura:attribute name="fileToggle" type="Boolean" default="false" />
+
+    <!-- MAP ATTRIBUTES -->
+    <aura:attribute name="loadMarkers" type="List" />
+    <aura:attribute name="pickupMarkers" type="Object" />
+    <aura:attribute name="deliveryMarkers" type="Object" />
+    <aura:attribute name="driverLoc" type="Object" />
+    <aura:attribute name="center" type="Object" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <div class="slds-box">
+        <div class="slds-card">
+            <div class="slds-tabs_default">
+                <ul class="slds-tabs_default__nav" role="tablist">
+                    <li class="slds-tabs_default__item" title="Load" role="presentation">
+                        <a class="slds-tabs_default__link" onclick="{!c.toggleLoad}" href="" role="tab" tabindex="0"
+                            aria-selected="true" aria-controls="tab-default-1" id="tab-default-0__item">
+                            <span class="slds-tabs__left-icon">
+                                <span class="slds-icon_container slds-icon-standard-opportunity" title="Locations">
+                                    <lightning:icon iconName="custom:custom98" size="small" />
+                                </span>
+                            </span>Load</a>
+                    </li>
+                    <li class="slds-tabs_default__item" title="Locations" role="presentation">
+                        <a class="slds-tabs_default__link" onclick="{!c.toggleLocation}" href="" role="tab" tabindex="0"
+                            aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">
+                            <span class="slds-tabs__left-icon">
+                                <span class="slds-icon_container slds-icon-standard-opportunity" title="Locations">
+                                    <lightning:icon iconName="standard:location" size="small" />
+
+                                </span>
+                            </span>Locations</a>
+                    </li>
+                    <li class="slds-tabs_default__item" title="Billing" role="presentation">
+                        <a class="slds-tabs_default__link" onclick="{!c.toggleBilling}" href="" role="tab" tabindex="-1"
+                            aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">
+                            <span class="slds-tabs__left-icon">
+                                <span class="slds-icon_container slds-icon-standard-case" title="Billing">
+                                    <lightning:icon iconName="standard:contract_payment" size="small" />
+
+                                </span>
+                            </span>Billing</a>
+                    </li>
+                    <li class="slds-tabs_default__item" title="Files" role="presentation">
+                        <a class="slds-tabs_default__link" onclick="{!c.toggleFiles}" href="" role="tab" tabindex="-1"
+                            aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">
+                            <span class="slds-tabs__left-icon">
+                                <span class="slds-icon_container slds-icon-standard-product" title="Files">
+                                    <lightning:icon iconName="standard:product" size="small" />
+
+                                </span>
+                            </span>Files</a>
+                    </li>
+
+                </ul>
+                <aura:if isTrue="{!v.loadToggle}">
+                    <div class="slds-box">
+                        <div class="slds-card">
+                            <ul class="slds-accordion">
+                                <li class="slds-accordion__list-item">
+                                    <section class="slds-accordion__section slds-is-open">
+                                        <div class="slds-accordion__summary">
+                                            <h2 class="slds-accordion__summary-heading">
+                                                <span class="slds-accordion__summary-content">Load Info</span>
+                                            </h2>
+                                        </div>
+                                        <div class="slds-accordion__content" id="referenceId-20">
+                                            <div class="slds-form" role="list">
+                                                <div class="slds-form__row">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <div
+                                                            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                            <span
+                                                                class="slds-form-element__label">Origin-->Destination</span>
+                                                            <div class="slds-form-element__control">
+                                                                <div class="slds-form-element__static">
+                                                                    <span>{!v.load.FreightTM__Calendar_Load__c}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <div
+                                                            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                            <span class="slds-form-element__label">Rate</span>
+                                                            <div class="slds-form-element__control">
+                                                                <div class="slds-form-element__static">
+                                                                    <span>
+                                                                        <ui:outputCurrency aura:id="rate"
+                                                                            value="{!v.load.FreightTM__Total_Rate_to_Carrier__c}" />
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-form__row">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <div
+                                                            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                            <span class="slds-form-element__label">Pickup By</span>
+                                                            <div class="slds-form-element__control">
+                                                                <div class="slds-form-element__static">
+                                                                    <span>
+                                                                        <lightning:formattedDateTime aura:id="pickup_by"
+                                                                            value="{!v.load.Pickup_By__c}"
+                                                                            year="numeric" month="short" day="numeric"
+                                                                            hour="2-digit" minute="2-digit" />
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <div
+                                                            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                            <span class="slds-form-element__label">Quantity</span>
+                                                            <div class="slds-form-element__control">
+                                                                <div class="slds-form-element__static">
+                                                                    <span>{!v.load.Quantity__c}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-form__row">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <div
+                                                            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                            <span class="slds-form-element__label">Deliver By</span>
+                                                            <div class="slds-form-element__control">
+                                                                <div class="slds-form-element__static">
+                                                                    <span>
+                                                                        <lightning:formattedDateTime
+                                                                            aura:id="deliver_by"
+                                                                            value="{!v.load.Deliver_By__c}"
+                                                                            year="numeric" month="short" day="numeric"
+                                                                            hour="2-digit" minute="2-digit" />
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <div
+                                                            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                            <span class="slds-form-element__label">Commodity</span>
+                                                            <div class="slds-form-element__control">
+                                                                <div class="slds-form-element__static">
+                                                                    <span>{!v.load.FreightTM__Commodity__c}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- PICKUP MAP -->
+                                        <lightning:map height="200px" mapMarkers="{!v.loadMarkers}" zoomLevel="6"
+                                            center="{!v.center}" />
+                                        <!-- END PICKUP MAP -->
+                                    </section>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.locationToggle}">
+                    <div id="tab-default-1" class="slds-tabs_default__content" role="tabpanel"
+                        aria-labelledby="tab-default-1__item">
+
+                        <!-- PICKUP INFO -->
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-box slds-col slds-size_1-of-2">
+                                <div class="slds-card">
+                                    <ul class="slds-accordion">
+                                        <li class="slds-accordion__list-item">
+                                            <section class="slds-accordion__section slds-is-open">
+                                                <div class="slds-accordion__summary">
+                                                    <h2 class="slds-accordion__summary-heading">
+                                                        <span class="slds-accordion__summary-content">Pickup Info</span>
+                                                    </h2>
+                                                </div>
+                                                <div class="slds-accordion__content" id="referenceId-21">
+                                                    <div class="slds-form" role="list">
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Pickup
+                                                                        Facility</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>{!v.load.FreightTM__PickupFacility__r.Name}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Pickup
+                                                                        Contact</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>{!v.load.FreightTM__Pickup_Contact__c}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Pickup Ref
+                                                                        #</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>{!v.load.FreightTM__Pickup_Ref__c}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Pickup
+                                                                        Phone</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>
+                                                                                <lightning:formattedPhone
+                                                                                    aura:id="pickup_phone"
+                                                                                    value="{!v.load.FreightTM__Pickup_Phone__c}" />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Pickup
+                                                                        Address</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>
+                                                                                {!v.load.FreightTM__Pickup_Address__c}
+                                                                                <br />{!v.load.FreightTM__Pickup_City__c},
+                                                                                {!v.load.FreightTM__Pickup_State__c}&nbsp;{!v.load.FreightTM__Pickup_Zip_Code__c}
+                                                                                <br />USA
+                                                                                <br />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Pickup
+                                                                        Email</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>
+                                                                                <lightning:formattedEmail
+                                                                                    aura:id="pickup_email"
+                                                                                    value="{!v.load.FreightTM__Pickup_Email__c}" />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- PICKUP MAP -->
+                                                <lightning:map height="200px" mapMarkers="{!v.pickupMarkers}"
+                                                    zoomLevel="16" />
+                                                <!-- END PICKUP MAP -->
+                                            </section>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- END PICKUP INFO -->
+
+                            <!-- DELIVERY INFO -->
+                            <div class="slds-box slds-col slds-size_1-of-2">
+                                <div class="slds-card">
+                                    <ul class="slds-accordion">
+                                        <li class="slds-accordion__list-item">
+                                            <section class="slds-accordion__section slds-is-open">
+                                                <div class="slds-accordion__summary">
+                                                    <h2 class="slds-accordion__summary-heading">
+                                                        <span class="slds-accordion__summary-content">Delivery
+                                                            Info</span>
+                                                    </h2>
+                                                </div>
+                                                <div class="slds-accordion__content" id="referenceId-21">
+                                                    <div class="slds-form" role="list">
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Delivery
+                                                                        Facility</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>{!v.load.FreightTM__DeliveryFacility__r.Name}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Delivery
+                                                                        Contact</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>{!v.load.FreightTM__Delivery_Contact__c}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Delivery Ref
+                                                                        #</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>{!v.load.FreightTM__Delivery_Ref__c}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Delivery
+                                                                        Phone</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>
+                                                                                <lightning:formattedPhone
+                                                                                    aura:id="delivery_phone"
+                                                                                    value="{!v.load.FreightTM__Delivery_Phone__c}" />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-form__row">
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Delivery
+                                                                        Address</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>
+                                                                                {!v.load.FreightTM__Delivery_Address__c}
+                                                                                <br />{!v.load.FreightTM__Delivery_City__c},
+                                                                                {!v.load.FreightTM__Delivery_State__c}&nbsp;{!v.load.FreightTM__Delivery_Zip_Code__c}
+                                                                                <br />USA
+                                                                                <br />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form__item" role="listitem">
+                                                                <div
+                                                                    class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                    <span class="slds-form-element__label">Delivery
+                                                                        Email</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            <span>
+                                                                                <lightning:formattedEmail
+                                                                                    aura:id="delivery_email"
+                                                                                    value="{!v.load.FreightTM__Delivery_Email__c}" />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- DELIVERY MAP -->
+                                                        <lightning:map height="200px" mapMarkers="{!v.deliveryMarkers}"
+                                                            zoomLevel="16" />
+                                                        <!-- END DELIVERY MAP -->
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- END DELIVERY -->
+
+                    </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.billingToggle}">
+                    <div id="tab-default-2" class="slds-tabs_default__content" role="tabpanel"
+                        aria-labelledby="tab-default-2__item">
+                        <!-- BILLING INFO -->
+                        <div class="slds-box">
+                            <div class="slds-card">
+                                <ul class="slds-accordion">
+                                    <li class="slds-accordion__list-item">
+                                        <section class="slds-accordion__section slds-is-open">
+                                            <div class="slds-accordion__summary">
+                                                <h2 class="slds-accordion__summary-heading">
+                                                    <span class="slds-accordion__summary-content">Billing Info</span>
+                                                </h2>
+                                            </div>
+                                            <div class="slds-accordion__content" id="referenceId-23">
+                                                <div class="slds-form" role="list">
+                                                    <div class="slds-form__row">
+                                                        <div class="slds-form__item" role="listitem">
+                                                            <div
+                                                                class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                <span class="slds-form-element__label">Billing
+                                                                    Contact</span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div class="slds-form-element__static">
+                                                                        <span>{!v.load.FreightTM__Carrier_Obj__r.Billing_Contact__c}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-form__item" role="listitem">
+                                                            <div
+                                                                class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                <span class="slds-form-element__label">Factoring
+                                                                    Company</span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div class="slds-form-element__static">
+                                                                        <span>{!v.load.FreightTM__Carrier_Obj__r.FactoringCompany_obj__r.Name}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-form__row">
+                                                        <div class="slds-form__item" role="listitem">
+                                                            <div
+                                                                class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                <span class="slds-form-element__label">Billing
+                                                                    Phone</span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div class="slds-form-element__static">
+                                                                        <span>
+                                                                            <lightning:formattedPhone
+                                                                                aura:id="billing_phone"
+                                                                                value="{!v.load.FreightTM__Carrier_Obj__r.Billing_Phone__c}" />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-form__item" role="listitem">
+                                                            <div
+                                                                class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                <span class="slds-form-element__label">Billing
+                                                                    Email</span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div class="slds-form-element__static">
+                                                                        <span>
+                                                                            <lightning:formattedEmail
+                                                                                aura:id="billing_email"
+                                                                                value="{!v.load.FreightTM__Carrier_Obj__r.Billing_Email__c}" />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="slds-form__row">
+                                                        <div class="slds-form__item" role="listitem">
+                                                            <div
+                                                                class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                                <span class="slds-form-element__label">Billing
+                                                                    Address</span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div class="slds-form-element__static">
+                                                                        <span>
+                                                                            {!v.load.FreightTM__Carrier_Obj__r.FreightTM__Billing_Address__c}
+                                                                            <br />{!v.load.FreightTM__Carrier_Obj__r.FreightTM__Billing_City__c},
+                                                                            {!v.load.FreightTM__Carrier_Obj__r.FreightTM__Billing_State_Province__c}&nbsp;{!v.load.FreightTM__Carrier_Obj__r.FreightTM__Billing_Zip_Code__c}
+                                                                            <br />USA
+                                                                            <br />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END BILLING -->
+                    </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.fileToggle}">
+                    <div id="tab-default-3" class="slds-tabs_default__content" role="tabpanel"
+                        aria-labelledby="tab-default-3__item">
+
+                        <!-- FILE INFO -->
+                        <c:embeddedFlow>
+                            <aura:set attribute="userType" value="{!v.userType}" />
+                            <aura:set attribute="recordId" value="{!v.load.Id}" />
+                            <aura:set attribute="flowName" value="File_List" />
+                        </c:embeddedFlow>
+                        <!-- END FILE INFO -->
+                    </div>
+                </aura:if>
+
+            </div>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,9 @@
+.THIS .slds-modal__container {
+    width: 50rem;
+    max-width: 90%;
+}
+
+.THIS .slds-modal__content {
+    height: 40rem;
+    overflow-y: auto;
+}

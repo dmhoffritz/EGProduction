@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event template" access="global">
+    <aura:attribute name="navItem" type="String" description="Item to Navigate" access="global"/>
+    <aura:attribute name="recordId" type="String" description="Id of record to navigate to" access="global"/>
+</aura:event>

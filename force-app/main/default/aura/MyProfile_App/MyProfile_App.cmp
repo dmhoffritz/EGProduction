@@ -1,0 +1,89 @@
+<aura:component controller="CarrierPortal_Cont">
+    <aura:attribute name="profile_id" type="String"/>
+    <aura:attribute name="current_user" type="Portal_User_Registration__c"/>
+    
+    <aura:attribute name="disableEdit" type="Boolean" default="true"/>
+    <aura:attribute name="enableEdit" type="Boolean" default="false"/>
+    
+    
+    <aura:attribute name="displaySuccess" type="Boolean" default="false"/>
+    <aura:attribute name="displayError" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <!-- TOAST MSGS -->
+    <aura:if isTrue="{!v.displaySuccess}">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                <span class="slds-assistive-text">success</span>
+                <lightning:icon class="success-icon" iconName="action:check" size="x-small"/>
+                
+                <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                </span>
+                
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small ">Successfully updated profile</h2>
+                </div>
+                <div class="slds-notify__close">
+                    <a onclick="{!c.closeToast}" style="text-decoration: none; font-size: 20px">X</a>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- END TOAST MSGS -->
+    
+    <div class="demo-only" style="width:50%; margin:auto; background-color:rgb(0,0,0,0.5); color:white; padding:10px; border-radius:10px">
+        <article class="slds-tile slds-media">
+            <div class="slds-media__figure">
+                <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                    <lightning:icon iconName="standard:avatar" size="large" alternativeText="Avatar"/>
+                </span>
+            </div>
+            <div class="slds-media__body" rendered="{!v.disableEdit}">
+                <h3 style="color:#62BF34" class="slds-tile__title slds-truncate" title="First Name Last Name">
+                    <a href="#" style="font-size: 16px;">{!v.current_user.FirstName__c + ' ' + v.current_user.LastName__c}</a>
+                </h3>
+                <aura:if isTrue="{!v.disableEdit}">
+                    <div class="slds-tile__detail" style="color:white">
+                        <dl class="slds-list_horizontal slds-wrap">
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input style="color:black" type="email" name="email" label="Email/Username" value="{!v.current_user.Email__c}" disabled="true"/>
+                            </dd>
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input type="tel" style="color:black" name="phone" label="Phone" value="{!v.current_user.Phone__c}" disabled="true"/>
+                            </dd>
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input type="password" style="color:black" name="pword" label="Password" value="{!v.current_user.Password__c}" disabled="true"/>
+                            </dd>
+                        </dl>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.enableEdit}">
+                    <div class="slds-tile__detail" style="color:white">
+                        <dl class="slds-list_horizontal slds-wrap">
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input style="color:black" type="email" name="email" label="Edit Email/Username" value="{!v.current_user.Email__c}" disabled="false"/>
+                            </dd>
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input type="tel" style="color:black" name="phone" label="Phone" value="{!v.current_user.Phone__c}" disabled="false"/>
+                            </dd>
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input type="password" style="color:black" name="pword" label="Edit Password" value="{!v.current_user.Password__c}" disabled="false"/>
+                            </dd>
+                            <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                                <lightning:input type="password" style="color:black" name="confirm_pword" label="Confirm Password" value="{!v.current_user.ConfirmPassword__c}" disabled="false"/>
+                            </dd>
+                        </dl>
+                    </div>
+                </aura:if>
+                
+            </div>
+            <aura:if isTrue="{!v.disableEdit}">
+                <lightning:button label="Edit" iconName="utility:edit" iconPosition="left" variant="brand" onclick="{!c.editInfo}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.enableEdit}">
+                <lightning:button label="Save" variant="success" title="Save" onclick="{!c.handleSave}"/>
+            </aura:if>
+        </article>
+    </div>  
+</aura:component>

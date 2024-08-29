@@ -1,0 +1,98 @@
+<aura:component>
+    <aura:attribute name="load" type="FreightTM__Load__c" />
+    
+    <aura:attribute name="carrierStage" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <div class="slds-region_medium">
+        <div class="slds-path slds-path_has-coaching slds-is-expanded">
+            <div class="slds-grid slds-path__track slds-has-overflow">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                <li aura:id="Assigned" class="slds-path__item" role="presentation">
+                                    <a title="Assigned" aria-selected="false" class="slds-path__link" href="" id="path-55" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="xx-small"/>
+                                            
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">Assigned</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Dispatched" class="slds-path__item" role="presentation">
+                                    <a title="Dispatched" aria-selected="false" class="slds-path__link" href="" id="path-56" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="xx-small"/>
+                                            
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">Dispatched</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Arrived_for_pickup" class="slds-path__item" role="presentation">
+                                    <a title="Arrived For Pickup" aria-selected="true" class="slds-path__link" href="" id="path-57" role="option" tabindex="0">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="xx-small"/>
+                                            
+                                            <span class="slds-assistive-text">Current Stage:</span>
+                                        </span>
+                                        <span class="slds-path__title">Arrived For Pickup</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Loaded_In_Transit" class="slds-path__item" role="presentation">
+                                    <a title="Loaded In Transit" aria-selected="false" class="slds-path__link" href="" id="path-58" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="xx-small"/>
+                                            
+                                        </span>
+                                        <span class="slds-path__title">Loaded In Transit</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Arrived_for_delivery" class="slds-path__item" role="presentation">
+                                    <a title="Arrived For Delivery" aria-selected="false" class="slds-path__link" href="" id="path-59" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="xx-small"/>
+                                            
+                                        </span>
+                                        <span class="slds-path__title">Arrived For Delivery</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Delivered" class="slds-path__item" role="presentation">
+                                    <a title="Delivered" aria-selected="false" class="slds-path__link" href="" id="path-60" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="x-small"/>
+                                        </span>
+                                        <span class="slds-path__title">Delivered</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Bill/POD_Received" class="slds-path__item" role="presentation">
+                                    <a title="Bill Received" aria-selected="false" class="slds-path__link" href="" id="path-61" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="x-small"/>
+                                        </span>
+                                        <span class="slds-path__title">Bill Received</span>
+                                    </a>
+                                </li>
+                                <li aura:id="Processed_for_Payment" class="slds-path__item" role="presentation">
+                                    <a title="Payment Processed" aria-selected="false" class="slds-path__link" href="" id="path-63" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:check" iconSize="x-small"/>
+                                        </span>
+                                        <span class="slds-path__title">Payment Processed</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-path__action">
+                    <span class="slds-path__stage-name">Stage: {!v.carrierStage}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</aura:component>

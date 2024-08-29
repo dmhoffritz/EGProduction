@@ -1,0 +1,23 @@
+<!--
+  @description       : Component used to list out all related items on a Load record
+  @author            : Ethan Myers
+  @group             : 
+  @last modified on  : 01-30-2023
+  @last modified by  : Ethan Myers
+-->
+<template>
+    <div>
+        <template for:each={items} for:item="loadItem" for:index="index">
+            <div key={loadItem.Id} class="tile">
+                <c-load-item-tile user={user} load={load} item={loadItem} commodity-options={commodityOptions} ></c-load-item-tile>
+            </div>
+        </template>
+
+        <template if:true={showAddButton}>
+            <div class="tile">
+                <lightning-button class="new-item-button" variant="brand" label="Add New Item" icon-name="utility:add"
+                    icon-position="left" onclick={addNewItem} stretch></lightning-button>
+            </div>
+        </template>
+    </div>
+</template>

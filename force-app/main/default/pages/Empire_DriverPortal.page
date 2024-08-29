@@ -1,0 +1,122 @@
+<apex:page standardController="FreightTM__Load__c" extensions="driverPortal_Cont" showheader="false" sidebar="false" cache="true"
+    docType="html-5.0" applyBodyTag="false" lightningStylesheets="true" standardStylesheets="false">
+    <apex:slds />
+    <apex:includeLightning />
+
+    <head>
+        <apex:stylesheet value="{!$Resource.Portal_Fonts}" />
+        <title>Empire Driver Portal</title>
+            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta http-equiv="CACHE_CONTROL" content="NO-CACHE"/>
+            <style type="text/CSS">
+                @import url('https://fonts.googleapis.com/css?family=Roboto'); * { margin: 0; padding: 0; font-family: 'industry'} body { font-family: 'industry',
+                sans-serif; color: #575a60; font-weight: 700; font-size: 13px; font-style: normal; float: none; line-height: 1.1; margin:
+                0 auto; padding: 0px; max-width: 765px; width: 100%; -webkit-appearance: none;
+                <!-- to override iOS default btn style -->
+                -moz-appearance: none;
+                <!-- to override iOS default btn style -->
+                }
+                @media screen and (max-width: 700px) {
+                .mobile-show {
+                visibility: visible;
+                }
+                .mobile-hide {
+                visibility: hidden;
+                display: none;
+                }
+                }
+                @media screen and (min-width: 701px) {
+                .mobile-show {
+                visibility: hidden;
+                display: none;
+                }
+                .mobile-hide {
+                visibility: visible;
+                }
+                }
+            </style>
+
+            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    </head>
+
+    <body onload="onLoadFunctions()">
+        <!-- Keep track of driver location -->
+        <script>
+            let watchId = null;
+            let lastUpdateTime;
+            // 60000ms = 1min
+            let minFrequency = 5000 //update location every 30min
+
+            function getLocation() {
+                if (navigator.geolocation && ("{!load.FreightTM__Status__c}" != "Delivered")) {
+                    watchId = navigator.geolocation.watchPosition(showPosition, showError);
+                } else if ("{!load.FreightTM__Status__c}" == "Delivered") {
+                    return;
+                } else {
+                    alert("Geolocation is not supported by this browser");
+                }
+            }
+
+            function showPosition(pos) {
+                let currentCoords = pos.coords.latitude + ',' + ' ' + pos.coords.longitude;
+                console.log("Processing the following coordinate data: " );
+                console.log(currentCoords);
+                let now = new Date();
+                
+                if ((lastUpdateTime && (now.getTime() - lastUpdateTime.getTime()) < minFrequency) || "{!load.FreightTM__Status__c}" == "Delivered") {
+                    navigator.geolocation.clearWatch(watchId);
+                    return;
+                } else {
+                    getLocation();
+                    lastUpdateTime = now;
+                    storeCoords(currentCoords);
+                }
+            }
+
+            function showError(error) {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            x.innerHTML = "User denied the request for Geolocation."
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            x.innerHTML = "Location information is unavailable."
+                            break;
+                        case error.TIMEOUT:
+                            x.innerHTML = "The request to get user location timed out."
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            x.innerHTML = "An unknown error occurred."
+                            break;
+                    }
+            }
+
+            function onLoadFunctions() {
+                getLocation();
+            }
+        </script>
+        <apex:form >
+            <apex:actionFunction action="{!storeCoordinates}" name="storeCoords" reRender="out">
+                <apex:param name="message" value="" assignTo="{!lat_long}" />
+            </apex:actionFunction>
+        </apex:form>
+        <div class="slds-scope">
+            <div id="auraPortal">
+                <script>
+                    $Lightning.use("c:lightningDriverPortal", function() {
+                        $Lightning.createComponent("c:driverPortalHome", 
+                        {
+                            loadId: "{!recordId}"
+                        },
+                        "auraPortal",
+                        function(cmp) {
+                            //callback fcn
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </body>
+
+</apex:page>

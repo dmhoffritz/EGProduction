@@ -1,0 +1,28 @@
+<aura:component implements="lightning:availableForFlowScreens,lightning:availableForFlowActions,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"  access="global" >
+    <aura:attribute name="recordId" type="String" access="global"/>
+    <aura:attribute name="load_num" type="String" access="global"/>
+    <aura:attribute name="showRateCon" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="rateConURL" type="String" access="global"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <lightning:button class="slds-button slds-button_destructive" iconName="utility:edit_form" iconPosition="left" label="Sign RateCon" onclick="{!c.redirectRateCon}"/>
+    
+    <aura:if isTrue="{!v.showRateCon}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 50%">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeModal}">
+                    <lightning:icon iconName="action:close" size="x-small"/>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.load_num}&nbsp;RateCon</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <iframe height="600px" id="theIframe" src="{!v.rateConURL}" width="100%"></iframe>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,614 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-27-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<apex:page sidebar="false" applyBodyTag="false" standardController="FreightTM__Load__c" extensions="BOLSignature" showheader="false" cache="true" docType="html-5.0" contentType="text/html" lightningStylesheets="true" standardStylesheets="false">
+    <apex:messages />
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <style type="text/CSS"> 
+            @page { 
+                size: 8.5in 11in; 
+                margin: 1 auto;
+                border: none;
+                /* PDF width, height, margin */ 
+            
+            @top-center {
+            content: element(header);
+            }
+            @bottom-left {
+            content: element(footer);
+            }
+            }
+            
+            
+            @media print { 
+            body {zoom: 0.7; /* IE / -moz-transform: scale(0.7); / Firefox / -o-transform: scale(0.7); / Opera / -webkit-transform: scale(0.7); / Safari And Chrome / transform: scale(0.7); / Standard Property */}
+            html, body {
+                 border: none;
+                 height: 100%;
+                 page-break-after: avoid !important;
+                 page-break-before: avoid !important;
+                       } 
+            .no-print, .no-print * { display: none !important; } 
+            
+            }
+            
+            body {
+                font-family: Arial Unicode MS;
+            }
+            
+            document.body.setAttribute('style', 'overflow: hidden;');
+
+            .blackline { border: 1px solid #000;}
+            table { 
+            border-collapse: collapse;
+            border-spacing: 0;
+            }
+            
+            th{
+            border: 1px solid black;
+            padding: 5px;
+            font-size: .9em;
+            font-weight: bold;
+            text-align: center;
+            }
+            
+            td{
+            border: 1px solid black;
+            padding: 5px;
+            font-size: .9em;
+            }
+            
+            .m-signature-pad--body-first canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 75%;
+            height: 100px;
+            border: 1px solid #CCCCCC;
+            border-radius: 10px 30px;
+            }
+            
+            .m-signature-pad--body-third canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 75%;
+            height: 100px;
+            border: 1px solid #CCCCCC;
+            border-radius: 10px 30px;
+            }
+            
+            .m-signature-pad--body-second canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 75%;
+            height: 100px; 
+            border: 1px solid #CCCCCC;
+            border-radius: 10px 30px;
+            }
+            .red {
+              color: red;
+            }
+            .green {
+              color: green;
+            }
+            .msgs {
+              font-weight: bold;
+              text-align: center;
+              margin: 0 auto;
+              width: 100%;
+            }
+            .button {
+            background-color: #62BF34;
+            border: none;
+            color: #333;
+            font-size: 1.3em;
+            font-weight: 900;
+            padding: 10px 15px;
+            width: 100%;
+            height: 25px;
+            margin: 0 auto;
+            letter-spacing: 1px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            }
+            
+        </style>
+    </head>
+    
+     <body>
+    
+            <apex:form >
+                <div class="no-print" style="text-align: right;">
+                   <apex:commandButton onclick="window.print()" value="Print Page" id="printPageButton" style="align:right;float:center;height:30px;text-align:center;"/>
+                </div>
+            </apex:form>
+                        
+    
+   
+    
+        <apex:pageBlock >
+            <apex:form >
+                <div style="font-family:arial, sans-serif; font-size: .9em;">
+                    <table width="100%" style="line-height:1.1em">
+                        <tr>
+                            <td width="60%" align="left" style="border: none;">
+                                <!--<apex:image url="https://sflogistics--c.documentforce.com/servlet/servlet.ImageServer?id=0151U0000004Ff4&oid=00D1U000000xtdQ&lastMod=1548960914000" width="200" height="66" /><br />
+<b>{!$Organization.Name}</b><br />-->
+                        <apex:image url="{!$Resource.Empire_Logo_Lockup_Green_New}" width="100"/><br /><br />
+                                
+                                <div style="color: black; text-align: left; margin-left:0px">
+                                    <!--<b>{!$Organization.Name}</b>-->
+                                    {!$Organization.Street}<br/> 
+                                    {!$Organization.City}, {!$Organization.State} {!$Organization.PostalCode}<br/> 
+                                    <!--MC #: <br />-->
+                                    Phone: {!$Organization.Phone}<br />
+                                    <!--Fax: {!$Organization.Fax}-->
+                                </div>
+                            </td>
+                            <td width="40%" align="right" style="text-align:left; margin-right:15px; border: none;">
+                                <h2>BILL OF LADING</h2>
+                                <b>Load #:&nbsp;</b><apex:outputText value="{!loadRec.Name}" /><br />
+                                <b>Date:&nbsp;</b><apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!TODAY()}"/></apex:outputText><br />
+                            </td>
+                        </tr>
+                    </table>
+            
+            <br />
+            
+            <table width="100%" style="line-height:1.3em; background-color: #000000">
+                <tr>
+                    <td width="100%" style="color: white" align="center">ALL DRIVERS MUST HAVE PPE ON BEFORE EXITING TRUCK TO LOAD AND UNLOAD</td>
+                </tr>
+            </table>
+            
+            <table width="100%" style="background-color: #FFFFFF">
+                <tr>
+                    <td width="100%" style="color:black; border: 0px" align="center"><b>Hard Hat - Safety Glasses - Steel Toed Boots - Safety Vest - Long Pants - Long Sleeve Shirt</b>
+                    <br/>
+                    Do not load or unload trucks if driver does not have proper PPE
+                    </td>
+                </tr>
+            </table>
+                    
+            <br/>
+            
+            <div style="font-family:arial, sans-serif; font-size: 1.0em;">
+                <!--<apex:panelGrid columns="2">-->
+                <table width="100%" style="line-height:1.1em;">
+                    <th width="60" align="center">Customer</th>
+                    <th width="40" align="center">Driver</th>
+                    <tr>
+
+                        <td width="60%" align="left" style="background-color: #f4f4f4">
+                            <b><apex:outputText value="{!loadRec.FreightTM__Customer__r.Name}" /></b><br/> <!-- Put Customer Name here -->
+                            <!--<apex:outputText value="{!Load__c.FreightTM__Carrier_Obj__r.Billing_Address__c}"/><br />
+<apex:outputPanel ><apex:outputText value="{!Load__c.FreightTM__Carrier_Obj__r.Billing_City__c}"/> <apex:outputText value=" {!Load__c.FreightTM__Carrier_Obj__r.Billing_State_Province__c}"/> <apex:outputText value=" {!Load__c.FreightTM__Carrier_Obj__r.Billing_Zip_Code__c}"/></apex:outputPanel><br />
+-->
+                            <b>Phone:</b>&nbsp;<apex:outputField value="{!loadRec.FreightTM__Customer__r.Phone}"/><br /> <!-- Customer Phone goes here -->
+                        </td>
+                        <td width="40%" align="right" style="text-align:left; background-color: #f4f4f4">
+                            <b>Name:</b>&nbsp;<apex:outputText value="{!loadRec.Driver_Name__c}"/><br/>
+                            <b>Cell:</b>&nbsp;<apex:outputText value="{!loadRec.Driver_Phone__c}"/>
+                        </td> 
+                    </tr>
+                </table>
+                <!--</apex:panelGrid>-->  
+            </div>
+                    <!-- <table width="100%" style="line-height:1.3em">
+<tr>
+<td width="50%" align="right" style="text-align:left">
+<h3>Shipper</h3>
+<b><apex:outputText value="{!FreightTM__Load__c.Shipper_Text__c}" /></b><br />
+<b>Phone:&nbsp;</b><apex:outputText value="{!FreightTM__Load__c.Shipper_Phone2__c}"/><br />
+<b>Email:&nbsp;</b><apex:outputText value="{!FreightTM__Load__c.Shipper_Email2__c}"/><br />
+</td>
+
+<td width="50%" align="right" style="text-align:left">
+<h3>Consignee</h3>
+<b><apex:outputText value="{!FreightTM__Load__c.Consignee_Text__c}" /></b><br />
+<b>Phone:&nbsp;</b><apex:outputText value="{!FreightTM__Load__c.Consignee_Phone2__c}"/><br />
+<b>Email:&nbsp;</b><apex:outputText value="{!FreightTM__Load__c.Consignee_Email2__c}"/><br />
+</td>
+</tr>
+</table>-->
+                    
+                    <br />
+    <!--
+        <table width="100%" border="1" cellpadding="10" style="line-height:1.3em; border-collapse: collapse;">
+            <th width="100" align="center" colspan="4">Package Description</th>
+           <tr><b>
+               <th width="5%" align="Center">Quantity</th>
+               <th width="20%" align="Center">Product</th>
+               <th width="5%" align="Center">Weight</th>
+               <th width="20%" align="Center">Requirements</th>        
+           </b></tr>
+           <tr style="font-size: .9em">
+               <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{0, number,00}"><apex:param value="{!loadRec.Quantity__c}"/></apex:outputText></td>
+               <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{!loadRec.Mat_Grade_Conversion__c}" /></td>
+               <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{0, number,00}"><apex:param value="{!loadRec.FreightTM__Weight__c}"/></apex:outputText>&nbsp;lbs</td>
+               <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{!loadRec.FreightTM__Requirements__c}" /></td>
+           </tr>
+        </table> 
+    -->
+                    <table width="100%" border="1" cellpadding="10" style="line-height:1.3em; border-collapse: collapse;">
+                        <th width="100" align="center" colspan="4">Package Description</th>
+                    
+                        <!-- 
+                                                SALES ORDER COMMODITY UPDATE (WINTER 2022): 
+                                                Prior to Sales Order release, all commodity data was stored as open-box fields on load record... 
+                                                Post Sales Order release, all commodity data is stored as related list of item records to properly define
+                                                qty, commodity, and grades of each item hauled on load... 
+                                                The following script is used to bind historical data with new data...
+                                                We do so by identifying whether load has related items. 
+                                                If so, we will display items in list on BOL. 
+                                                If not, we will display legacy commodity fields to maintain integrity with previous BOL forms.
+                                             -->
+                        <apex:outputPanel rendered="{!IF(loadRec.Items__r.size == 0, true, false)}">
+                            <tr>
+                                <b>
+                                    <th width="5%" align="Center">Quantity</th>
+                                    <th width="20%" align="Center">Product</th>
+                                    <!--<th width="40%" align="left">Description</th>-->
+                                    <th width="5%" align="Center">Weight</th>
+                                    <th width="20%" align="Center">Requirements</th>
+                                </b>
+                            </tr>
+                            <tr style="font-size: .9em">
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{0, number,00}">
+                                        <apex:param value="{!loadRec.Quantity__c}" /></apex:outputText>
+                                </td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!loadRec.Mat_Grade_Conversion__c}" />
+                                </td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{0, number,00}">
+                                        <apex:param value="{!loadRec.FreightTM__Weight__c}" /></apex:outputText>&nbsp;lbs</td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!loadRec.FreightTM__Requirements__c}" />
+                                </td>
+                            </tr>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!IF(loadRec.Items__r.size > 0, true, false)}">
+                            <apex:pageBlockTable value="{!loadRec.Items__r}" var="item" border="1" cellpadding="5" style="font-size: 12pt; line-height:1.3em; border-collapse: collapse;border-bottom:1px solid black;"
+                                width="100%">
+                                <apex:column value="{!item.Quantity__c}" headerClass="th" style="text-align:center; width: 25%;" />
+                                <apex:column value="{!item.Commodity_BOL__c}" headerClass="th" style="text-align:center; width: 50%;" headerValue="Commodity"
+                                />
+                                <apex:column value="{!item.Notes__c}" headerClass="th" style="text-align:center; width: 25%;" />
+                            </apex:pageBlockTable>
+                        </apex:outputPanel>
+                    </table>
+        <br />
+        
+
+                                            
+
+                    <table width="100%" border="1" cellpadding="10" style="line-height:1.3em; border-collapse: collapse;">
+                        <!--<table width="100%" style="line-height:1.3em">-->
+                        <th width="100" align="center" colspan="7">Stops / Actions:</th>
+                        <tr width="100%">
+                            <th width="5%" align="center">#</th>
+                            <th width="10%" align="center">Action</th>
+                            <th width="10%" align="left">Date / Time</th>
+                            <th width="20%" align="left">Location</th>
+                            <th width="10%" align="center">Ref #:</th>
+                            <th width="20%" align="left">Contact</th>
+                            <th width="35%" align="left">Remarks</th>        
+                        </tr>
+                        <tr style="font-size: .9em">
+                            <td align="center" style="background-color: #f4f4f4">1</td>
+                            <td align="center" style="background-color: #f4f4f4">Pickup By</td>
+                            <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{0, date,M/d/yy h:mm a}"><apex:param value="{!loadRec.Pickup_By__c + offset}"/></apex:outputText>
+                                <!--<apex:outputText value=" {!FreightTM__Load__c.FreightTM__Pickup_Arrival_Window__c}" />--></td>
+                            <!--<td align="left" style="background-color: #f4f4f4"><apex:outputText value="{0, date, MM/dd/yy, hh:mm a}"><apex:param value="{!FreightTM__Load__c.FreightTM__Pickup_Arrival__c}"/></apex:outputText></td>-->
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!loadRec.FreightTM__Pickup_Address__c}"/><br />
+                                <apex:outputPanel ><apex:outputText value="{!loadRec.FreightTM__Pickup_City__c}"/>, <apex:outputText value=" {!loadRec.FreightTM__Pickup_State__c}"/> <apex:outputText value=" {!loadRec.FreightTM__Pickup_Zip_Code__c}"/></apex:outputPanel><br />
+                                <apex:outputText value="{!loadRec.FreightTM__Pickup_Country__c}"/><br />
+                                Lat/Long:&nbsp;<apex:outputText value="{!loadRec.Pickup_Lat_Long__Latitude__s}"/>,
+                                <apex:outputText value="{!loadRec.Pickup_Lat_Long__Longitude__s}"/></td>
+                            <td align="center" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!loadRec.FreightTM__Pickup_Ref__c}" /></td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                Name:&nbsp;
+                                
+                                <apex:outputText value="{!pickupContact}" />
+                                <br/>
+
+                                Phone:&nbsp;<apex:outputText value="{!loadRec.FreightTM__Pickup_Phone__c}"/><br />
+                                <!--
+                                Email:&nbsp;<apex:outputText value="{!loadRec.FreightTM__Pickup_Email__c}"/><br />
+                                -->
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{!loadRec.FreightTM__Pickup_Remarks__c}" /></td>
+                        </tr>
+                        
+                        <!--<tr><td colspan="5" cellspacing="40">&nbsp;</td></tr>-->
+                        
+                        <apex:variable value="{!2}" var="rowNum"/>
+                        <apex:repeat var="s" value="{!stops}">
+                            <tr style="font-size: .9em">
+                                <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{!FLOOR(rowNum)}"/><apex:variable var="rowNum" value="{!rowNum + 1}"/></td>
+                                <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{!s.FreightTM__Type__c}"/></td>
+                                <td align="left" style="background-color: #f4f4f4"><apex:outputText value=" {!s.FreightTM__Arrival__c} "/></td>
+                                <td align="left" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!s.FreightTM__Address__c}"/><br />
+                                    <apex:outputPanel ><apex:outputText value="{!s.FreightTM__City__c}"/>, <apex:outputText value="{!s.FreightTM__State__c}"/> <apex:outputText value="{!s.FreightTM__Zip_Code__c}"/></apex:outputPanel><br />
+                                    <apex:outputText value="{!s.FreightTM__Country__c}"/><br /></td>
+                                <td align="center" style="background-color: #f4f4f4"><apex:outputText value="{!s.FreightTM__Reference__c}" /></td>
+                                <td align="left">
+                                    <apex:outputText value="{!s.FreightTM__Contact__c}"/><br />
+                                    <apex:outputText value="{!s.FreightTM__Phone__c}"/><br />
+                                    <apex:outputText value="{!s.FreightTM__Email__c}"/><br /></td>
+                                <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{!s.FreightTM__Remarks__c}" /></td>
+                            </tr>
+                            <!--
+<tr>              
+<td colspan="5" cellspacing="40"><apex:outputText value="Stop Remarks: {!s.FreightTM__Remarks__c}"/></td>
+</tr>
+-->
+                        </apex:repeat>
+           </table>
+                    <!--                    
+                    <table width="100%" style="background-color: #FFFFFF">
+                        <tr>
+                            <td width="100%" style="color:black; border: 0px" align="center"><b>Please send all invoices to apfreight@yourempiregroup.com upon proof of delivery</b></td>
+                        </tr>
+                    </table>   
+                    -->
+                                    
+                    <apex:outputPanel rendered="{!msg}"> 
+                        <span class="msgs red"><apex:pageMessages /></span>
+                        <div class="msgs green" style="margin: 15px 0 5px 0;"><apex:outputText value="{!SUBSTITUTE(JSENCODE(msgs), '\\n', '<br/>')}" escape="false" /></div>
+                    </apex:outputPanel>
+                    
+                   
+                    
+                    <!-- Driver Signature HTML -->
+                    <table width="100%" style="line-height:1.0em; margin-top: 10px;">
+                        <tr>
+                            <td width="20%" align="left" style="padding-right: 10px; border:none;"><div style="height: 100px;"></div><b>Driver</b></td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;"><div style="height: 100px;"></div><b>Print Name:&nbsp;<apex:inputField value="{!loadRec.Driver_Name__c}" ignoreEditPermissionForRendering="true"/></b></td>
+                            <td width="35%" align="left" style="padding-right: 10px; border:none;">
+                                
+                                <div style="height: 100px;">
+                                    <apex:outputpanel >
+                                        <apex:includeScript value="{!$Resource.signature_pad}"/>
+                                        <apex:outputpanel rendered="{!IF(isShowDriverSignature != true, true, false)}" layout="none">
+                                            <div id="signature-pad-Driver" class="m-signature-pad-Driver">
+                                                <div class="m-signature-pad--body-third">
+                                                    <canvas id="canvasDriver"></canvas>
+                                                </div>
+                                            </div>
+                                            <br/><br/>
+                                            <input id="clearSigDButton" style="text-align: center;" type="button" name="SigCap" onclick="clearDriverPad();" value="Clear Driver Signature"/>
+                                            
+                                            <apex:inputHidden id="DriverSignature" value="{!DriverSignature}" />
+                                        </apex:outputpanel>
+                                        
+                                        <apex:outputpanel rendered="{!IF(isShowDriverSignature == true, true, false)}" layout="none">
+                                            <apex:image id="theDriverImage" value="{!DriverSignature}" width="70%" height="135"/>
+                                            <br/>
+                                            <apex:commandButton rendered="false" value="Clear Driver Signature" action="{!clearDriverSign}" styleClass="text-align: center;" />
+                                        </apex:outputpanel>
+                                        
+                                    </apex:outputpanel>
+                                </div>
+                                
+                                _____________________________<br/>Signature</td>
+                           <td width="20%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Date:</b>&nbsp;<br/>
+                        <apex:outputText value="{0, date,M/d/yy h:mm a}"><apex:param value="{!loadRec.Date__c + offset}"/></apex:outputText></td>
+                            <!--<td width="20%" align="left" style="background-color: #cbd8ed"><b><apex:outputText value="{0, number, currency}"><apex:param value="{!FreightTM__Load__c.Total_Amount__c}"/></apex:outputText></b></td>-->
+                        </tr>
+                        </table>
+                    <!-- End Driver Signature HTML -->
+                    
+                    <!-- Delivery Signature HTML -->
+                    <table width="100%" style="line-height:1.0em; margin-top: 10px;">
+                        <tr>
+                            <td width="20%" align="left" style="padding-right: 10px; border:none;">
+                                <div style="height: 100px;"></div>
+                                <b>Shipper
+                                    <br/>(Consignor)</b>
+                            </td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                                <div style="height: 100px;"></div>
+                                <b>Print Name:&nbsp;
+                                    <apex:inputField value="{!loadRec.FreightTM__Pickup_Contact__c}" ignoreEditPermissionForRendering="true" />
+
+                                </b>
+                            </td>
+                            <td width="35%" align="left" style="padding-right: 10px; border:none;">
+                    
+                    
+                                <div style="height: 100px;">
+                                    <!--<apex:form >-->
+                                    <apex:outputpanel >
+                                        <apex:includeScript value="{!$Resource.signature_pad}" />
+                                        <apex:outputpanel rendered="{!IF(isShowDeliverySignature != true, true, false)}" layout="none">
+                                            <div id="signature-pad-delivery" class="m-signature-pad-delivery">
+                                                <div class="m-signature-pad--body-second">
+                                                    <canvas id="canvasDeliery"></canvas>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                            <input id="clearSigDButton" style="text-align: center;" type="button" name="SigCap" onclick="clearDeliveryPad();" value="Clear Delivery Signature"
+                                            />
+                    
+                                            <apex:inputHidden id="deliverySignature" value="{!deliverySignature}" />
+                                        </apex:outputpanel>
+                                        <apex:outputpanel rendered="{!IF(isShowDeliverySignature == true, true, false)}" layout="none">
+                                            <apex:image id="theDeliveryImage" value="{!deliverySignature}" width="70%" height="135" />
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                    
+                                            <apex:commandButton rendered="false" value="Clear Delivery Signature" action="{!clearDelivery}" styleClass="text-align: center;"
+                                            />
+                                        </apex:outputpanel>
+                    
+                                    </apex:outputpanel>
+                                </div>
+                                <!--</apex:form>-->
+                    
+                                _____________________________
+                                <br/>Signature</td>
+                            <td width="20%" align="left" style="border: none;">
+                                <div style="height: 100px;"></div>
+                                <b>Date:</b>&nbsp;
+                                <br/>
+                                <apex:outputText value="{0, date,M/d/yy h:mm a}">
+                                    <apex:param value="{!loadRec.Receiver_Date__c + offset}" /></apex:outputText>
+                            </td>
+                    
+                        </tr>
+                    </table>
+                    <!-- End Delivery Signature HTML -->
+                            
+                        
+                    
+                    <!--
+/* ***************************************************************** */
+-->
+                   
+                    
+                    <!--
+/* ***************************************************************** */
+-->
+            <br/>   
+            <br/>
+            
+                    <table class="no-print" width="100%" style="line-height:1.1em;">
+                        <div style="width: 800px;">
+                        <tr>
+                            <td width="100%" align="center" style="border:none">            
+                            <apex:commandButton value="Click Here to Save & Submit" action="{!Save2}" style="height:40px;border-radius:9px;width:500px;text-align:center;!important;" styleClass="button" onclick="saveSign();" />
+                            </td>
+                        </tr>
+                        </div>
+                    </table>
+                    
+                    
+                    <script type="text/javascript">
+                    
+                    try{
+                        // Pickup
+                        var pickupCanvas = document.getElementById("canvasPickup"),
+                            pickupSignaturePad;
+                        var pickupSignaturePad = new SignaturePad(pickupCanvas);
+                        pickupSignaturePad.minWidth = 2;
+                        pickupSignaturePad.maxWidth = 4;
+                        pickupSignaturePad.penColor = "#000000";
+                        pickupSignaturePad.backgroundColor = "#FFFFFF";
+                        pickupSignaturePad.toDataURL();
+                        window.onresize = resizeCanvas;
+                        resizeCanvas(pickupCanvas);
+                    }catch(e){}
+                    
+                    
+                    
+                    try{
+                        // Driver
+                        var DriverCanvas = document.getElementById("canvasDriver"),
+                            DriverSignaturePad;
+                        var DriverSignaturePad = new SignaturePad(DriverCanvas);
+                        DriverSignaturePad.minWidth = 2;
+                        DriverSignaturePad.maxWidth = 4;
+                        DriverSignaturePad.penColor = "#000000";
+                        DriverSignaturePad.backgroundColor = "#FFFFFF";
+                        DriverSignaturePad.toDataURL();
+                        window.onresize = resizeCanvas;
+                        resizeCanvas(DriverCanvas);
+                    }catch(e){}
+                    
+                    
+                    
+                    
+                    try{
+                        // Delivery
+                        var deliveryCanvas = document.getElementById("canvasDeliery"),
+                            deliverySignaturePad;
+                        var deliverySignaturePad = new SignaturePad(deliveryCanvas);
+                        deliverySignaturePad.minWidth = 2;
+                        deliverySignaturePad.maxWidth = 4;
+                        deliverySignaturePad.penColor = "#000000";
+                        deliverySignaturePad.backgroundColor = "#FFFFFF";
+                        deliverySignaturePad.toDataURL();
+                        window.onresize = resizeCanvas;
+                        resizeCanvas(deliveryCanvas);
+                    }catch(e){}
+                    
+                    function resizeCanvas(canvas) {
+                        var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+                        canvas.width = canvas.offsetWidth * ratio;
+                        canvas.height = canvas.offsetHeight * ratio;
+                        canvas.getContext("2d").scale(ratio, ratio);
+                    }
+                    
+                    function clearPickupPad(){
+                        
+                        pickupSignaturePad.clear();
+                        document.getElementById("{!$Component.pickupSignature}").value = ''
+                    }
+                    
+                    function clearDriverPad(){
+                        
+                        DriverSignaturePad.clear();
+                        document.getElementById("{!$Component.DriverSignature}").value = ''
+                    }
+                    
+                    
+                    function clearDeliveryPad(){
+                        
+                        deliverySignaturePad.clear();
+                        document.getElementById("{!$Component.deliverySignature}").value = ''
+                    }
+                    
+                    function saveSign(){
+                        try{ 
+                            var pickupStrDataURI = pickupSignaturePad.toDataURL();
+                            if (!pickupSignaturePad.isEmpty()) {
+                                document.getElementById("{!$Component.pickupSignature}").value = pickupStrDataURI;
+                            }
+                        }catch{}
+                            
+                            
+                             try{ 
+                            var DriverStrDataURI = DriverSignaturePad.toDataURL();
+                            if (!DriverSignaturePad.isEmpty()) {
+                                document.getElementById("{!$Component.DriverSignature}").value = DriverStrDataURI;
+                            }
+                        }catch{}
+                            
+                            
+                            try{
+                            var deliveryStrDataURI = deliverySignaturePad.toDataURL();
+                        if (!deliverySignaturePad.isEmpty()) {
+                            document.getElementById("{!$Component.deliverySignature}").value = deliveryStrDataURI;
+                        }
+                    }catch{}
+                        //strDataURI = strDataURI.replace(/^data:image\/(png|jpg);base64,/, "");
+                        //alert('signature saved');                
+                        }
+                        </script>
+                    
+
+                  </div>
+                
+ 
+            </apex:form> 
+        </apex:pageBlock>
+       
+    </body>
+  
+    
+</apex:page>

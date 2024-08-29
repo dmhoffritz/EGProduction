@@ -1,0 +1,92 @@
+<!--
+  @description       : Ready for Invoicing Load Item table in Load Processing
+  @author            : Derek Hoffritz
+  @group             : 
+  @last modified on  : 12-05-2023
+  @last modified by  : Derek Hoffritz
+-->
+<template>
+    <div class="slds-align_absolute-center" style="height: 100%;">
+        <fieldset class="slds-form-element">
+            <div class="slds-form-element__control">
+                <template if:true={displayRejections}>
+                    <div class="rejected-picker">
+                        <div class="slds-visual-picker">
+                            <input type="radio" id="visual-picker-95" value="Rejected" name="status-pickers" onclick={showRejected} />
+                            <label class="pickerLabel" for="visual-picker-95">
+                                <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                    <span>
+                                        <span class="slds-text-heading_medium slds-m-bottom_x-small">Rejected
+                                            ({rejectedCount})</span>
+                                        <span class="slds-text-title">These Loads have been rejected and need immediate
+                                            attention.</span>
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </template>
+                <div class="slds-visual-picker">
+                    <input type="radio" id="visual-picker-91" value="Inventory Review" name="status-pickers" onclick={showInventoryReview}/>
+                    <label class="pickerLabel" for="visual-picker-91">
+                        <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                            <span>
+                                <span class="slds-text-heading_medium slds-m-bottom_x-small">Ready for Inventory Review ({inventoryReviewCount})</span>
+                                <span class="slds-text-title">These are Loads which were delivered prior to this week, but have not yet had their inventory cross-referenced with field reports.</span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="slds-visual-picker">
+                    <input type="radio" id="visual-picker-92" value="PM Review" name="status-pickers" onclick={showPMReview}/>
+                    <label class="pickerLabel" for="visual-picker-92">
+                        <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                            <span>
+                                <span class="slds-text-heading_medium slds-m-bottom_x-small">Ready for PM Review ({pmReviewCount})</span>
+                                <span class="slds-text-title">These are Loads with proper inventory allocation. Please compare these with Job expectations and set final approval.</span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="slds-visual-picker">
+                    <input type="radio" id="visual-picker-93" value="Ready for QB Movements" name="status-pickers" onclick={showQBMovements}/>
+                    <label class="pickerLabel" for="visual-picker-93">
+                        <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                            <span>
+                                <span class="slds-text-heading_medium slds-m-bottom_x-small">QB Movements ({qbMovementCount})</span>
+                                <span class="slds-text-title">These Loads have been approved by Project Managers and are prepared to be moved within QuickBooks.</span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="slds-visual-picker">
+                    <input type="radio" id="visual-picker-94" value="Ready for Invoicing" name="status-pickers" onclick={showInvoicing}/>
+                    <label class="pickerLabel" for="visual-picker-94">
+                        <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                            <span>
+                                <span class="slds-text-heading_medium slds-m-bottom_x-small">Ready for Invoicing ({invoicingCount})</span>
+                                <span class="slds-text-title">These Loads have been properly processed by Inventory and Project Managers. Time to get paid.</span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+    </div>
+    <template if:true={showReport}>
+        <!-- <c-ar-load-report onback={hideReport}></c-ar-load-report> -->
+        <c-custom-load-report title={reportTitle} load-filter={reportFilter} onupdate={refreshData}></c-custom-load-report>
+    </template>
+    <template if:true={loading}>
+        <div class="demo-only demo-only_viewport demo--inverse" style="position:relative">
+            <div class="slds-spinner_container slds-is-fixed">
+                <div role="status" class="slds-spinner slds-spinner_medium">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

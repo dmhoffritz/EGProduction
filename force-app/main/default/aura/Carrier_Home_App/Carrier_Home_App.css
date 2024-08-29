@@ -1,0 +1,35 @@
+.THIS {
+}
+
+.THIS.pickers_carrier-factoring {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.THIS.pickers_factoring-company {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.THIS.pickers_carrier-not-factoring {
+    margin-left: 5%;
+}
+
+/* Picker Block */
+.THIS .slds-visual-picker__figure {
+    background-color: rgb(0, 0, 0, 0.75) !important;
+}
+
+/* Picker # */
+.THIS .slds-text-heading_large {
+    color: #66cc33 !important;
+    font-family: 'Industry' !important;
+    font-size: 85px !important; 
+    font-weight: bolder !important;
+}
+
+/* Picker Description */
+.THIS .slds-text-heading_small, .THIS .slds-text-title {
+    color: white !important;
+    font-family: 'Industry' !important;
+}

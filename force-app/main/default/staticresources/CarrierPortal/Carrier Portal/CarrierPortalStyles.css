@@ -1,0 +1,11 @@
+.Front_Loader {
+    background-image: url("{!URLFOR($Resource.CarrierPortal, 'img/Front_Loader.jpeg')}");
+}
+
+.Birds_Eye {
+    background-image: url("{!URLFOR($Resource.CarrierPortal, 'img/Birds_Eye.jpg')}");
+}
+
+.Hardhat_Truck {
+    background-image: url("{!URLFOR($Resource.CarrierPortal, 'img/Hardhat_Truck.jpg')}");
+}

@@ -1,0 +1,126 @@
+<apex:page standardController="FreightTM__Load__c" recordSetVar="Loads" sidebar="false" cache="false" applyBodyTag="false" extensions="LoadsBatchMill_V2" renderAs="pdf" docType="html-5.0" applyHtmlTag="false" showHeader="false">    
+
+   <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <style type="text/CSS">
+            
+            table {
+                margin: 10px 0px 10px 0px;
+                border-collapse: collapse;
+                border-spacing: 0;
+                }
+            .pageBreak {
+                page-break-before: always;
+                -fs-page-sequence: start;
+                }
+            @page {
+                size: A4;
+                @bottom-left {
+                    font-size: 8pt;
+                    content: "<apex:outputText value="{0, date, dd.MM.yyyy HH:mm:ss}"><apex:param value="{!NOW()}" /></apex:outputText>";
+                }
+                @bottom-right {
+                    font-size: 8pt;
+                    content: counter(page) " of " counter(pages);
+                }
+                }
+            
+            .blackline { border: 1px solid #000;}
+
+            td,th{
+                <!--border: 1px solid #8f8f8f;-->
+                border: 1px solid #c7cdd4;
+                padding: 5px;
+                }
+                
+        </style>
+    </head>
+    
+    <apex:pageBlock >
+        <div style="font-family:arial, sans-serif; font-size: .85em">
+            <apex:image url="{!$Resource.Empire_group_logo}" width="120"/> <br />
+            
+         <table width="100%" style="line-height:1.3em;">
+           <tr>
+            <td width="100%" align="center" style="border: none; vertical-align: bottom;">
+                
+                <!-- if NOT Factoring -->
+                <apex:outputpanel >
+                    <b>Empire Group<br />
+                    140 Mayfair Rd., Suite 980<br />
+                    Hattiesburg, MS 39402<br />
+                    Phone: (601) 602-8418<br /> 
+                    Fax: (601) 730-7969<br /> 
+                    Email: pods@yourempiregroup.com</b><br />
+                </apex:outputpanel>
+            </td>
+           </tr>
+            </table>
+        </div>
+   </apex:pageBlock>
+            <br /><br />
+            
+ 
+    <table>
+        <tr width="100%" align="center" style="border: none; vertical-align: center; line-height:1.3em;">
+            <th>Load#</th>
+            <th>Pickup</th>
+            <th>Quantity</th>
+            <th>Product</th>
+            <th>BOL</th>
+        </tr>
+        <apex:repeat value="{!loadList}" var="L">
+        <tr align="center" style="border: none; vertical-align: center; line-height:1.3em;">
+            <td style="background-color: #f4f4f4"><apex:outputText >{!L.Name}</apex:outputText></td>
+            <td style="background-color: #f4f4f4"><apex:outputText value="{0, date,M/d/yy}"><apex:param value="{!L.Pickup_By__c}"/></apex:outputText></td>
+            <td style="background-color: #f4f4f4"><apex:outputText >{!L.Quantity__c}</apex:outputText></td>
+            <td style="background-color: #f4f4f4"><apex:outputText >{!L.FreightTM__Commodity__c}</apex:outputText></td>
+            <td style="background-color: #f4f4f4"><apex:outputLink >http://yourempiregroup.secure.force.com/bol/BOLWithSignature?id={!L.Id}</apex:outputLink></td>
+        </tr>
+        </apex:repeat> 
+    </table>
+                
+            
+           <!-- <table width="100%" border="1" cellpadding="10" style="line-height:1.1em; border-collapse: collapse;">
+                <tr>
+                    <th width="10%" align="center">Load #</th>
+                    <th width="30%" align="left">Pickup Date/Time</th>
+                    <th width="20%" align="left">Quantity</th>
+                    <th width="20%" align="left">Commodity</th> 
+                    <th width="20%" align="left">Docs</th> 
+                 </tr>
+                 
+                <tr>
+                <apex:pageBlockTable value="{!selected}" var="load">
+                      <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{!load.Name}" /></td><br />
+                      <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{!load.Pickup_By__c}" /></td><br />
+                      <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{!load.Quantity__c}" /></td><br />
+                      <td align="left" style="background-color: #f4f4f4"><apex:outputText value="{!load.FreightTM__Commodity__c}" /></td><br />
+                </apex:pageBlockTable>    
+                </tr>
+                </table>-->
+            
+            <br /><br /><br />
+            
+            <table align="right" width="40%" style="border: none">
+           
+               <tr>
+                  <td colspan="2" style="border:none;"></td>
+                  <td colspan="2">Company Name: <u><b>{!$Organization.Name}</b></u></td>
+               </tr>
+               <tr>
+                  <td colspan="2" style="border:none;"></td>
+                  <td colspan="2">By: <b>{!$User.FirstName}</b> <b>{!$User.LastName}</b></td>
+               </tr>
+
+                
+                <tr>
+                  <td colspan="2" style="border:none;"></td>
+                  <td colspan="2">Date: <apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!TODAY()}"/></apex:outputText></td>
+               </tr>
+               
+             </table>
+
+     
+        
+</apex:page>

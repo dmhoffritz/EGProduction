@@ -1,0 +1,302 @@
+<apex:page sidebar="false"  docType="html-5.0" standardController="FreightTM__Load__c" extensions="TruckLocationForRoute" showHeader="false" standardStylesheets="false">
+    
+    <apex:form >
+        <head>
+            
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <meta charset="utf-8"/>
+            <style>
+                #map {
+                height: 100%;
+                }
+                /* Optional: Makes the sample page fill the window. */
+                html,
+                body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                }
+                #floating-panel {
+                position: absolute;
+                top: 10px;
+                left: 25%;
+                z-index: 5;
+                background-color: #fff;
+                padding: 5px;
+                border: 1px solid #999;
+                text-align: center;
+                font-family: 'Roboto', 'sans-serif';
+                line-height: 30px;
+                padding-left: 10px;
+                }
+            </style>
+            
+            <form id="testForm">
+                <select name="tripId" hidden="true">
+                    <option value=""></option>
+                </select>
+            </form>
+            
+        </head>
+        <body>
+            
+            <script 
+            src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&ext=.js">
+            </script>
+            
+            <div id="map"></div>
+            
+            <script>
+            
+            var loca = new Array();
+            loca = '{!trucklocations}';
+            loca = loca.replace('[','');
+            loca = loca.replace(']','');
+            var locat = loca.split(", ||,");
+            var EndLoc = locat[locat.length-1];
+            var LatlngEndLoc = EndLoc.split(", ");
+            
+            //origin = '{!origin}';
+            //alert('origin: '+ origin);
+            //alert('locat: '+ locat);
+            //alert('EndLoc: '+ EndLoc);
+            
+            
+            var map;
+            var gmarkers = [];
+            
+            function initMap() {
+                var directionsDisplay = new google.maps.DirectionsRenderer({
+                    suppressMarkers: true,
+                    polylineOptions: {
+                        strokeColor: "#3d50e3",
+                        strokeWeight: 3
+                    },
+                    
+                });
+                var directionsService = new google.maps.DirectionsService;
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: {
+                        lat: LatlngEndLoc[0],
+                        lng: LatlngEndLoc[1]
+                    } // Starting Point Marathahalli
+                });
+                directionsDisplay.setMap(map);
+                calculateAndDisplayRoute(directionsService, directionsDisplay);
+            }
+            google.maps.event.addDomListener(window, 'load', initMap);
+            
+            function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+                var selectedMode = "DRIVING";
+                /* configure waypoints */
+                var waypts = [];
+                waypts.push({
+                    location: (EndLoc), 
+                    stopover: true,
+                    
+                });
+                
+                
+                if(EndLoc != ""){
+                    directionsService.route({
+                        origin: "{!origin}", // Haight.
+                        destination: "{!destination}", // Ending Point Shivaji Nagar.
+                        travelMode: google.maps.TravelMode[selectedMode],
+                        waypoints: waypts
+                    }, function(response, status) {
+                        if (status == 'OK') {
+                            directionsDisplay.setDirections(response);
+                            RenderCustomDirections(response, status);
+                        } else {}
+                    }
+                                           );
+                }else{
+                    
+                    directionsService.route({
+                        origin: "{!origin}", // Haight.
+                        destination: "{!destination}", // Ending Point Shivaji Nagar.
+                        travelMode: google.maps.TravelMode[selectedMode],
+                    }, function(response, status) {
+                        if (status == 'OK') {
+                            directionsDisplay.setDirections(response);
+                            RenderCustomDirections(response, status);
+                        } else {}
+                    }
+                                           );
+                    
+                }
+            }
+            
+
+            var startLocation, endLocation, waypts;
+            function RenderCustomDirections(response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    waypts = [];
+                    var bounds = new google.maps.LatLngBounds();
+                    var route = response.routes[0];
+                    startLocation = new Object();
+                    endLocation = new Object();
+                    
+                    var path = response.routes[0].overview_path;
+                    var legs = response.routes[0].legs;
+                    for (i = 0; i < legs.length; i++) {
+                        if (i == 0) {
+                            startLocation.latlng = legs[i].start_location;
+                            startLocation.address = legs[i].start_address;
+                            startLocation.marker = createMarker(legs[i].start_location, "Origin", legs[i].start_address, "green", String.fromCharCode(79));
+                        } else {
+                            waypts[i] = new Object();
+                            waypts[i].latlng = legs[i].start_location;
+                            waypts[i].address = legs[i].start_address;
+                            waypts[i].marker = createMarker(legs[i].start_location, "waypoint" + i, legs[i].start_address, "yellow", String.fromCharCode("S".charCodeAt(0) + i));
+                        }
+                        endLocation.latlng = legs[i].end_location;
+                        endLocation.address = legs[i].end_address;
+                        var steps = legs[i].steps;
+                        for (j = 0; j < steps.length; j++) {
+                            var nextSegment = steps[j].path;
+                            for (k = 0; k < nextSegment.length; k++) {
+                                bounds.extend(nextSegment[k]);
+                            }
+                        }
+                    }
+                    endLocation.marker = createMarker(endLocation.latlng, "Destination", endLocation.address, "green", String.fromCharCode(68));
+                    google.maps.event.trigger(endLocation.marker, 'click');
+                } else alert(status);
+            }
+            
+            var icons = new Array();
+            icons["red"] = {
+                url: "http://maps.google.com/mapfiles/ms/micons/red.png",
+                // This marker is 32 pixels wide by 32 pixels tall.
+                size: new google.maps.Size(32, 32),
+                // The origin for this image is 0,0.
+                origin: new google.maps.Point(0, 0),
+                // The anchor for this image is at 9,34.
+                anchor: new google.maps.Point(16, 32),
+                labelOrigin: new google.maps.Point(16, 10)
+            };
+            
+            function getMarkerImage(iconColor) {
+                if ((typeof(iconColor) == "undefined") || (iconColor == null)) {
+                    iconColor = "red";
+                }
+                if (!icons[iconColor]) {
+                    icons[iconColor] = {
+                        url: "http://maps.google.com/mapfiles/ms/micons/" + iconColor + ".png",
+                        // This marker is 32 pixels wide by 32 pixels tall.
+                        size: new google.maps.Size(32, 32),
+                        // The origin for this image is 0,0.
+                        origin: new google.maps.Point(0, 0),
+                        // The anchor for this image is at 6,20.
+                        anchor: new google.maps.Point(16, 32),
+                        labelOrigin: new google.maps.Point(16, 10)
+                    };
+                }
+                return icons[iconColor];
+                
+            }
+            // Marker sizes are expressed as a Size of X,Y
+            // where the origin of the image (0,0) is located
+            // in the top left of the image.
+            
+            // Origins, anchor positions and coordinates of the marker
+            // increase in the X direction to the right and in
+            // the Y direction down.
+            
+            var iconImage = {
+                url: 'http://maps.google.com/mapfiles/ms/micons/red.png',
+                // This marker is 20 pixels wide by 34 pixels tall.
+                size: new google.maps.Size(20, 34),
+                // The origin for this image is 0,0.
+                origin: new google.maps.Point(0, 0),
+                // The anchor for this image is at 9,34.
+                anchor: new google.maps.Point(9, 34)
+            };
+            // Shapes define the clickable region of the icon.
+            // The type defines an HTML &lt;area&gt; element 'poly' which
+            // traces out a polygon as a series of X,Y points. The final
+            // coordinate closes the poly by connecting to the first
+            // coordinate.
+            var iconShape = {
+                coord: [9, 0, 6, 1, 4, 2, 2, 4, 0, 8, 0, 12, 1, 14, 2, 16, 5, 19, 7, 23, 8, 26, 9, 30, 9, 34, 11, 34, 11, 30, 12, 26, 13, 24, 14, 21, 16, 18, 18, 16, 20, 12, 20, 8, 18, 4, 16, 2, 15, 1, 13, 0],
+                type: 'poly'
+            };
+            var infowindow = new google.maps.InfoWindow({
+                size: new google.maps.Size(150, 50)
+            });
+            
+            function createMarker(latlng, title, html, color, label) {
+                var contentString = '<b>' + title + '</b><br>' + html;
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    draggable: true,
+                    map: map,
+                    icon: getMarkerImage(color),
+                    shape: iconShape,
+                    title: title,
+                    label: label,
+                    zIndex: Math.round(latlng.lat() * -100000) << 5
+                });
+                marker.myname = title;
+                gmarkers.push(marker);
+                
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent(contentString);
+                    infowindow.open(map, marker);
+                });
+                
+                return marker;
+            }
+            
+            </script>    
+            
+            <script async="async" defer="defer"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1LzmP-MEyPNoOelRYwzZrLTf8bDn7ogU&callback=initMap&libraries=&v=weekly">
+                </script>
+            <script 
+            src="https://polyfill.io/v3/polyfill.min.js?features=default">
+                </script>
+        </body>
+        
+    </apex:form>
+    
+</apex:page>
+
+
+
+<!--{suppressInfoWindows: true,suppressMarkers: true,}
+MarkerOptions: {
+icon: {
+fillColor: '#1e00ff'
+}
+},
+
+{
+
+polylineOptions: {
+strokeColor: "#e33d3d",
+strokeWeight: 2
+},                   
+
+}
+
+
+const lineSymbol = {
+path: "M 0,-1 0,1",
+strokeOpacity: 1,
+scale: 4,
+};
+
+suppressMarkers: false, 
+suppressPolylines: false,
+
+
+new google.maps.Marker({
+position: {lat: LatlngEndLoc[0], lng: LatlngEndLoc[1]}, //Example
+map: map,
+icon: "https://yourempiregroup--ftm--c.documentforce.com/servlet/servlet.ImageServer?id=0153F000000fopb&oid=00D3F000000INqX&lastMod=1601989231000",
+});
+
+-->

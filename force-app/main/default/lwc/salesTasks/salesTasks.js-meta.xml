@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Sales Follow - Task List</masterLabel>
+    <description>This component gives Sales Reps the availability to complete their follow up tasks in one view</description>
+    <targets>
+        <target>lightning__HomePage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+</LightningComponentBundle>

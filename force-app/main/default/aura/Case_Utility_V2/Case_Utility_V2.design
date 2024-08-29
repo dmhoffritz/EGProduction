@@ -1,0 +1,5 @@
+<design:component label="New Support Request - V17">
+    <design:attribute name="button" label="Button Name" />
+    <design:attribute name="Quick_Case" label="New Support Request" />
+      
+</design:component>

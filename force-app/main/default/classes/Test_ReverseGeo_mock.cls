@@ -1,0 +1,13 @@
+@isTest
+global class Test_ReverseGeo_mock implements HttpCalloutMock{
+
+      	global HttpResponse respond(HTTPRequest req){
+        HttpResponse res = new HttpResponse();
+        res.setStatus('OK');
+        res.setStatusCode(200);
+        //res.setBody('{   "destination_addresses" : [      "20 Main St, San Diego, CA 92173, USA",      "Main St, Irvine, CA 92614, USA"   ],   "origin_addresses" : [ "Main St, Irvine, CA 92614, USA", "Main St, Irvine, CA 92614, USA" ],   "rows" : [      {         "elements" : [            {               "distance" : {                  "text" : "99.2 mi",                  "value" : 159704               },               "duration" : {                  "text" : "1 hour 32 mins",                  "value" : 5490               },               "status" : "OK"            },            {               "distance" : {                  "text" : "1 ft",                  "value" : 0               },               "duration" : {                  "text" : "1 min",                  "value" : 0               },               "status" : "OK"            }         ]     },      {         "elements" : [            {               "distance" : {                  "text" : "99.2 mi",                  "value" : 159704               },               "duration" : {                  "text" : "1 hour 32 mins",                  "value" : 5490               },               "status" : "OK"            },            {               "distance" : {                  "text" : "1 ft",                  "value" : 0               },               "duration" : {                  "text" : "1 min",                  "value" : 0               },               "status" : "OK"            }         ]      }   ],   "status" : "OK"}');
+            res.setBody('{   "plus_code" : { "compound_code" : "8J9P+FMH West Hattiesburg, MS, USA", "global_code" : "863G8J9P+FMH" }, "results" : [{"address_components" : [{"long_name" : "140","short_name" : "140","types" : [ "street_number" ]},{"long_name" : "Mayfair Road","short_name" : "Mayfair Rd","types" : [ "route" ]},{"long_name" : "Hattiesburg","short_name" : "Hattiesburg","types" : [ "locality", "political" ]},{"long_name" : "Lamar County","short_name" : "Lamar County","types" : [ "administrative_area_level_2", "political" ]},{"long_name" : "Mississippi","short_name" : "MS","types" : [ "administrative_area_level_1", "political" ]},{"long_name" : "United States","short_name" : "US","types" : [ "country", "political" ]},{"long_name" : "39402","short_name" : "39402","types" : [ "postal_code" ]}],"formatted_address" : "140 Mayfair Rd, Hattiesburg, MS 39402, USA"}');
+        return res;
+      }
+  
+}

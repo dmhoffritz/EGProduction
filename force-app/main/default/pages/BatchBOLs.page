@@ -1,0 +1,398 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 02-01-2023
+  @last modified by  : Ethan Myers
+-->
+<apex:page standardController="FreightTM__Load__c" recordSetVar="Loads" sidebar="false" applyBodyTag="false" renderAs="pdf"
+    extensions="LoadsBatchMill_V2">
+    <apex:messages />
+
+    <!-- CSS Styling -->
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <style type="text/CSS">
+            @page { size: 8.5in 11in; margin: 1 auto; border: none; /* PDF width, height, margin */ @top-center { content: element(header);
+            } @bottom-left { content: element(footer); } } @media print { body {zoom: 0.7; /* IE / -moz-transform: scale(0.7);
+            / Firefox / -o-transform: scale(0.7); / Opera / -webkit-transform: scale(0.7); / Safari And Chrome / transform:
+            scale(0.7); / Standard Property */} html, body { border: none; height: 100%; page-break-after: avoid !important;
+            page-break-before: avoid !important; } .no-print, .no-print * { display: none !important; } } body { font-family:
+            Arial Unicode MS; } document.body.setAttribute('style', 'overflow: hidden;'); .blackline { border: 1px solid
+            #000;} table, .table { border-collapse: collapse; border-spacing: 0; } th, .th{ border: 1px solid black; padding:
+            5px; font-size: .8em; font-weight: bold; text-align: center; } td, .td{ border: 1px solid black; padding: 0px;
+            font-size: .8em; } .m-signature-pad--body-first canvas { position: relative; left: 0; top: 0; width: 75%; height:
+            100px; border: 1px solid #CCCCCC; border-radius: 10px 30px; } .m-signature-pad--body-third canvas { position:
+            relative; left: 0; top: 0; width: 75%; height: 100px; border: 1px solid #CCCCCC; border-radius: 10px 30px; }
+            .m-signature-pad--body-second canvas { position: relative; left: 0; top: 0; width: 75%; height: 100px; border:
+            1px solid #CCCCCC; border-radius: 10px 30px; } .red { color: red; } .green { color: green; } .msgs { font-weight:
+            bold; text-align: center; margin: 0 auto; width: 100%; } .button { background-color: #62BF34; border: none; color:
+            #333; font-size: 1.3em; font-weight: 900; padding: 10px 15px; width: 100%; height: 25px; margin: 0 auto; letter-spacing:
+            1px; -webkit-appearance: none;
+            <!-- to override iOS default btn style -->
+            -moz-appearance: none;
+            <!-- to override iOS default btn style -->
+            }
+
+           .signatureText {
+                font-family: "handsome-pro", sans-serif !important;
+                font-weight: 700;
+                font-style: normal;
+                font-size: 35px;
+                color: black;
+            }          
+        </style>
+    </head>
+    <!-- End CSS Styling -->
+
+    <!-- BOL List HTML -->
+    <apex:repeat var="load" value="{!loadRec}">
+
+
+        <div style="page-break-after: always;">
+            <apex:pageBlock >
+
+                <div style="font-family:arial, sans-serif; font-size: .8em">
+                    <table width="100%" style="line-height:1.1em">
+                        <tr>
+                            <td width="60%" align="left" style="border: none;">
+                                <apex:image url="{!$Resource.Empire_Logo_Lockup_Green_New}" width="100" />
+                                <br />
+                                <div style="color: black; text-align: left; margin-left:0px">
+                                    {!$Organization.Street}
+                                    <br/> {!$Organization.City}, {!$Organization.State} {!$Organization.PostalCode}
+                                    <br/> Phone: {!$Organization.Phone}
+                                    <br /> Fax: {!$Organization.Fax}
+                                    <br />
+                                </div>
+                            </td>
+                            <td width="40%" align="right" style="text-align:left; margin-right:15px; border: none;">
+                                <h2>BILL OF LADING</h2>
+                                <b>Load #:&nbsp;</b>
+                                <apex:outputText value="{!load.Name}" />
+                                <br />
+                                <!--
+                            <b>Total Distance:&nbsp;</b>
+                            <apex:outputText value="{0, number, 00.00}">
+                                <apex:param value="{!load.FreightTM__Total_Miles__c}" /></apex:outputText>&nbsp;mi
+                            <br />
+                            -->
+                                <b>Date:&nbsp;</b>
+                                <apex:outputText value="{0, date, MMMM d',' yyyy}">
+                                    <apex:param value="{!TODAY()}" /></apex:outputText>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br />
+
+                    <table width="100%" border="1" cellpadding="7" style="line-height:1.1em; border-collapse: collapse;">
+                        <th width="60" align="center">Trucking Company</th>
+                        <th width="40" align="center">Driver</th>
+                        <tr>
+                            <td width="60%" align="left" style="background-color: #f4f4f4">
+                                <b>
+                                    <apex:outputText value="{!load.FreightTM__Carrier_Obj__r.Name}" />
+                                </b>
+                                <br/>
+                                <b>Phone:</b>&nbsp;
+                                <apex:outputField value="{!load.FreightTM__Carrier_Obj__r.FreightTM__Phone__c}" />
+                                <br />
+                                <b>Email:</b>&nbsp;
+                                <apex:outputField value="{!load.FreightTM__Carrier_Obj__r.FreightTM__Email__c}" />
+                                <br />
+
+                            </td>
+                            <td width="40%" align="right" style="text-align:left; background-color: #f4f4f4">
+                                <b>Name:</b>&nbsp;
+                                <apex:outputText value="{!load.Driver_Name__c}" />
+                                <br/>
+                                <b>Cell:</b>&nbsp;
+                                <apex:outputText value="{!load.Driver_Phone__c}" />
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br />
+
+                    <table width="100%" border="1" cellpadding="10" style="line-height:1.3em; border-collapse: collapse;">
+                        <th width="100" align="center" colspan="4">Package Description</th>
+
+                        <!-- 
+                            SALES ORDER COMMODITY UPDATE (WINTER 2022): 
+                            Prior to Sales Order release, all commodity data was stored as open-box fields on load record... 
+                            Post Sales Order release, all commodity data is stored as related list of item records to properly define
+                            qty, commodity, and grades of each item hauled on load... 
+                            The following script is used to bind historical data with new data...
+                            We do so by identifying whether load has related items. 
+                            If so, we will display items in list on BOL. 
+                            If not, we will display legacy commodity fields to maintain integrity with previous BOL forms.
+                        -->
+                        <apex:outputPanel rendered="{!IF(load.Items__r.size == 0, true, false)}">
+                            <tr>
+                                <th width="5%" align="Center">Quantity</th>
+                                <th width="20%" align="Center">Product</th>
+                                <!--<th width="40%" align="left">Description</th>-->
+                                <th width="5%" align="Center">Weight</th>
+                                <th width="20%" align="Center">Requirements</th>
+                            </tr>
+                            <tr style="font-size: .9em">
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{0, number,00}">
+                                        <apex:param value="{!load.Quantity__c}" /></apex:outputText>
+                                </td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!load.Mat_Grade_Conversion__c}" />
+                                </td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{0, number,00}">
+                                        <apex:param value="{!load.FreightTM__Weight__c}" /></apex:outputText>&nbsp;lbs</td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!load.FreightTM__Requirements__c}" />
+                                </td>
+                            </tr>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!IF(load.Items__r.size > 0, true, false)}">
+                            <apex:pageBlockTable value="{!load.Items__r}" var="item" border="1" cellpadding="5" style="font-size: 12pt; line-height:1.3em; border-collapse: collapse;border-bottom:1px solid black;"
+                                width="100%">
+                                <apex:column value="{!item.Quantity__c}" headerClass="th" style="text-align:center; width: 25%;" />
+                                <apex:column value="{!item.Commodity_BOL__c}" headerClass="th" style="text-align:center; width: 50%;" headerValue="Commodity"
+                                />
+                                <apex:column value="{!item.Notes__c}" headerClass="th" style="text-align:center; width: 25%;" />
+                            </apex:pageBlockTable>
+                        </apex:outputPanel>
+                    </table>
+                    <br />
+
+                    <table width="100%" border="1" cellpadding="7" style="line-height:1.3em; border-collapse: collapse;">
+                        <tr width="100%">
+                            <th width="5%" align="center">#</th>
+                            <th width="10%" align="center">Action</th>
+                            <th width="10%" align="left">Date / Time</th>
+                            <th width="20%" align="left">Location</th>
+                            <th width="10%" align="center">Ref #:</th>
+                            <th width="20%" align="left">Contact</th>
+                            <th width="35%" align="left">Remarks</th>
+                        </tr>
+                        <tr style="font-size: .9em">
+                            <td align="center" style="background-color: #f4f4f4">1</td>
+                            <td align="center" style="background-color: #f4f4f4">Pickup By</td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{0, date,M/d/yy h:mm a}">
+                                    <apex:param value="{!load.Pickup_By__c + offset}" /></apex:outputText>
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!load.FreightTM__Pickup_Address__c}" />
+                                <br />
+                                <apex:outputPanel >
+                                    <apex:outputText value="{!load.FreightTM__Pickup_City__c}" />,
+                                    <apex:outputText value=" {!load.FreightTM__Pickup_State__c}" />
+                                    <apex:outputText value=" {!load.FreightTM__Pickup_Zip_Code__c}" /></apex:outputPanel>
+                                <br />
+                                <apex:outputText value="{!load.FreightTM__Pickup_Country__c}" />
+                                <br /> Lat/Long:&nbsp;
+                                <apex:outputText value="{!load.Pickup_Lat_Long__Latitude__s}" />,
+                                <apex:outputText value="{!load.Pickup_Lat_Long__Longitude__s}" />
+                            </td>
+                            <td align="center" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!load.FreightTM__Pickup_Ref__c}" />
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                Name:&nbsp;
+                                    <apex:outputText value="{!load.FreightTM__Pickup_Contact__c}" />
+                                <br /> Phone:&nbsp;
+                                <apex:outputText value="{!load.FreightTM__Pickup_Phone__c}" />
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!load.FreightTM__Pickup_Remarks__c}" />
+                            </td>
+                        </tr>
+
+
+                        <apex:variable value="{!2}" var="rowNum" />
+                        <apex:repeat var="s" value="{!stops}">
+                            <tr style="font-size: .9em">
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!FLOOR(rowNum)}" />
+                                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                                </td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!s.FreightTM__Type__c}" />
+                                </td>
+                                <td align="left" style="background-color: #f4f4f4">
+                                    <apex:outputText value=" {!s.FreightTM__Arrival__c} " />
+                                </td>
+                                <td align="left" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!s.FreightTM__Address__c}" />
+                                    <br />
+                                    <apex:outputPanel >
+                                        <apex:outputText value="{!s.FreightTM__City__c}" />,
+                                        <apex:outputText value="{!s.FreightTM__State__c}" />
+                                        <apex:outputText value="{!s.FreightTM__Zip_Code__c}" /></apex:outputPanel>
+                                    <br />
+                                    <apex:outputText value="{!s.FreightTM__Country__c}" />
+                                    <br />
+                                </td>
+                                <td align="center" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!s.FreightTM__Reference__c}" />
+                                </td>
+                                <td align="left">
+                                    <apex:outputText value="{!s.FreightTM__Contact__c}" />
+                                    <br />
+                                    <apex:outputText value="{!s.FreightTM__Phone__c}" />
+                                    <br />
+                                    <apex:outputText value="{!s.FreightTM__Email__c}" />
+                                    <br />
+                                </td>
+                                <td align="left" style="background-color: #f4f4f4">
+                                    <apex:outputText value="{!s.FreightTM__Remarks__c}" />
+                                </td>
+                            </tr>
+
+                        </apex:repeat>
+
+
+                        <tr style="font-size: .9em">
+                            <td align="center" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!rowNum}" />
+                            </td>
+                            <td align="center" style="background-color: #f4f4f4">Deliver By</td>
+
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{0, date,M/d/yy h:mm a}">
+                                    <apex:param value="{!load.Deliver_By__c + offset}" /></apex:outputText>
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!load.FreightTM__Delivery_Address__c}" />
+                                <br />
+                                <apex:outputPanel >
+                                    <apex:outputText value="{!load.FreightTM__Delivery_City__c}" />,
+                                    <apex:outputText value=" {!load.FreightTM__Delivery_State__c}" />
+                                    <apex:outputText value=" {!load.FreightTM__Delivery_Zip_Code__c}" /></apex:outputPanel>
+                                <br />
+                                <apex:outputText value="{!load.FreightTM__Delivery_Country__c}" />
+                                <br /> Lat/Long:&nbsp;
+                                <apex:outputText value="{!load.Delivery_Lat_Long__Latitude__s}" />,
+                                <apex:outputText value="{!load.Delivery_Lat_Long__Longitude__s}" />
+                            </td>
+                            <td align="center" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!load.FreightTM__Delivery_Ref__c}" />
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                Name:&nbsp;
+                                    <apex:outputText value="{!load.FreightTM__Delivery_Contact__c}" />
+                                <br /> Phone:&nbsp;
+                                <apex:outputText value="{!load.FreightTM__Delivery_Phone__c}" />
+                            </td>
+                            <td align="left" style="background-color: #f4f4f4">
+                                <apex:outputText value="{!load.FreightTM__Delivery_Remarks__c}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" cellspacing="40" class="red">
+                                <b>
+                                    <apex:outputText value="Delivery Instructions: {!load.FreightTM__Remarks__c}" />
+                                </b>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table width="100%" style="line-height:1.3em; margin-top: 20px;">
+                        <tr style="max-height: 5px;">
+                            <td colspan="4" cellspacing="5" style="border: none; max-height: 5px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="30%" align="left" style="padding-right: 10px; border:none;">
+                                <b>Driver</b>
+                            </td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                                <apex:outputText style="align: center" value="{!load.Driver_Name__c}" />
+                                <b>_____________________________</b>
+                                <br/>
+                                <i>Name</i>
+                            </td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                                <apex:image rendered="{!IF(load.driverSignature__c != null || load.driverSignature__c != '', true, false)}" id="theDriverImage" value="{!load.driverSignature__c}"
+                                    width="70%" height="23" />
+                                <b>________________________</b>
+                                <br/>
+                                <i>Signature</i>
+                            </td>
+                            <td width="20%" align="left" style="border: none;">
+                                <apex:outputText value="{0, date,M/d/yy h:mm a}">
+                                    <apex:param value="{!load.Date__c + offset}" /></apex:outputText>
+                                <b>____________</b>
+                                <br/>
+                                <i>Date</i>
+                            </td>
+                        </tr>
+                        <tr style="max-height: 5px;">
+                            <td colspan="4" cellspacing="5" style="border: none; max-height: 5px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="30%" align="left" style="padding-right: 10px; border:none;">
+                                <b>Shipper</b>
+                            </td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                                    <apex:outputText style="align: center" value="{!load.FreightTM__Pickup_Contact__c}" />
+                                <b>_____________________________</b>
+                                <br/>
+                                <i>Name</i>
+                            </td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                               <apex:image rendered="{!IF(load.pickupSignature__c != null || load.pickupSignature__c != '', true, false)}" id="thePickupImage" value="{!load.pickupSignature__c}"
+                                    width="70%" height="23" /> 
+                                <b>________________________</b>
+                                <br/>
+                                <i>Signature</i>
+                            </td>
+
+                            <td width="20%" align="left" style="border: none;">
+                                <apex:outputText value="{0, date,M/d/yy h:mm a}">
+                                    <apex:param value="{!load.Shipper_Date__c + offset}" /></apex:outputText>
+                                <b>____________</b>
+                                <br/>
+                                <i>Date</i>
+                            </td>
+                        </tr>
+
+                        <tr style="max-height: 5px;">
+                            <td colspan="4" cellspacing="5" style="border: none; max-height: 5px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="30%" align="left" style="padding-right: 10px; border:none;">
+                                <b>Receiver</b>
+                            </td>
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                                    <apex:outputText style="align: center" value="{!load.FreightTM__Delivery_Contact__c}" />
+                                <b>_____________________________</b>
+                                <br/>
+                                <i>Name</i>
+                            </td>
+
+                            <td width="25%" align="left" style="padding-right: 10px; border:none;">
+                                <apex:image rendered="{!IF(load.deliverySignature__c != null || load.deliverySignature__c != '', true, false)}" id="theDeliveryImage" value="{!load.deliverySignature__c}"
+                                    width="70%" height="23" />
+                                <b>________________________</b>
+                                <br/>
+                                <i>Signature</i>
+                            </td>
+
+                            <td width="20%" align="left" style="border: none;">
+                                <apex:outputText value="{0, date,M/d/yy h:mm a}">
+                                    <apex:param value="{!load.Receiver_Date__c + offset}" /></apex:outputText>
+                                <b>____________</b>
+                                <br/>
+                                <i>Date</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </apex:pageBlock>
+        </div>
+    </apex:repeat>
+    <!-- End BOL List -->
+
+</apex:page>

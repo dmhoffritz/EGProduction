@@ -1,0 +1,119 @@
+<aura:component >
+    <ltng:require styles="{!$Resource.Portal_Fonts}" />
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="load" type="FreightTM__Load__c" />
+    
+    <!-- Document Triggers -->
+    <aura:attribute name="showRateCon" type="Boolean" default="false" />
+    <aura:attribute name="showBOL" type="Boolean" default="false" />
+    <aura:attribute name="rateConURL" type="String" />
+    <aura:attribute name="bolURL" type="String" />
+    
+    <aura:attribute name="pickupDate" type="Date" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <div class="slds-col slds-size_12-of-12">
+        <div class="slds-page-header slds-page-header_record-home">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="custom:custom98"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span>Load</span>
+                                        <span class="slds-page-header__title slds-truncate" title="Load #">{!v.load.Name}</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                            <ul class="slds-button-group-list">
+                                <li>
+                                    <button class="slds-button slds-button_neutral" onclick="{!c.redirectRateCon}">View RateCon</button>
+                                </li>
+                                <li>
+                                    <button class="slds-button slds-button_neutral" onclick="{!c.redirectBOL}">View BOL</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__row slds-page-header__row_gutters">
+                <div class="slds-page-header__col-details">
+                    <ul class="slds-page-header__detail-row">
+                        <li class="slds-page-header__detail-block">
+                            <div class="slds-text-title slds-truncate" title="Status">Status</div>
+                            <div class="slds-truncate" title="Load Status">{!v.load.FreightTM__Status__c}</div>
+                        </li>
+                        <li class="slds-page-header__detail-block">
+                            <div class="slds-text-title slds-truncate" title="Origin --> Destination">Origin --> Destination</div>
+                            <div class="slds-wrap" title="Route">{!v.load.FreightTM__Calendar_Load__c}</div>
+                        </li>
+                        <li class="slds-page-header__detail-block">
+                            <div class="slds-text-title slds-truncate" title="Quantity">Quantity</div>
+                            <div class="slds-truncate" title="Product Amount">{!v.load.Quantity__c}</div>
+                        </li>
+                        <li class="slds-page-header__detail-block">
+                            <div class="slds-text-title slds-truncate" title="Commodity">Commodity</div>
+                            <div class="slds-truncate" title="Product">{!v.load.FreightTM__Commodity__c}</div>
+                        </li>
+                        <li class="slds-page-header__detail-block">
+                            <div class="slds-text-title slds-truncate" title="Pickup By">Pickup By</div>
+                            <div class="slds-truncate" title="Pickup Date">
+                                <lightning:formattedDateTime value="{!v.load.Pickup_By__c}" year="numeric" month="short" day="numeric" hour="2-digit" minute="2-digit"/>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>        
+    </div>
+    
+    <aura:if isTrue="{!v.showRateCon}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 50%;">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeModal}">
+                    <lightning:icon iconName="action:close" size="x-small"/>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.load.Name}&nbsp;RateCon</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <iframe height="600px" id="theIframe" src="{!v.rateConURL}" width="100%"></iframe>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.showBOL}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open slds-slide-up-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeModal}">
+                    <lightning:icon iconName="action:close" size="x-small"/>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.load.Name}&nbsp;BOL</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <iframe height="600px" id="theIframe" src="{!v.bolURL}" width="100%"></iframe>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+    
+    
+</aura:component>

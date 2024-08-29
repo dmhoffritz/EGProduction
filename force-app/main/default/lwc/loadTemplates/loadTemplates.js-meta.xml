@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Job - Load Templates</masterLabel>
+    <description>Component meant to surface loads templates related to job record. Related either as a Pickup or Delivery load.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+</LightningComponentBundle>

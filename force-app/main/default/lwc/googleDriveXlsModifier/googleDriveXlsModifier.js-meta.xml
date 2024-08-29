@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <masterLabel>Google Drive XLS Modifier</masterLabel>
+    <description>This Lightning Web Component continuously monitors and updates Google Drive links to .xls files.</description>
+</LightningComponentBundle>

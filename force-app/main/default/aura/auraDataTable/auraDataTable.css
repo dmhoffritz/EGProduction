@@ -1,0 +1,138 @@
+.THIS {
+}
+
+.THIS.slds-spinner_container {
+    position: fixed !important;
+}
+
+/*** STYLE ACTION MENU ***/
+.THIS .tableAction .slds-button{
+    background-color: white !important;
+    min-width: 30px;
+}
+
+.THIS .editAction .slds-button{
+    min-width: 10px;
+}
+/*** END ACTION STYLE ***/
+
+/*** Restyle first table so that we can hide first column ***/
+.THIS.THIS.tableCSS_hideColumn .slds-scrollable_x {
+    background-color: #66cc33;
+}
+
+.THIS.tableCSS_hideColumn tr td:first-child {
+    display:none;
+}
+.THIS.tableCSS_hideColumn tr th:first-child {
+    display:none;
+}
+.THIS lightning-primitive-header-actions {
+    display: none;
+} 
+
+.THIS.tableCSS_hideColumn table {
+    background-color: #dbcccc !important;
+    color: black !important;
+}
+
+.THIS.tableCSS_hideColumn thead th span{
+    font-family: 'Industry' !important;
+    background-color: #66CC33 !important;
+    color: black !important;
+}
+
+.THIS.tableCSS_hideColumn .slds-th__action:hover {
+    background-color: #66CC33 !important;
+}
+
+.THIS.tableCSS_hideColumn thead th hover {
+    background-color: #66CC33 !important;
+    color: white !important;
+    font-weight:bold !important;
+}
+
+.THIS.tableCSS_hideColumn tr {
+    font-family: 'Open-Sans' !important;
+}
+
+.THIS.tableCSS_hideColumn tr:hover {
+    background-color: #dbcccc !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+
+.THIS.tableCSS_hideColumn td {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.tableCSS_hideColumn td:hover {
+    background-color: #b8a9a9 !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+
+/*** Datatable Styles ***/
+.THIS.tableCSS table {
+    background-color: #dbcccc !important;
+    color: black !important;
+}
+
+.THIS.tableCSS thead th span{
+    font-family: 'Industry' !important;
+    background-color: #66CC33 !important;
+    color: black !important;
+}
+
+.THIS.tableCSS .slds-th__action:hover {
+    background-color: #66CC33 !important;
+}
+
+.THIS.tableCSS thead th hover {
+    background-color: #66CC33 !important;
+    color: white !important;
+    font-weight:bold !important;
+}
+
+.THIS.tableCSS td {
+    font-family: 'open-sans' !important;
+}
+
+.THIS.tableCSS tr:hover {
+    background-color: #dbcccc !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+.THIS.tableCSS td:hover {
+    background-color: #b8a9a9 !important;
+    color: black !important;
+    font-weight:bold !important;
+}
+
+/*** BADGE STYLES ***/
+.THIS .slds-badge.slds-theme_success {
+    /* display: table-cell !important; */
+    background-color: lightgreen !important;
+    color: black !important;
+    justify-content: center !important;
+}
+.THIS .slds-badge.slds-theme_error {
+    /* display: table-cell !important; */
+    background-color: #f07d7d !important;
+    color: black !important;
+    justify-content: center !important;
+}
+.THIS .slds-badge.slds-theme_warning {
+    background-color: #fe9339 !important;
+    color: black !important;
+    justify-content: center !important;
+}
+
+/*** SUCCESS & ERROR TOASTS ***/
+.THIS .success-icon {
+    background-color: #66CC33;
+}
+.THIS .slds-notify__content {
+    width: fit-content;
+    
+}

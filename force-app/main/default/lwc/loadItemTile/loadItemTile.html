@@ -1,0 +1,97 @@
+<!--
+  @description       : Tile used to display load item data and allow field service users to update its commodity, quantity, and grades based on what actually delivered
+  @author            : Ethan Myers
+  @group             : 
+  @last modified on  : 02-24-2023
+  @last modified by  : Ethan Myers
+-->
+<template>
+    <template if:true={loading}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <div class="tile-header">
+        <div class="commodity">
+            <div class="commodity-label">Original Commodity:</div>
+            <div class="commodity-value">{originalCommodity}</div>
+        </div>
+        <div class="quantity">
+            <div class="quantity-label">Original Quantity:</div>
+            <div class="quantity-value">{originalQuantity}</div>
+        </div>
+        <template if:true={editEnabled}>
+            <template if:false={editMode}>
+                <lightning-button label="Edit" variant="base" onclick={enableEdit}
+                    icon-name="utility:edit"></lightning-button>
+            </template>
+        </template>
+        <template if:true={editMode}>
+            <lightning-button variant="destructive" label="Delete" icon-name="utility:delete" icon-position="left"
+                onclick={deleteItem}></lightning-button>
+            <lightning-button label="Save" variant="brand" onclick={saveChanges}
+                icon-name="utility:check"></lightning-button>
+        </template>
+        <template if:false={editEnabled}>
+            <div style="width:25%"></div>
+        </template>
+    </div>
+    <div class="tile-body">
+        <div class="input-row">
+            <div class="input-value">
+                <lightning-combobox label="Commodity" options={commodityOptions} value={selectedCommodity}
+                    onchange={handleCommodityChange} data-item-id={item.Id} disabled={disabled}></lightning-combobox>
+            </div>
+            <template if:true={showProductLookup}>
+                <div class="input-value">
+                    <lightning-record-edit-form record-id={item.Id} object-api-name="Item__c">
+                        <lightning-input-field field-name="Product__c" onchange={logProduct}
+                            disabled={disabled}></lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+            <template if:true={showEquipmentLookup}>
+                <div class="input-value">
+                    <lightning-record-edit-form record-id={item.Id} object-api-name="Item__c">
+                        <lightning-input-field field-name="Equipment__c" onchange={logEquipment}
+                            disabled={disabled}></lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+                <div class="input-value">
+                    <lightning-input label="Quantity" type="number" value={item.Quantity__c} onchange={updateQty}
+                        data-item-id={item.Id} name="Quantity__c" min="0" disabled={disabled}></lightning-input>
+                </div>
+            <template if:false={isEquipment}>
+                <div class="input-value">
+                    <lightning-record-edit-form record-id={item.Id} object-api-name="Item__c">
+                        <lightning-input-field field-name="Grade__c" onchange={updateGrade}
+                            disabled={gradeDisabled}></lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+                <div class="input-value">
+                    <lightning-input label="New" type="number" value={item.New__c} onchange={updateQty} data-item-id={item.Id}
+                        name="New__c" min="0" disabled={disabled}></lightning-input>
+                </div>
+                <div class="input-value">
+                    <lightning-input label="A4" type="number" value={item.A_Four__c} onchange={updateQty}
+                        data-item-id={item.Id} min="0" name="A_Four__c" disabled={gradeInputDiabled}></lightning-input>
+                </div>
+                <div class="input-value">
+                    <lightning-input label="A3" type="number" value={item.A_Three__c} onchange={updateQty}
+                        data-item-id={item.Id} min="0" name="A_Three__c" disabled={disabled}></lightning-input>
+                </div>
+                <div class="input-value">
+                    <lightning-input label="B2" type="number" value={item.B_Two__c} onchange={updateQty} data-item-id={item.Id}
+                        name="B_Two__c" min="0" disabled={gradeInputDiabled}></lightning-input>
+                </div>
+                <div class="input-value">
+                    <lightning-input label="B1" type="number" value={item.B_One__c} onchange={updateQty} data-item-id={item.Id}
+                        name="B_One__c" min="0" disabled={disabled}></lightning-input>
+                </div>
+                <div class="input-value">
+                    <lightning-input label="Cull" type="number" value={item.Cull__c} onchange={updateQty}
+                        data-item-id={item.Id} name="Cull__c" min="0" disabled={disabled}></lightning-input>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

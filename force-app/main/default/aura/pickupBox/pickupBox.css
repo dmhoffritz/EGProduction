@@ -1,0 +1,50 @@
+.THIS.slds-card {
+    background: black !important;
+}
+
+.THIS .slds-card__header {
+    background: black !important;
+    color: white;
+    border-radius: 5px;
+    padding: 7.5px 7.5px 7.5px 7.5px !important;
+}
+
+.THIS .slds-card__body {
+    padding: 0.5em;
+    background: lightgrey;
+}
+
+.THIS .slds-card__footer {
+    border-top: 2px solid lightgrey !important;
+}
+
+.THIS .slds-has-coordinates {
+    border-radius: 5px;
+}
+.THIS .mapBox {
+
+}
+
+.THIS .statusButton {
+    width: 100%;
+    background: #66cc33;
+    color: white;
+    font-size: 18px;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.THIS .pickupSignatureButton {
+    width: 100%;
+    background: #3c97dd;
+    color: white;
+    font-size: 18px;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.THIS .deliverySignatureButton {
+    width: 100%;
+    background: #b9ac91;
+    color: white;
+    font-size: 18px;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}

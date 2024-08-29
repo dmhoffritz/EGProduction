@@ -1,0 +1,287 @@
+<aura:component controller="WorkOrder_Cont">
+    <aura:attribute name="itemId" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}" />
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}" />
+
+    <aura:dependency resource="markup://c:navSalesOrder" type="EVENT" />
+    <aura:registerEvent name="navSalesOrder" type="c:navSalesOrder" />
+    <aura:handler event="force:showToast" action="{!c.init}" />
+
+
+
+    <aura:registerEvent name="reloadItems" type="c:flowFinished" />
+
+    <aura:attribute name="item" type="WorkOrderLineItem" />
+    <aura:attribute name="loadTemplates" type="FreightTM__Load__c[]" />
+    <aura:attribute name="jobDeliveries" type="FreightTM__Load__c[]" />
+    <aura:attribute name="jobPickups" type="FreightTM__Load__c[]" />
+    <aura:attribute name="loadsLeapfrogged" type="FreightTM__Load__c[]" />
+    <aura:attribute name="loadsDelivered" type="Integer" default="0" />
+    <aura:attribute name="loadsPickedUp" type="Integer" default="0" />
+    <aura:attribute name="matsDelivered" type="Decimal" default="0" />
+    <aura:attribute name="matsPickedUp" type="Decimal" default="0" />
+
+    <aura:attribute name="lTemplates" type="Object"/>
+    <aura:attribute name="jDeliveries" type="Object"/>
+    <aura:attribute name="jPickups" type="Object"/>
+
+    <aura:attribute name="draftValues" type="FreightTM__Load__c[]" default="[]" />
+    <aura:attribute name="errors" type="Object" default="[]" />
+
+    <aura:attribute name="templateColumns" type="List" default="[]" />
+    <aura:attribute name="activeColumns" type="List" default="[]" />
+    <aura:attribute name="deliveryColumns" type="List" default="[]" />
+    <aura:attribute name="pickupColumns" type="List" default="[]" />
+    <aura:attribute name="leapfrogColumns" type="List" default="[]" />
+
+    <aura:attribute name="initialized" type="Boolean" default="false" />
+    <aura:attribute name="spinnerToggle" type="Boolean" default="false" />
+
+    <aura:attribute name="flowTitle" type="String" default="" />
+    <aura:attribute name="displayFlow" type="Boolean" default="false" />
+
+    <aura:attribute name="showPath" type="Boolean" default="true" />
+
+    <aura:attribute name="itemSteps" type="List" />
+
+    <aura:attribute name="freightInProgress" type="String" default="" />
+    <aura:attribute name="freightOutProgress" type="String" default="" />
+
+
+
+    <lightning:button label="Go Back" iconName="utility:back" iconPosition="left" onclick="{!c.goBack}" />
+
+    <aura:if isTrue="{!v.spinnerToggle}">
+        <lightning:spinner alternativeText="Fetching Data..." size="medium" />
+    </aura:if>
+
+    <!-- <aura:if isTrue="{!v.initialized}"> -->
+        <div class="itemHeader">
+
+            <div class="slds-page-header slds-page-header_record-home">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <aura:if isTrue="{!v.item.Product__r.Family == 'Mat Sales'}">
+                                    <lightning:icon iconName="standard:orders" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.item.Product__r.Family == 'Services'}">
+                                    <lightning:icon iconName="standard:service_crew" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.item.Product__r.Family == 'Equipment'}">
+                                    <lightning:icon iconName="custom:custom98" />
+                                </aura:if>                            
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span>Sales Order Line Item</span>
+                                            <span class="slds-page-header__title slds-truncate"
+                                                title="{!v.item.LineItemNumber}">
+                                                <a href="{!'https://yourempiregroup.lightning.force.com/lightning/r/WorkOrderLineItem/' + v.itemId + '/view'}"
+                                                    target="_blank">
+                                                    {!v.item.LineItemNumber}
+                                                </a>
+                                                {!': ' + v.item.Product__r.Name + ' - ' +
+                                                v.item.Product__r.Product_Type__c}
+                                            </span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__controls">
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li>
+                                        <lightning:buttonIcon iconName="utility:rotate" onclick="{!c.init}" />
+                                    </li>
+                                    <li>
+                                        <button class="slds-button slds-button_neutral" onclick="{!c.createLoadTemplate}">Create Load Template</button>
+                                    </li>
+                                    <li>
+                                        <button class="slds-button slds-button_neutral" onclick="{!c.editItem}">Edit</button>
+                                    </li>
+                                    <li>
+                                        <button class="slds-button slds-button_destructive" onclick="{!c.remove}">Remove</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__row slds-page-header__row_gutters">
+                    <div class="slds-page-header__col-details">
+                        <ul class="slds-page-header__detail-row">
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title" title="Quantity">Quantity</div>
+                                <div class="titleValue" title="{!v.item.Quantity}">
+                                    {!v.item.Quantity}
+                                </div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title" title="Unit Price">Unit Price</div>
+                                <div class="titleValue" title="{!v.item.UnitPrice}">
+                                    {!'$' + v.item.UnitPrice}
+                                </div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title" title="Freight Cost Type">Freight Cost Type
+                                </div>
+                                <div class="titleValue" title="{!v.item.FreightCostType__c}">
+                                    {!v.item.FreightCostType__c}
+                                </div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title" title="Freight In (to Bill)">Freight In (to Bill)
+                                </div>
+                                <div class="titleValue" title="{!'$' + v.item.FreightIn__c}">
+                                    {!'$' + v.item.FreightIn__c}
+                                </div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title" title="Freight Out (to Bill)">Freight Out (to Bill)
+                                </div>
+                                <div class="titleValue" title="{!'$' + v.item.FreightOut__c}">
+                                    {!'$' + v.item.FreightOut__c}
+                                </div>
+                            </li>
+                        </ul>
+                    <div class="slds-grid slds-gutters slds-page-header__detail-row">
+                        <div class="slds-col slds-p-horizontal_medium rollupCSS">
+                            <lightning:card title="Freight In">
+                                <aura:set attribute="body">
+                                    <div>
+                                        <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar-label-id-5">
+                                            <span>{!'MATs Delivered into Job (' + v.matsDelivered + '/' + v.item.Quantity + ')'}</span>
+                                            <span aria-hidden="true">
+                                                <strong>{!v.freightInProgress + '% Delivered'}</strong>
+                                            </span>
+                                        </div>
+                                        <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100"
+                                            aria-valuenow="{!v.freightInProgress}" aria-labelledby="progress-bar-label-id-5"
+                                            aria-label="{{Placeholder for description of progress bar}}" role="progressbar">
+                                            <span class="slds-progress-bar__value" style="{! 'width: ' + v.freightInProgress + '%' }"
+                                                onmouseover="{!c.handleShowPopover}">
+                                                <span class="slds-assistive-text">{!'Progress: ' + v.freightInProgress + '%'}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </aura:set>
+                            </lightning:card>
+                        </div>
+                        <div class="slds-col slds-p-horizontal_medium rollupCSS">
+                            <lightning:card title="Freight Out">
+                                <aura:set attribute="body">
+                                    <div>
+                                        <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar-label-id-5">
+                                            <span>{!'MATs Picked up from Job (' + v.matsPickedUp + '/' + v.item.Quantity + ')'}</span>
+                                            <span aria-hidden="true">
+                                                <strong>{!v.freightOutProgress + '% Picked Up'}</strong>
+                                            </span>
+                                        </div>
+                                        <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100"
+                                            aria-valuenow="{!v.freightOutProgress}" aria-labelledby="progress-bar-label-id-5"
+                                            aria-label="{{Placeholder for description of progress bar}}" role="progressbar">
+                                            <span class="slds-progress-bar__value" style="{! 'width: ' + v.freightOutProgress + '%' }">
+                                                <span class="slds-assistive-text">{!'Progress: ' + v.freightOutProgress + '%'}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </aura:set>
+                            </lightning:card>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <lightning:picklistPath aura:id="itemPath" recordId="{!v.item.Id}" variant="linear" picklistFieldApiName="Status"
+                    onselect="{!c.handleSelect}" />
+            <!--
+                <lightning:progressIndicator currentStep="{! v.item.Status }" type="path" variant="base">
+                    <aura:iteration items="{! v.itemSteps }" var="step">
+                        <lightning:progressStep label="{! step.label }" value="{! step.value }" onclick="{!c.handleSelect}"/>
+                    </aura:iteration>
+                </lightning:progressIndicator>
+            -->
+
+            </div>
+        </div>
+        <div class="loadList">
+            <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                <span class="slds-assistive-text">warning</span>
+                <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                    title="Description of icon when needed">
+                    <lightning:icon class="freightIcons" iconName="utility:warning" size="x-small" />
+                </span>
+                <h2>THESE ARE LOAD ORDER TEMPLATES FOR CLONING ONLY</h2>
+            </div>
+            <div class="loadTable templateTable">
+                <lightning:datatable aura:id="templateTable" keyField="Id" data="{!v.lTemplates}" columns="{!v.templateColumns}"
+                    onrowaction="{! c.handleRowAction }" hideCheckboxColumn="true" errors="{! v.errors }"
+                    draftValues="{! v.draftValues }" onsave="{!c.handleSaveEdition}" />
+            </div>
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">Delivering into Job</span>
+                <span class="slds-icon_container slds-m-right_x-small" title="Description of icon when needed">
+                    <lightning:icon class="freightIcons" iconName="utility:internal_share" size="x-small" />
+                </span>
+                <h2>DELIVERING INTO JOB (FREIGHT IN)</h2>
+            </div>
+            <div class="loadTable">
+                <lightning:datatable aura:id="deliveryTable" keyField="Id" data="{!v.jDeliveries}"
+                    columns="{!v.deliveryColumns}" hideCheckboxColumn="true" onrowaction="{! c.handleRowAction }" />
+            </div>
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">Picking up from Job</span>
+                <span class="slds-icon_container slds-m-right_x-small" title="Description of icon when needed">
+                    <lightning:icon class="freightIcons" iconName="utility:reply" size="x-small" />
+                </span>
+                <h2>PICKING UP FROM JOB (FREIGHT OUT)</h2>
+            </div>
+            <div class="loadTable">
+                <lightning:datatable aura:id="pickupTable" keyField="Id" data="{!v.jPickups}" columns="{!v.pickupColumns}"
+                    hideCheckboxColumn="true" onrowaction="{! c.handleRowAction }" />
+            </div>
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">LEAPFROG LOADS</span>
+                <span class="slds-icon_container slds-m-right_x-small" title="Description of icon when needed">
+                    <lightning:icon class="freightIcons" iconName="utility:change_record_type" size="x-small" />
+                </span>
+                <h2>LEAPFROG LOADS</h2>
+            </div>
+            <div class="loadTable">
+                <lightning:datatable aura:id="leapfrogTable" keyField="Id" data="{!v.loadsLeapfrogged}"
+                    columns="{!v.leapfrogColumns}" hideCheckboxColumn="true" onrowaction="{! c.handleRowAction }" />
+            </div>
+        </div>
+
+        <!-- Embedded Flow -->
+        <aura:if isTrue="{!v.displayFlow}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 90%;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick="{!c.closeModal}">
+                        <lightning:icon iconName="action:close" size="x-small" />
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.flowTitle}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}" />
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </aura:if>
+        <!-- / Embedded Flow -->
+    <!-- </aura:if> -->
+</aura:component>

@@ -1,0 +1,28 @@
+<apex:page standardController="FreightTM__Facility__c">
+ 
+    <h1>Inventory Locations</h1>
+  
+    <!-- Display the address on a map -->
+    
+    <apex:pageBlock >
+    <apex:pageBlockSection title="Locations for {!FreightTM__Facility__c.Name}">
+    
+     <apex:dataList value="{!FreightTM__Facility__c.Name}" var="name">
+       <apex:outputText value="{!FreightTM__Facility__c.Name}"/>
+     </apex:dataList> 
+     
+    <apex:map width="600px" height="400px" mapType="roadmap" zoomLevel="16"
+        center="{!FreightTM__Facility__c.FreightTM__Street__c},{!FreightTM__Facility__c.FreightTM__City__c},{!FreightTM__Facility__c.FreightTM__State__c}">
+    
+    <apex:repeat value="{!FreightTM__Facility__c.Name}" var="name">
+    <apex:mapMarker title="{!FreightTM__Facility__c.Name}"
+       position="{!FreightTM__Facility__c.FreightTM__Street__c},{!FreightTM__Facility__c.FreightTM__City__c},{!FreightTM__Facility__c.FreightTM__State__c}"
+    />
+    </apex:repeat>
+ 
+  </apex:map>
+ 
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+ 
+</apex:page>

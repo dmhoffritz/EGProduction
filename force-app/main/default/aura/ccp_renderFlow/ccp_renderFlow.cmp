@@ -1,0 +1,28 @@
+<aura:component implements="lightningcommunity:allowInRelaxedCSP">
+    <aura:attribute name="flowName" type="String"/>
+    <aura:attribute name="flowInputVariables" type="Object"/>
+    <aura:attribute name="flowOutputVariables" type="Object"/>
+    <aura:attribute name="hideFlowTransitionOverlay" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="refreshPageOnFlowCompletion" type="Boolean" default="false" access="global"/>    
+    <aura:attribute name="redirectUrlOnFlowCompletion" type="String" default="" access="global"/>  
+    <aura:attribute name="fixedModalWidthHeight" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="modalWidth" type="String" default="800px" access="global"/>
+    <aura:attribute name="modalHeight" type="String" default="600px" access="global"/>
+    
+    <aura:attribute name="flowStatus" type="String" default="NOT STARTED"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <aura:if isTrue="{!v.flowStatus != 'FINISHED'}">
+        <div class="{!if(v.hideFlowTransitionOverlay,'hideOverlay ','')}"
+                style="{!if(v.fixedModalWidthHeight, 'width: ' + v.modalWidth + '; height: ' + v.modalHeight + ';', '')}" >
+            <lightning:flow aura:id="flowRenderer" onstatuschange="{!c.handleStatusChange}"/>
+        </div> 
+    </aura:if>
+    
+    
+    
+    
+</aura:component>

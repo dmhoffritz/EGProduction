@@ -1,0 +1,119 @@
+<aura:component controller="CarrierPortal_Cont"
+    implements="lightning:availableForFlowScreens,lightning:availableForFlowActions,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="userType" type="String" access="global" />
+    <aura:attribute name="recordId" type="String" access="global" />
+    <aura:attribute name="fileIds" type="List" access="global" />
+
+    <aura:attribute name="docLabel" type="String" access="global" />
+
+    <aura:attribute name="files" type="List" access="global" />
+    <aura:attribute name="invoices" type="List" access="global" />
+    <aura:attribute name="PoDs" type="List" access="global" />
+    <aura:attribute name="otherFiles" type="List" access="global" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:dependency resource="markup://c:onsave" type="EVENT" />
+    <aura:handler event="c:onsave" action="{!c.init}" />
+
+    <aura:attribute name="Load" type="FreightTM__Load__c" />
+
+    <aura:attribute name="showInvoiceUpload" type="Boolean" default="false" />
+    <aura:attribute name="showPodUpload" type="Boolean" default="false" />
+
+    <div class="slds-box">
+        <div class="slds-card">
+            <ul class="slds-accordion">
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <span class="slds-accordion__summary-content">Invoice(s)</span>
+                            </h2>
+                            <div style="justify-content: right;">
+                               <aura:if isTrue="{!v.userType != 'Carrier_Factoring'}">
+                                    <aura:if isTrue="{!v.showInvoiceUpload}">
+                                        <c:fileUpload aura:id="invoiceUpload">
+                                            <aura:set attribute="parentId" value="{!v.recordId}" />
+                                            <aura:set attribute="docType" value="Invoice" />
+                                        </c:fileUpload>
+                                   </aura:if>
+                               </aura:if>
+                            </div>
+
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-24">
+                            <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                                <aura:iteration items="{!v.invoices}" var="invoice">
+                                    <aura:if isTrue="{!invoice.fileName != null}">
+                                        <li class="slds-p-horizontal_xx-small slds-size_1-of-2 slds-medium-size_1-of-3">
+                                            <a href="{!invoice.fileURL}" target="_blank">
+                                                <lightning:fileCard fileId="{!invoice.docID}"
+                                                    description="{!invoice.fileName}" />
+                                            </a>
+                                        </li>
+                                    </aura:if>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </section>
+                </li>
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <span class="slds-accordion__summary-content">POD(s)</span>
+                            </h2>
+                            <div style="justify-content: right;">
+                                <aura:if isTrue="{!v.showPodUpload}">
+                                    <c:fileUpload aura:id="podUpload">
+                                        <aura:set attribute="parentId" value="{!v.recordId}" />
+                                        <aura:set attribute="docType" value="POD" />
+                                    </c:fileUpload>
+                                </aura:if>
+                            </div>
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-24">
+                            <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                                <aura:iteration items="{!v.PoDs}" var="pod">
+                                    <aura:if isTrue="{!pod.fileName != null}">
+                                        <li class="slds-p-horizontal_xx-small slds-size_1-of-2 slds-medium-size_1-of-3">
+                                            <a href="{!pod.fileURL}" target="_blank">
+                                                <lightning:fileCard fileId="{!pod.docID}"
+                                                    description="{!pod.fileName}" />
+                                            </a>
+                                        </li>
+                                    </aura:if>
+                                </aura:iteration>
+
+                            </ul>
+                        </div>
+                    </section>
+                </li>
+                <!--
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <span class="slds-accordion__summary-content">Other Files</span>
+                            </h2>
+                        </div>
+                        <div class="slds-accordion__content" id="referenceId-24">
+                            <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                                <aura:iteration items="{!v.otherFiles}" var="file">
+                                    <li class="slds-p-horizontal_xx-small slds-size_1-of-2 slds-medium-size_1-of-3">
+                                        <a href="{!file.fileURL}" target="_blank">
+                                            <lightning:fileCard fileId="{!file.docID}" description="{!file.fileName}"/>
+                                        </a>
+                                    </li>
+                                </aura:iteration>
+                            </ul>         
+                        </div>
+                    </section>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+
+</aura:component>

@@ -1,0 +1,172 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-30-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<aura:component controller="WorkOrder_Cont">
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="Item" type="WorkOrderLineItem" />
+
+    <aura:attribute name="itemId" type="String" />
+    <aura:attribute name="productType" type="String" default="" />
+    <aura:attribute name="status" type="String" default="" />
+    <aura:attribute name="sellType" type="String" default="" />
+    <aura:attribute name="itemQuantity" type="Integer" default="0" />
+    <aura:attribute name="commodity" type="String" default="" />
+    <aura:attribute name="pricePerUnit" type="Integer" default="0" />
+    <aura:attribute name="grade" type="String" default=""/>
+    <aura:attribute name="freightBillingType" type="String" default="" />
+    <aura:attribute name="freightIn" type="String" default="" />
+    <aura:attribute name="freightOut" type="String" default="" />
+    <aura:attribute name="selectedItems" type="List" default="[]"/>
+    <aura:attribute name="percentDeliveries" type="String" default=""/>
+    <aura:attribute name="percentPickups" type="String" default="" />
+    <aura:attribute name="pickupQty" type="String" default="" />
+    <aura:attribute name="deliveryQty" type="String" default="" />
+
+    <aura:attribute name="selected" type="Boolean" default="false" />
+
+    <div aura:id="itemId" class="productItem">
+        <article class="slds-tile slds-media">
+            <div class="slds-media__figure">
+                <span class="slds-icon_container" title="{!v.sellType}">
+                    <aura:if isTrue="{!v.productType == 'Mat Sales'}">
+                        <lightning:icon iconName="standard:orders" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.productType == 'Services'}">
+                        <lightning:icon iconName="standard:service_crew" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.productType == 'Equipment'}">
+                        <lightning:icon iconName="custom:custom98" />
+                    </aura:if>
+                </span>
+            </div>
+            <div class="slds-media__body">
+                <div class="tileHeader" style="position: relative;">
+                    <h3 class="slds-tile__title" title="{!v.Item.Commodity__c}">
+                        <a href="{!'https://yourempiregroup.lightning.force.com/lightning/r/WorkOrderLineItem/' + v.itemId + '/view'}"
+                            target="_blank">{!v.Item.Commodity__c}</a>
+                        &nbsp;&nbsp;
+                        <span aura:id="statusBadge" class="slds-badge">{!v.status}</span>
+                    </h3>
+                    <!--
+                    <lightning:input type="checkbox-button" checked="{!v.selected}" onchange="{!c.queueItem}"
+                        style="position:absolute;top:0;right:0;"></lightning:input>
+                    -->
+                </div>
+                <aura:if isTrue="{!v.productType == 'Mat Sales'}">
+
+                    <div class="slds-tile__detail">
+                        <div class="slds-grid">
+                            <div class="slds-col" style="width: 50%">
+                                <p class="slds-truncate" title="Qty">Qty:</p>
+                            </div>
+                            <div class="slds-col" style="width: 50%">
+                                <p class="slds-truncate" title="{!v.itemQuantity}">{!v.itemQuantity}</p>
+                            </div>
+                        </div>
+                            <div class="slds-grid">
+                                <div class="slds-col" style="width: 50%">
+                                    <p class="slds-truncate" title="Grade">Grade (to Bill):</p>
+                                </div>
+                                <div class="slds-col" style="width: 50%">
+                                    <p class="slds-truncate" title="{!v.grade}">{!v.grade}</p>
+                                </div>
+                            </div>
+                        <div class="slds-grid">
+                            <div class="slds-col" style="width: 50%">
+                                <p class="slds-truncate" title="Price per Unit">Unit Price:</p>
+                            </div>
+                            <div class="slds-col" style="width: 50%">
+                                <p class="slds-truncate" title="{!'$' + v.pricePerUnit}">{!'$' + v.pricePerUnit}</p>
+                            </div>
+                        </div>
+                        <aura:if isTrue="{!v.sellType != 'Purchase'}">
+                            <div class="slds-grid">
+                                <div class="slds-col" style="width: 50%">
+                                    <p class="slds-truncate" title="Budgeted Attrition">Budgeted Attrition</p>
+                                </div>
+                                <div class="slds-col" style="width: 50%">
+                                    <p class="slds-truncate" title="{!v.Item.Attrition__c + '%'}">{!v.Item.Attrition__c + '%'}</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <div class="slds-grid">
+                            <div class="slds-col" style="width: 50%">
+                                <p class="slds-truncate" title="Freight Billing Type">Freight Billing Type</p>
+                            </div>
+                            <div class="slds-col" style="width: 50%">
+                                <p class="slds-truncate" title="{!v.freightBillingType}">{!v.freightBillingType}</p>
+                            </div>
+                        </div>
+                        <aura:if isTrue="{!AND(v.freightBillingType != 'Cost + 10%', v.freightBillingType != 'None')}">
+                            <div class="slds-grid">
+                                <div class="slds-col" style="width: 50%">
+                                    <p class="slds-truncate" title="Freight In (to Bill)">Freight In (to Bill)</p>
+                                </div>
+                                <div class="slds-col" style="width: 50%">
+                                    <p class="slds-truncate" title="{!'$' + v.freightIn}">{!'$' + v.freightIn}</p>
+                                </div>
+                            </div>
+                            <aura:if isTrue="{!v.sellType != 'Purchase'}">
+                                <div class="slds-grid">
+                                    <div class="slds-col" style="width: 50%">
+                                        <p class="slds-truncate" title="Freight Out (to Bill)">Freight Out (to Bill)</p>
+                                    </div>
+                                    <div class="slds-col" style="width: 50%">
+                                        <p class="slds-truncate" title="{!'$' + v.freightOut}">{!'$' + v.freightOut}</p>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </aura:if>
+
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.Item.Product_Family__c != 'Services'}">
+                    <div>
+                        <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar-label-id-5">
+                            <span aria-hidden="true" style="text-align: center; width: 100%">
+                                <strong>{! v.percentDeliveries + '% Delivered ' + '(' + v.deliveryQty + '/' + v.Item.Quantity + ')'}</strong>
+                            </span>
+                        </div>
+                        <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+                            aria-labelledby="progress-bar-label-id-5" aria-label="{{Placeholder for description of progress bar}}"
+                            role="progressbar">
+                            <span class="slds-progress-bar__value" style="{! 'width: ' + v.percentDeliveries + '%' }">
+                                <span class="slds-assistive-text">{! 'Progress: ' + v.percentDeliveries + '%'}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <aura:if isTrue="{!v.sellType != 'Purchase'}">
+                        <div>
+                            <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar-label-id-5">
+                                <span aria-hidden="true" style="text-align: center; width: 100%;">
+                                    <strong>{! v.percentPickups + '% Picked Up ' + '(' + v.pickupQty + '/' + v.Item.Quantity + ')'}</strong>
+                                </span>
+                            </div>
+                            <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+                                aria-labelledby="progress-bar-label-id-5" aria-label="{{Placeholder for description of progress bar}}"
+                                role="progressbar">
+                                <span class="slds-progress-bar__value" style="{! 'width: ' + v.percentPickups + '%' }">
+                                    <span class="slds-assistive-text">{! 'Progress: ' + v.percentPickups + '%'}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </aura:if>
+                </aura:if>
+                <!--
+                <div class="slds-grid">
+                    <div class="slds-col">
+                        <lightning:button label="View Details" onclick="{!c.showLoads}" class="detailButton"></lightning:button>
+                    </div>
+                </div>
+                -->
+            </div>
+
+        </article>
+    </div>
+
+</aura:component>

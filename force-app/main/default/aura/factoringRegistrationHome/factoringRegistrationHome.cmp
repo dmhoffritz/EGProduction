@@ -1,0 +1,102 @@
+<aura:component controller="Factoring_Registration_Cont">
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="verifyCo" type="Boolean" default="false" />
+    <aura:attribute name="factoringCo" type="Factoring_Company__c" />
+    <aura:attribute name="stateOptions" type="List" />
+
+    <aura:attribute name="agreeCheck" type="Boolean" default="false" />
+    <aura:attribute name="termsToggle" type="Boolean" default="false" />
+    <aura:attribute name="disabled" type="Boolean" default="true" />
+
+    <aura:attribute name="registerPanel" type="Boolean" default="false" />
+
+    <br/>
+    <aura:if isTrue="{!v.verifyCo}">
+
+    <div class="slds-align_absolute-center" style="height: 100%">
+        <div class="formBox">
+            <h2>Please Verify Company Info Below</h2>
+
+            <div class="c-container">
+                <lightning:layout verticalAlign="stretch" multipleRows="true" class="x-large">
+                    <lightning:layoutItem flexibility="auto" padding="around-small" class="custom-box">
+                        <lightning:input style="width: 100%" name="companyName" readonly="true"
+                            value="{!v.factoringCo.Name}" label="Company" />
+                        <lightning:input name="primaryContact" label="Company Contact"
+                            value="{!v.factoringCo.PrimaryContact__c}"
+                            placeholder="{!v.factoringCo.PrimaryContact__c}" />
+                        <lightning:input type="tel" name="phoneNum" label="Phone" value="{!v.factoringCo.Phone__c}"
+                            placeholder="{!v.factoringCo.Phone__c}" />
+                        <lightning:input type="email" name="emailAddr" label="Email" value="{!v.factoringCo.Email__c}"
+                            placeholder="{!v.factoringCo.Email__c}" />
+
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small" class="custom-box">
+                        <lightning:inputAddress class="addressBox" addressLabel="Billing Address" streetLabel="Street" cityLabel="City"
+                            countryLabel="Country" provinceLabel="State" postalCodeLabel="Zip Code" street="{!v.factoringCo.Street__c}"
+                            city="{!v.factoringCo.City__c}" province="{!v.factoringCo.State__c}" country="United States"
+                            postalCode="{!v.factoringCo.ZipCode__c}" provinceOptions="{!v.stateOptions}" countryDisabled="true" />
+                        <div class="slds-align_absolute-center" style="height: 300px; width: 100%; display: grid;">
+                            <div>
+                                <span style="color:white">
+                                    By checking the box below and clicking Verify, you are agreeing to our
+                                    <a onclick="{!c.showTerms}" style="color: lightblue">Terms of Use</a>
+                                </span>
+                            </div>
+                            <div>
+                                <lightning:input class="checkboxCSS" type="checkbox" label="I agree" name="agree"
+                                    value="" checked="{!v.agreeCheck}" required="true" onchange="{!c.toggleButton}" />
+                            </div>
+                            <aura:if isTrue="{!v.termsToggle}">
+                                <section role="dialog" tabindex="-1"
+                                    class="slds-modal slds-fade-in-open slds-modal_large"
+                                    aria-labelledby="modal-heading-01" aria-modal="true">
+                                    <div id="modalContent" class="slds-modal__container">
+                                        <button
+                                            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeModal}">
+                                            <lightning:icon iconName="utility:close" iconSize="small" />
+                                            <span class="slds-assistive-text">Cancel and close</span>
+                                        </button>
+                                        <div class="slds-modal__header">
+                                            <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Terms of
+                                                Use</h1>
+                                        </div>
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                            <iframe id="termsFrame"
+                                                src="https://yourempiregroup.secure.force.com/carrier/Portal_Terms"
+                                                width="100%" height="600" />
+                                        </div>
+                                        <div class="slds-modal__footer">
+                                            <lightning:button variant="success" label="Done"
+                                                onclick="{!c.closeModal}" />
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                            </aura:if>
+                            <div>
+                                <lightning:button aura:id="verifyButton" variant="success" label="Verify" value="Verify"
+                                    onclick="{!c.saveCoInfo}" disabled="true" />
+                            </div>
+                        </div>
+
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </div>
+    </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.registerPanel}">
+    <div class="slds-align_absolute-center" style="height: 100%">
+        <div class="formBox">
+            <h2>Carrier Portal Sign-Up</h2>
+            <c:portalRegistration_FactoringCo factoringCoId="{!v.factoringCo.Id}" />
+        </div>
+    </div>
+    </aura:if>
+
+
+</aura:component>

@@ -1,0 +1,55 @@
+<aura:component controller="driverPortal_Cont">
+
+    <aura:attribute name="loadId" type="String" default="" />
+    <aura:attribute name="load" type="FreightTM__Load__c" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="initialized" type="Boolean" default="false" />
+    <aura:attribute name="needDriverSign" type="Boolean" default="false" />
+    <aura:attribute name="driverContact" type="String" default="" />
+    <aura:attribute name="driverContactCell" type="String"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <aura:dependency resource="markup://c:loadUpdating" type="EVENT" />
+    <aura:handler event="c:loadUpdating" action="{!c.showSpinner}" />
+
+    <aura:dependency resource="markup://c:loadUpdated" type="EVENT" />
+    <aura:handler event="c:loadUpdated" action="{!c.init}" />
+
+    <c:driverPortalHeader loadId="{!v.loadId}" loadNum="{!v.load.Name}" loadLane="{!v.load.FreightTM__Calendar_Load__c}" loadStatus="{!v.load.FreightTM__Status__c}" />
+    <!-- <c:dispatcherBox dispatcher="{!v.load.Dispatcher_Carrier__c}" dispatcherCell="{!v.load.FreightTM__Dispatch__r.MobilePhone}" instructions="{!v.load.FreightTM__Remarks__c}"/> -->
+
+
+    <aura:if isTrue="{!v.initialized}">
+        <aura:if isTrue="{!v.needDriverSign}">
+            <c:Signature signatureType="Driver" loadId="{!v.load.Id}" contact="{!v.driverContact}" contactCell="{!v.driverContactCell}" />
+        </aura:if>  
+        <c:pickupBox loadId="{!v.loadId}" loadStatus="{!v.load.FreightTM__Status__c}" locationType="Pickup" iconName="standard:proposition" location="{!v.load.FreightTM__PickupFacility__r.Name}" street="{!v.load.FreightTM__Pickup_Address__c}"
+            city="{!v.load.FreightTM__Pickup_City__c}" state="{!v.load.FreightTM__Pickup_State__c}"
+            zip="{!v.load.FreightTM__Pickup_Zip_Code__c}" lat="{!v.load.Pickup_Lat_Long__Latitude__s}"
+            long="{!v.load.Pickup_Lat_Long__Longitude__s}" refNum="{!v.load.FreightTM__Pickup_Ref__c}"
+            jobRef="{!v.load.Pickup_Ref_Job__c}" instructions="{!v.load.FreightTM__Pickup_Remarks__c}"
+            contact="{!v.load.FreightTM__Pickup_Contact__c}" contactPhone="{!v.load.FreightTM__Pickup_Phone__c}"
+            contactSignature="{!v.load.Shipper_Signature__c}" date="{!v.load.Pickup_By__c}"/>
+
+        <c:pickupBox loadId="{!v.loadId}" loadStatus="{!v.load.FreightTM__Status__c}" locationType="Delivery" iconName="standard:fulfillment_order" location="{!v.load.FreightTM__DeliveryFacility__r.Name}"
+            street="{!v.load.FreightTM__Delivery_Address__c}" city="{!v.load.FreightTM__Delivery_City__c}"
+            state="{!v.load.FreightTM__Delivery_State__c}" zip="{!v.load.FreightTM__Delivery_Zip_Code__c}"
+            lat="{!v.load.Delivery_Lat_Long__Latitude__s}" long="{!v.load.Delivery_Lat_Long__Longitude__s}"
+            refNum="{!v.load.FreightTM__Delivery_Ref__c}" jobRef="{!v.load.Delivery_Ref_Job__c}"
+            instructions="{!v.load.FreightTM__Delivery_Remarks__c}" contact="{!v.load.FreightTM__Delivery_Contact__c}"
+            contactPhone="{!v.load.FreightTM__Delivery_Phone__c}" contactSignature="{!v.load.Receiver_Signature__c}"
+            date="{!v.load.Deliver_By__c}" />
+    </aura:if>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner class="slds-is-fixed"/>
+    </aura:if>
+
+    <!--
+    <div style="border: 2px solid black">
+        <c:Signature loadId="{!v.loadId}" signatureType="Driver"></c:Signature>
+    </div>
+-->
+</aura:component>

@@ -1,0 +1,60 @@
+.THIS.slds-button {
+    margin: 0.5em 0.5em;
+}
+
+.THIS .slds-button {
+    margin: 0.5em 0.5em;
+}
+
+.THIS .templateHeader {
+    font-size: 18px;
+    background: rgb(255, 165, 0, 0.8);
+    padding: 4px;
+    margin: 0.5em 0.5em;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.THIS .tableHeader {
+    font-size: 18px;
+    background: #66cc33;
+    padding: 4px;
+    margin: 0.5em 0.5em;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.THIS .slds-page-header__detail-row {
+    justify-content: center;
+}
+
+.THIS .slds-text-title {
+    font-weight: bold;
+}
+
+.THIS .titleValue {
+    text-align: center;
+}
+
+.THIS .slds-alert_error {
+    --slds-c-alert-color-background: lightblue;
+    font-weight: bolder;
+    color: black;
+}
+
+.THIS .templateTable .slds-cell-fixed {
+    background-color: rgb(255, 165, 0, 0.8) !important;
+}
+
+
+.THIS .loadTable {
+    max-height: 250px;
+    overflow-y: scroll;
+    margin: 1em 0.5em 1em 0.5em;
+}
+
+.THIS .freightIcons .slds-icon {
+    fill: black !important;
+}

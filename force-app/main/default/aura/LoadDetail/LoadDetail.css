@@ -1,0 +1,23 @@
+.THIS .slds-col {
+}
+.THIS .slds-scope .slds-button .slds-progress__marker{
+    height: 40px !important;
+}
+.THIS .progressStep {
+    height: 40px !important;
+}
+
+.THIS.progress-element {
+    background-color: #b6b6b6 !important;
+}
+
+.THIS .slds-size_8-of-12 {
+    background-color: #b6b6b6 !important;
+    border-radius: 5px;
+    margin-top: 10px !important;
+    padding: 5px !important;
+}
+
+.THIS .slds-size_12-of-12 {
+
+}

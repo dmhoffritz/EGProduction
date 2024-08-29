@@ -1,0 +1,113 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <!-- <lightning-layout-item size="3" small-device-size="12" medium-device-size="6" large-device-size="3"> -->
+        <div
+            class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12 slsds-large-size_3-of-12">
+            <lightning-checkbox-group name="Clearing" label="Clearing" options={clearingOptions} value={clearingValues}
+                onchange={handleClearingSelection}>
+            </lightning-checkbox-group>
+        </div>
+        <!-- </lightning-layout-item> -->
+
+        <!-- <lightning-layout-item size="3" small-device-size="12" medium-device-size="6" large-device-size="3"> -->
+        <div
+            class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12 slsds-large-size_3-of-12">
+            <lightning-checkbox-group name="Access" label="Access" options={accessOptions} value={accessValues}
+                onchange={handleAccessSelection}>
+            </lightning-checkbox-group>
+        </div>
+        <!-- </lightning-layout-item> -->
+
+        <!-- <lightning-layout-item size="3" small-device-size="12" medium-device-size="6" large-device-size="3"> -->
+        <div
+            class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12 slsds-large-size_3-of-12">
+            <lightning-checkbox-group name="Environmental" label="Environmental" options={environmentalOptions}
+                value={environmentalValues} onchange={handleEnvironmentalSelection}>
+            </lightning-checkbox-group>
+        </div>
+        <!-- </lightning-layout-item> -->
+
+        <!-- <lightning-layout-item size="3" small-device-size="12" medium-device-size="6" large-device-size="3"> -->
+        <div
+            class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12 slsds-large-size_3-of-12">
+            <lightning-checkbox-group name="MAT Handling" label="MAT Handling" options={matOptions} value={matValues}
+                onchange={handleMatSelection}>
+            </lightning-checkbox-group>
+        </div>
+        <!-- </lightning-layout-item> -->
+    </div>
+
+    <!--
+    <h2>Clearing</h2>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="around-small">
+        <lightning-input type="checkbox" label="Mulch &amp; Spread" name="mulch"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+            padding="around-small">
+        <lightning-input type="checkbox" label="Wetlands" name="wetlands"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Chip Haul-Off" name="chip"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Amphibuous" name="amphibuous"></lightning-input>    
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="De-Stump Ditchline" name="ditchline"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Herbicide" name="herbicide"></lightning-input>
+    </lightning-layout-item>
+    <h2>Access</h2>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="TCE/Road Approach" name="roadApproach"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Rock" name="rock"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Fences/Gates" name="fences"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Airbridge" name="airbridge"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Culverts" name="culverts"></lightning-input>
+    </lightning-layout-item>
+    <h2>Environmental</h2>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="SWPPP Controls" name="controls"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Restoration/Regrading" name="restore"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Cleanup" name="cleanup"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="Reseed/Fertilize" name="reseed"></lightning-input>
+    </lightning-layout-item>
+    <h2>MAT Handling</h2>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="MAT Install" name="install"></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="around-small">
+        <lightning-input type="checkbox" label="MAT Removal" name="removal"></lightning-input>
+    </lightning-layout-item>
+-->
+</template>

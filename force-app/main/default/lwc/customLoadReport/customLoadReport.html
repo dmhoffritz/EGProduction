@@ -1,0 +1,237 @@
+<!-- sldsValidatorIgnore -->
+<!--
+  @description       : 
+  @author            : Ethan Myers
+  @group             : 
+  @last modified on  : 02-24-2023
+  @last modified by  : Ethan Myers
+-->
+<template>
+    <!-- AUTOLAUNCHED FLOW SHOWS HERE -->
+    <div class="reportWrapper">
+        <template if:true={autoLaunchFlow}>
+            <lightning-flow onstatuschange={handleFlowStatusChange} flow-api-name={flowApiName}
+                flow-input-variables={inputVariables}>
+            </lightning-flow>
+        </template>
+
+        <div class="slds-page-header slds-page-header_record-home">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container">
+                                <lightning-icon icon-name={headerIcon} size="medium"></lightning-icon>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate"
+                                            title={listLabel}>{listLabel}</span>
+                                    </h1>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                            <ul class="slds-button-group-list">
+                                <li>
+                                    <button class="slds-button slds-button_neutral" onclick={batchBOL}>Batch BOLs</button>
+                                </li>
+                                <li>
+                                    <button class="slds-button slds-button_neutral" onclick={downloadItemData}>Export to
+                                        Excel</button>
+                                </li>
+                                <template if:true={showRejectButton}>
+                                    <li>
+                                        <lightning-button variant="destructive" label="Reject" title="Reject"
+                                            onclick={reject} class="slds-m-left_x-small"
+                                            icon-name="utility:close"></lightning-button>
+                                    </li>
+                                </template>
+
+                                <li>
+                                    <lightning-button variant="brand" label={actionLabel} title={actionLabel}
+                                        onclick={approve} class="slds-m-left_x-small"
+                                        icon-name={buttonIcon}></lightning-button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__row slds-page-header__row_gutters">
+                <div class="slds-page-header__col-details">
+                    <div class="slds-grid slds-grid_vertical">
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-grid slds-gutters slds-wrap">
+                                <div class="slds-col slds-size_1-of-10">
+                                    <lightning-input type="date" name="receiverDate" label="Receiver Date" value={dateSelection}
+                                        onchange={updateFilters}></lightning-input>
+                                </div>
+                                <template if:true={recordTypeOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="recordType" label="Load Type" placeholder="Select a Load Type"
+                                            options={recordTypeOptions} onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                                <!-- PM dropdown list here -->
+                                <template if:true={pmOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="projectManager" label="PM" placeholder="Select a PM" options={pmOptions}
+                                            onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                                <!-- Ref # dropdown list here -->
+                                <template if:true={pickupOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="pickupJob" label="Pickup Ref #" placeholder="Pickup Ref #" options={pickupOptions}
+                                            onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                                <template if:true={deliveryOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="deliveryJob" label="Delivery Ref #" placeholder="Delivery Ref #"
+                                            options={deliveryOptions} onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                                <!-- Order dropdown list here -->
+                                <template if:true={orderOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="order" label="Order" placeholder="Select an Order" options={orderOptions}
+                                            onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                                <!--
+                                <template if:true={locationOptions}>
+                                    <div class="slds-col">
+                                        <lightning-combobox name="deliveryLocation" label="Delivery Location"
+                                            placeholder="Select a Delivery Location" options={locationOptions} onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                                -->
+                                <!-- Commodity dropdown list here -->
+                                <template if:true={commodityOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="commodity" label="Commodity" placeholder="Select a Commodity"
+                                            options={commodityOptions} onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                            
+                                <!-- Sell Type dropdown list here -->
+                                <template if:true={sellTypeOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="sellType" label="Sell Type" placeholder="Select a Sell Type"
+                                            options={sellTypeOptions} onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                            
+                                <!-- Grade dropdown list here -->
+                                <template if:true={gradeOptions}>
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning-combobox name="grade" label="Grade" placeholder="Select a Grade" options={gradeOptions}
+                                            onchange={updateFilters}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="tableControls">
+                                <lightning-button variant="base" label="Refresh Data" title="Refresh" onclick={refreshData}
+                                    class="slds-m-left_x-small refreshBtn" icon-name="utility:refresh"></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <template if:true={items}>
+                <div class="slds-page-header__row slds-page-header__row_gutters">
+                    <div class="slds-page-header__col-details">
+                        <ul class="slds-page-header__detail-row">
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="# of Loads"># of Loads</div>
+                                <div class="slds-truncate" title={loadCount}>{loadCount}</div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="Total Quantity">Total Quantity</div>
+                                <div class="slds-truncate" title={commodityCount}>{commodityCount}</div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="Total Carrier Rate">Total Carrier Rate
+                                </div>
+                                <div class="slds-truncate" title={totalCarrierRate}>${totalCarrierRate}</div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="Expected Mat Revenue">Expected Mat
+                                    Revenue</div>
+                                <div class="slds-truncate" title={totalPrice}>${totalPrice}</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <template if:true={items}>
+            <!-- LOAD LIST HERE -->
+            <div class="itemTable">
+                <lightning-datatable key-field="itemId" class="tableCSS" data={itemsForTable} columns={columns}
+                    show-row-number-column onrowselection={storeSelectedItems}
+                    default-sort-direction={defaultSortDirection} sorted-direction={sortDirection} sorted-by={sortedBy}
+                    onsort={onHandleSort} resize-column-width>
+                </lightning-datatable>
+            </div>
+        </template>
+
+        <!-- MODAL -->
+        <template if:true={screenFlow}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleModalClose}>
+                        <lightning-icon icon-name="utility:close" size="medium" class="whiteIcon"></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{modalHeader}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-flow onstatuschange={handleFlowStatusChange} flow-api-name={flowApiName}
+                            flow-input-variables={inputVariables}>
+                        </lightning-flow>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <template if:false={isLoaded}>
+            <div class="demo-only demo-only_viewport demo--inverse" style="position:relative">
+                <div class="slds-spinner_container slds-is-fixed">
+                    <div role="status" class="slds-spinner slds-spinner_medium">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

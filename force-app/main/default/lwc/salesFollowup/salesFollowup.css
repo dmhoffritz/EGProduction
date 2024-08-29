@@ -1,0 +1,4 @@
+.slds-alert_success {
+    --slds-c-alert-color-background: #66cc33 !important;
+    color: white;
+}

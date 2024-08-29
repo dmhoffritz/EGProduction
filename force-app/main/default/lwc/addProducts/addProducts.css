@@ -1,0 +1,12 @@
+.slds-page-header__detail-block {
+    padding-left: revert !important;
+    max-width: 100% !important;
+}
+
+.deleteButton {
+    --sds-c-button-color-background: red;
+}
+
+.submit-icon {
+    --sds-c-icon-color-foreground-default: white;
+}

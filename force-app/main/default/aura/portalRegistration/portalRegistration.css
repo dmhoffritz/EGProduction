@@ -1,0 +1,104 @@
+h2.THIS {
+    font-family: 'Industry';
+    font-size: 20px;
+    color: #66cc33;
+    font-weight: bold; 
+    text-align: center; 
+}
+
+.THIS.c-container {
+    border-top: 2px solid #66cc33;
+    margin: 10px 0 20px 0;
+}
+
+.THIS .slds-checkbox .slds-checkbox__label .slds-form-element__label {
+    color: white !important;
+    font-size: 14px;
+}
+
+.THIS .headerCSS {
+    width: 100%;
+    color: #66cc33; 
+    font-size: 20px; 
+    break-after: always;
+    font-family: 'Industry'; 
+    float: left;    
+    text-align: left;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.THIS .large {
+    height: 100%;
+}
+.THIS .x-large {
+    height: 100%;
+}
+.THIS .custom-box {
+    text-align: center;
+    background-color: black;
+    padding: 1rem;
+    width: 50%;
+    margin-bottom: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.THIS .checkboxColumn {
+    justify-content: end;
+}
+
+.THIS .picklistColumn {
+    justify-content: start;
+}
+
+.THIS .picklistColumn .slds-form-element__label {
+    color: white;
+}
+
+.THIS .slds-checkbox {
+    color: white;
+}
+
+.THIS .slds-no-flex {
+    font-size: 16px;
+    color: #66cc33;
+    float: left;
+}
+
+.THIS .slds-input[readonly] {
+    color: white;
+    font-size: 14px;
+}
+
+.THIS .addressBox .slds-form-element__legend {
+    float: left;
+    font-size: 20px !important;
+}
+
+.THIS .addressBox .slds-form-element__label {
+    font-size: 16px;
+    color: #66cc33;
+    float: left;
+}
+
+.THIS .stateListBox .slds-form-element__legend {
+    font-size: 14px !important;
+    color: #66cc33 !important;
+    text-align: center;
+}
+
+.THIS .stateListBox .slds-form-element__label {
+    font-size: 12px;
+    color: lightgrey;
+    text-align: left;
+}
+
+.THIS .stateListBox .slds-button:first-of-type {
+    background: lightgrey;
+}
+
+.THIS .checkboxCSS {
+    color: white;
+    text-align:left;
+}

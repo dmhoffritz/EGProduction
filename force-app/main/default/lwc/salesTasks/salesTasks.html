@@ -1,0 +1,36 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-12-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <template if:true={showBids}>
+        <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+            <span class="slds-assistive-text">warning</span>
+            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                title="Description of icon when needed">
+                <lightning-icon icon-name="utility:warning" size="x-small"></lightning-icon>
+            </span>
+            <h2 style="font-weight: bold">Please review and complete the following tasks.
+            </h2>
+        </div>
+    </template>
+    <template if:false={showBids}>
+        <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+            <span class="slds-assistive-text">success</span>
+            <span class="slds-icon_container slds-icon-utility-success slds-m-right_x-small" title="Success">
+                <lightning-icon icon-name="utility:success" size="x-small"></lightning-icon>
+            </span>
+            <h2 style="font-weight: bold">Congrats! You have successfully completed all tasks.</h2>
+        </div>
+    </template>
+    <ul class="slds-timeline">
+        <template for:each={tasks} for:item="task">
+            <div key={task.task.Id}> 
+                <c-bid-task-card bid={task.bid} task={task.task}></c-bid-task-card>
+            </div>
+        </template>
+    </ul>
+</template>

@@ -1,0 +1,361 @@
+<apex:page sidebar="false" applyBodyTag="false" standardController="FreightTM__Load__c" extensions="RateConSignature" showheader="false" cache="true" docType="html-5.0" lightningStylesheets="true" standardStylesheets="false">
+    <apex:messages />
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <style type="text/CSS">
+                        
+            .blackline { border: 1px solid #000;}
+            table { 
+            border-collapse: collapse;
+            border-spacing: 0;
+            }
+            td,th{
+            border: 1px solid black;
+            padding: 5px;
+            }
+            
+            .m-signature-pad--body-first canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 75%;
+            height: 100px;
+            border: 1px solid #CCCCCC;
+            border-radius: 10px 30px;
+            }
+            
+            .m-signature-pad--body-second canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 75%;
+            height: 100px; 
+            border: 1px solid #CCCCCC;
+            border-radius: 30px 10px;
+            }
+            .red {
+              color: red;
+            }
+            .green {
+              color: green;
+            }
+            .msgs {
+              font-weight: bold;
+              text-align: center;
+              margin: 0 auto;
+              width: 100%;
+            }
+        </style>
+    </head>
+    
+    <apex:form >
+    <apex:pageBlock > 
+        <div style="font-family:arial, sans-serif; font-size: .9em">
+            
+            <table width="100%" style="line-height:1.3em">
+                <tr>
+                    <td width="60%" align="left" style="border: none;">
+                        <!--<apex:image url="https://c.na85.content.force.com/servlet/servlet.ImageServer?id=0151U000000MnFl&oid=00D1U000000GUQx&lastMod=1543948986000" width="210" height="40" style="margin-left:-10px" /><br />
+<b>{!$Organization.Name}</b><br />-->
+                        <apex:image url="{!$Resource.Empire_group_logo}" width="120"/><br />
+                        
+                        <div style="color: black; text-align: left; margin-left:10px">
+                            <b>{!$Organization.Name}</b><br />
+                            {!$Organization.Street}<br/> 
+                            {!$Organization.City} {!$Organization.State} {!$Organization.PostalCode}<br/> 
+                            <!--MC #: MC-72300<br />-->
+                            Phone: {!$Organization.Phone}<br />
+                            <!--Fax: {!$Organization.Fax}-->
+                        </div>
+                    </td>
+                    <td width="40%" align="right" style="text-align:left; border: none;">
+                        <h2 style="text-indent:0%;">RATE CONFIRMATION</h2>
+                        <b>Load #:&nbsp;</b><apex:outputText value="{!loadRec.Name}" /><br />
+                        <b>Date:&nbsp;</b><apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!TODAY()}"/></apex:outputText><br />
+                        <b>Total Distance:&nbsp;</b><apex:outputText value="{0, number, 00.00}"><apex:param value="{!loadRec.FreightTM__Total_Miles__c}"/></apex:outputText>&nbsp;mi<br />
+                    </td>
+                </tr>
+            </table>
+            
+            <br />
+            
+            <div style="line-height:1.3em">
+                <!--<apex:panelGrid columns="2">-->
+                <b>Carrier Information:</b><br />
+                <table width="100%" style="line-height:1.1em;">
+                    <tr>
+                        <td width="60%" align="left">
+                            <b><apex:outputText value="{!loadRec.FreightTM__Carrier_Obj__r.Name}" /></b><br /><br />
+                            <!--<apex:outputText value="{!Load__c.FreightTM__Carrier_Obj__r.Billing_Address__c}"/><br />
+<apex:outputPanel ><apex:outputText value="{!Load__c.FreightTM__Carrier_Obj__r.Billing_City__c}"/> <apex:outputText value=" {!Load__c.FreightTM__Carrier_Obj__r.Billing_State_Province__c}"/> <apex:outputText value=" {!Load__c.FreightTM__Carrier_Obj__r.Billing_Zip_Code__c}"/></apex:outputPanel><br />
+-->
+                            <b>Phone:</b>&nbsp;<apex:outputField value="{!loadRec.FreightTM__Carrier_Obj__r.FreightTM__Phone__c}"/><br />
+                            <b>Email:</b>&nbsp;<apex:outputField value="{!loadRec.FreightTM__Carrier_Obj__r.FreightTM__Email__c}"/><br />
+                            <b>Fax:</b>&nbsp;<apex:outputField value="{!loadRec.FreightTM__Carrier_Obj__r.FreightTM__Fax__c}"/>
+                        </td>
+                        <td width="40%" align="right" style="text-align:left">
+                            <br/>
+                            <b>Driver:</b>&nbsp;<apex:outputText value="{!loadRec.Driver_Name__c}"/><br/>
+                            <b>Phone:</b>&nbsp;<apex:outputText value="{!loadRec.Driver_Phone__c}"/><br/>
+                        </td> 
+                    </tr>
+                </table>
+                <!--</apex:panelGrid>-->  
+            </div>
+            
+            <br />
+            <!--
+<div style="line-height:1.3em; padding-left:61%;">
+<b>Driver:</b><apex:outputPanel ><apex:outputText value=" {!FreightTM__Load__c.FreightTM__Driver__r.FreightTM__First_Name__c}" /><apex:outputText value=" {!FreightTM__Load__c.FreightTM__Driver__r.Name}" /></apex:outputPanel><br />
+<b>Dispatcher:</b><apex:outputPanel ><apex:outputText value=" {!FreightTM__Load__c.FreightTM__Dispatcher__r.FreightTM__First_Name__c}" /><apex:outputText value=" {!FreightTM__Load__c.FreightTM__Dispatcher__r.Name}" /></apex:outputPanel><br />
+<b>Carrier:</b><apex:outputText value=" {!FreightTM__Load__c.FreightTM__Carrier__r.Name}" /><br />
+</div>
+-->
+            <table width="100%" style="line-height:1.3em">
+                <!--<table width="100%" class="tableline" style="line-height:1.1em; border: 1px solid #000; border-collapse: collapse">-->  
+                <h2>Stops / Actions</h2>
+                <tr width="100%">
+                    <th width="5%" align="center">#</th>
+                    <th width="10%" align="center">Action</th>
+                    <th width="5%" align="center">Ref #:</th>
+                    <th width="15%" align="left">Date/Time</th>
+                    <th width="25%" align="left">Location</th>
+                    <th width="20%" align="left">Contact</th>
+                    <th width="30%" align="left">Remarks</th>
+                </tr>
+                <tr>
+                    <td align="center">1</td>
+                    <td align="center">Pickup</td>
+                    <td align="center">
+                        <apex:outputText value="{!loadRec.FreightTM__Pickup_Ref__c}" /></td>
+                    <td align="left"><apex:outputText value=" {!loadRec.FreightTM__Pickup_Arrival__c} "/></td>
+                    <!--<td align="left" style="background-color: #cbd8ed"><apex:outputText value="{0, date, MM/dd/yy, hh:mm a}"><apex:param value="{!FreightTM__Load__c.FreightTM__Pickup_Arrival__c}"/></apex:outputText></td>-->
+                    <td align="left">
+                        <apex:outputText value="{!loadRec.FreightTM__Pickup_Address__c}"/><br />
+                        <apex:outputPanel ><apex:outputText value="{!loadRec.FreightTM__Pickup_City__c}"/>, <apex:outputText value=" {!loadRec.FreightTM__Pickup_State__c}"/> <apex:outputText value=" {!loadRec.FreightTM__Pickup_Zip_Code__c}"/></apex:outputPanel><br />
+                        <apex:outputText value="{!loadRec.FreightTM__Pickup_Country__c}"/><br /></td>
+                    <td align="left">
+                        <apex:outputText value="{!loadRec.FreightTM__Pickup_Contact__c}"/><br />
+                        <apex:outputText value="{!loadRec.FreightTM__Pickup_Phone__c}"/><br />
+                        <apex:outputText value="{!loadRec.FreightTM__Pickup_Email__c}"/><br /></td>
+                    <td align="left"><apex:outputText value="{!loadRec.FreightTM__Pickup_Remarks__c}"/></td>
+                </tr>
+                
+                <apex:variable value="{!2}" var="rowNum"/>
+                <apex:repeat var="s" value="{!stops}">
+                    <tr>
+                        <td align="center"><apex:outputText value="{!FLOOR(rowNum)}"/><apex:variable var="rowNum" value="{!rowNum + 1}"/></td>
+                        <td align="center"><apex:outputText value="{!s.FreightTM__Type__c}"/></td>
+                        <td align="left"><apex:outputText value=" {!s.FreightTM__Arrival__c} "/></td>
+                        <td align="left">
+                            <apex:outputText value="{!s.FreightTM__Address__c}"/><br />
+                            <apex:outputPanel ><apex:outputText value="{!s.FreightTM__City__c}"/>, <apex:outputText value="{!s.FreightTM__State__c}"/> <apex:outputText value="{!s.FreightTM__Zip_Code__c}"/></apex:outputPanel><br />
+                            <apex:outputText value="{!s.FreightTM__Country__c}"/><br /></td>
+                        <td align="left">
+                            <apex:outputText value="{!s.FreightTM__Contact__c}"/><br />
+                            <apex:outputText value="{!s.FreightTM__Phone__c}"/><br />
+                            <apex:outputText value="{!s.FreightTM__Email__c}"/><br /></td>
+                        <td align="left"><apex:outputText value="{!s.FreightTM__Remarks__c}"/></td>
+                    </tr>
+                    
+                </apex:repeat>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                <!--<tr><td colspan="4" cellspacing="40">&nbsp;</td></tr>-->
+                
+                <!--<apex:variable value="{!2}" var="rowNum"/>
+                <apex:repeat var="s" value="{!loadRec.FreightTM__Stops__r}">
+                    <tr>
+                        <td align="center"><apex:outputText value="{!FLOOR(rowNum)}"/><apex:variable var="rowNum" value="{!rowNum + 1}"/></td>
+                        <td align="center"><apex:outputText value="{!s.FreightTM__Type__c}"/></td>
+                        <td align="left"><apex:outputText value=" {!s.FreightTM__Arrival__c} "/></td>
+                        <td align="left">
+                            <apex:outputText value="{!s.FreightTM__Address__c}"/><br />
+                            <apex:outputPanel ><apex:outputText value="{!s.FreightTM__City__c}"/>, <apex:outputText value="{!s.FreightTM__State__c}"/> <apex:outputText value="{!s.FreightTM__Zip_Code__c}"/></apex:outputPanel><br />
+                            <apex:outputText value="{!s.FreightTM__Country__c}"/><br /></td>
+                        <td align="left">
+                            <apex:outputText value="{!s.FreightTM__Contact__c}"/><br />
+                            <apex:outputText value="{!s.FreightTM__Phone__c}"/><br />
+                            <apex:outputText value="{!s.FreightTM__Email__c}"/><br /></td>
+                        <td align="left"><apex:outputText value="{!s.FreightTM__Remarks__c}"/></td>
+                    </tr>
+                    
+                </apex:repeat>-->
+                
+                <!--<tr><td colspan="5" cellspacing="40">&nbsp;</td></tr>-->
+                <tr>
+                    <td align="center"><apex:outputText value="{!rowNum}"/></td>
+                    <td align="center">Delivery</td>
+                    <td align="center">
+                        <apex:outputText value="{!loadRec.FreightTM__Delivery_Ref__c}" /></td>
+                    <!--<td width="40%" style="border: none"><b>Service Date:&nbsp;<apex:outputPanel ><apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!m.Start_Date__c}" /></apex:outputText>&nbsp;-&nbsp; <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"><apex:param value="{!m.End_Date__c}" /></apex:outputText></apex:outputPanel></b></td>-->
+                    <td align="left"><apex:outputText value=" {!loadRec.FreightTM__Delivery_Arrival__c} "/></td>
+                    <td align="left">
+                        <apex:outputText value="{!loadRec.FreightTM__Delivery_Address__c}"/><br />
+                        <apex:outputPanel ><apex:outputText value="{!loadRec.FreightTM__Delivery_City__c}"/>, <apex:outputText value=" {!loadRec.FreightTM__Delivery_State__c}"/> <apex:outputText value=" {!loadRec.FreightTM__Delivery_Zip_Code__c}"/></apex:outputPanel><br />
+                        <apex:outputText value="{!loadRec.FreightTM__Delivery_Country__c}"/><br /></td>
+                    <td align="left">
+                        <apex:outputText value="{!loadRec.FreightTM__Delivery_Contact__c}"/><br />
+                        <apex:outputText value="{!loadRec.FreightTM__Delivery_Phone__c}"/><br />
+                        <apex:outputText value="{!loadRec.FreightTM__Delivery_Email__c}"/><br /></td>
+                    <td align="left"><apex:outputText value="{!loadRec.FreightTM__Delivery_Remarks__c}"/></td>
+                </tr>
+                
+                <tr>              
+                    <td colspan="7" cellspacing="40"><b><apex:outputText value="Delivery Instructions: {!loadRec.FreightTM__Remarks__c}"/></b></td>
+                </tr>
+                <tr>              
+                    <td colspan="7" cellspacing="40"><h3>Total Carrier Rate: $<apex:outputText value="{0, number,00.00}"><apex:param value="{!loadRec.FreightTM__Rate_to_Carrier__c}"/></apex:outputText></h3></td>
+                </tr>
+            </table>
+            
+            <br />
+            
+            <p>Upon completion of the load, please email or fax us a copy of the "Proof of Delivery" (POD) to APFreight@yourempiregroup.com. Thank you!</p>
+            
+            <apex:outputPanel rendered="{!msg}"> 
+                <span class="msgs red"><apex:pageMessages /></span>
+                <div class="msgs green" style="margin: 15px 0 5px 0;"><apex:outputText value="{!SUBSTITUTE(JSENCODE(msgs), '\\n', '<br/>')}" escape="false" /></div>
+            </apex:outputPanel>
+            
+            <table width="100%" style="line-height:1.3em">
+                <tr>
+                    <!--<td width="40%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Dispatcher:</b></td>-->
+                    <td width="15%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Driver Name:&nbsp;<br/><apex:inputField value="{!loadRec.Driver_Name__c}" ignoreEditPermissionForRendering="True" /></b></td>
+                    <td width="15%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Driver Phone:&nbsp;<br/><apex:inputField value="{!loadRec.Driver_Phone__c}" ignoreEditPermissionForRendering="True"  /></b></td>
+                    <td width="15%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Load Reference #:&nbsp;<br/><apex:inputField value="{!loadRec.Reference_Number__c}" ignoreEditPermissionForRendering="True"  /></b></td>
+                    <td width="15%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Print Name:&nbsp;<br/><apex:inputField value="{!loadRec.FreightTM__Carrier_Obj__r.FreightTM__Primary_Contact__c}" ignoreEditPermissionForRendering="True" /></b></td>
+                    <!--<td width="25%" align="left" style="border: none;"><div style="height: 100px;"></div>_____________________________<br/>Print Name</td>-->
+                    <td width="25%" align="left" style="border: none;"><div style="height: 100px;">
+                        
+                        <!--<apex:form >-->
+                            <apex:outputpanel >
+                                <apex:includeScript value="{! $Resource.signature_pad }"/>
+                                <apex:outputpanel rendered="{!IF(isShowPickupSignature != true, true, false)}" layout="none">
+                                    <div id="signature-pad-pickup" class="m-signature-pad-pickup">
+                                        <div class="m-signature-pad--body-first">
+                                            <canvas id="canvasPickup"></canvas>
+                                        </div>
+                                    </div>
+                                    <br/><br/>
+                                    <input id="clearSigDButton" style="text-align: center;" type="button" name="SigCap" onclick="clearPickupPad();" value="Clear Pickup Signature"/>
+                                    
+                                    <apex:inputHidden id="pickupSignature" value="{!pickupSignature}" />
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(isShowPickupSignature == true, true, false)}" layout="none">
+                                    <apex:image id="thePickupImage" value="{!pickupSignature}" width="60%" height="135"/>
+                                    <br/>
+                                    <apex:commandButton value="Clear Pickup Signature" action="{!clearPickup}" styleClass="text-align: center;" />
+                                </apex:outputpanel>
+                                
+                            </apex:outputpanel>
+                        <!--</apex:form>-->
+                        
+                        </div>_____________________________<br/>Signature Agreement</td>
+                    
+                    <td width="15%" align="left" style="border: none;"><div style="height: 100px;"></div><b>Date:&nbsp;<br/>
+                        <apex:outputText value="{0, date,M/d/yy h:mm a}"><apex:param value="{!loadRec.RateCon_Signing_Date__c + offset}"/></apex:outputText></b></td>
+
+                    <!--<td width="10%" align="left" style="border: none;"><div style="height: 100px;"></div>____________<br/>Date</td>-->
+                    <!--<td width="20%" align="left" style="background-color: #cbd8ed"><b><apex:outputText value="{0, number, currency}"><apex:param value="{!FreightTM__Load__c.Total_Amount__c}"/></apex:outputText></b></td>-->
+                </tr>
+            </table>
+            
+            <!--
+/* ***************************************************************** */
+-->
+
+            
+<!--
+/* ***************************************************************** */
+-->
+
+        <script type="text/javascript">
+        
+        try{
+            // Pickup
+            var pickupCanvas = document.getElementById("canvasPickup"),
+                pickupSignaturePad;
+            var pickupSignaturePad = new SignaturePad(pickupCanvas);
+            pickupSignaturePad.minWidth = 2;
+            pickupSignaturePad.maxWidth = 4;
+            pickupSignaturePad.penColor = "#000000";
+            pickupSignaturePad.backgroundColor = "#FFFFFF";
+            pickupSignaturePad.toDataURL();
+            window.onresize = resizeCanvas;
+            resizeCanvas(pickupCanvas);
+        }catch(e){}
+        
+        try{
+            // Delivery
+            var deliveryCanvas = document.getElementById("canvasDeliery"),
+                deliverySignaturePad;
+            var deliverySignaturePad = new SignaturePad(deliveryCanvas);
+            deliverySignaturePad.minWidth = 2;
+            deliverySignaturePad.maxWidth = 4;
+            deliverySignaturePad.penColor = "#000000";
+            deliverySignaturePad.backgroundColor = "#FFFFFF";
+            deliverySignaturePad.toDataURL();
+            window.onresize = resizeCanvas;
+            resizeCanvas(deliveryCanvas);
+        }catch(e){}
+        
+        function resizeCanvas(canvas) {
+            var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+        
+        function clearPickupPad(){
+            
+            pickupSignaturePad.clear();
+            document.getElementById("{!$Component.pickupSignature}").value = ''
+        }
+        
+        function clearDeliveryPad(){
+            
+            deliverySignaturePad.clear();
+            document.getElementById("{!$Component.deliverySignature}").value = ''
+        }
+        
+        function saveSign(){
+            try{ 
+                var pickupStrDataURI = pickupSignaturePad.toDataURL();
+                if (!pickupSignaturePad.isEmpty()) {
+                    document.getElementById("{!$Component.pickupSignature}").value = pickupStrDataURI;
+                }
+            }catch{}
+                
+                try{
+                var deliveryStrDataURI = deliverySignaturePad.toDataURL();
+            if (!deliverySignaturePad.isEmpty()) {
+                document.getElementById("{!$Component.deliverySignature}").value = deliveryStrDataURI;
+            }
+        }catch{}
+            //strDataURI = strDataURI.replace(/^data:image\/(png|jpg);base64,/, "");
+            //alert('signature saved');                
+            }
+            </script>
+                
+        </div>
+
+            <apex:outputPanel rendered="true" layout="none">
+                 <apex:commandButton rendered="true" value="Save & Submit Changes" action="{!Save}"  styleClass="text-align: center;"  onclick="saveSign();" />
+            </apex:outputPanel>
+
+                
+        
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>
+
+<!--renderAs="pdf"-->

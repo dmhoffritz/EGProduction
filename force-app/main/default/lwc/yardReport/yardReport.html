@@ -1,0 +1,424 @@
+<template>
+    <template if:true={loading}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <template if:true={showReports}>
+        <div class="slds-align_absolute-center headerActions">
+            <div class="slds-grid slds-grid_vertical slds-gutters">
+                <div class="slds-col">
+                    <div class="datePicker">
+                        <div class="buttonContainer">
+                            <lightning-button-icon icon-name="utility:chevronleft"
+                                onclick={showYesterday}></lightning-button-icon>
+                        </div>
+                        <div class="dateInputContainer">
+                            <lightning-input label="Report Date" type="date" name="reportDate" value={date}
+                                onchange={updateReportDate} max={today}></lightning-input>
+                        </div>
+                        <div class="buttonContainer">
+                            <lightning-button-icon icon-name="utility:chevronright"
+                                onclick={showTomorrow}></lightning-button-icon>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:work_plan"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title" title={reportTitle}>{reportTitle}</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">
+                            <template if:true={showReports}>
+                                <lightning-formatted-date-time value={date}></lightning-formatted-date-time>
+                                &nbsp;• Use datepicker above to reference other report dates
+                            </template>
+                            <template if:true={showUngraded}>
+                                All loads delivered into yard that have not been graded. Loads will be referenced on
+                                report of same day they were
+                                graded.
+                            </template>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <ul class="slds-button-group-list">
+                            <li>
+                                <lightning-button-icon icon-name="utility:refresh" onclick={refreshData}></lightning-button-icon>
+                            </li>
+                            <template if:false={hasAttachments}>
+                                <li>
+                                    <lightning-button-icon icon-name="utility:photo" onclick={takePhoto}></lightning-button-icon>
+                                </li>
+                            </template>
+                            <li>
+                                <lightning-button class="viewportButton" label={viewportButtonLabel}
+                                    variant={viewportButtonVariant} icon-name={viewportButtonIcon}
+                                    icon-position={viewportButtonIconPosition}
+                                    onclick={toggleViewport}></lightning-button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <template if:true={showUngraded}>
+            <div class="slds-page-header__row slds-page-header__row_gutters">
+                <div class="slds-page-header__col-details">
+                    <ul class="slds-page-header__detail-row">
+                        <template if:true={showUngraded}>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="# of Loads"># of Loads</div>
+                                <div class="slds-truncate" title={matsUngraded.movementSummary.loadCount}>
+                                    {matsUngraded.movementSummary.loadCount}</div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="# of Mats"># of Mats</div>
+                                <div class="slds-truncate" title={matsUngraded.movementSummary.qtyCount}>
+                                    {matsUngraded.movementSummary.qtyCount}</div>
+                            </li>
+                            <li class="slds-page-header__detail-block">
+                                <div class="slds-text-title slds-truncate" title="# of Ungraded Mats"># of Ungraded Mats
+                                </div>
+                                <div class="slds-truncate" title={matsUngraded.movementSummary.ungradedCount}>
+                                    {matsUngraded.movementSummary.ungradedCount}</div>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <template if:true={hasData}>
+
+        <!--
+        <template if:true={matsUngraded}>
+            <div class="ungradedBox">
+                <div class="headerBox">
+                    <h1>Mats Ungraded</h1>
+                </div>
+                <template for:each={matsUngraded} for:item="item">
+                    <div key={item.key}>
+                        <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                            <span class="slds-assistive-text">Ungraded Job</span>
+                            <lightning-icon icon-name="utility:lower_flag" size="x-small" class="blackIcon"></lightning-icon>
+                            <h2 style="font-weight: bold">&nbsp;{item.label}</h2>
+                        </div>
+                        <div class="movementTable">
+                            <lightning-datatable key-field="Id" data={item.records} draft-values={movements_edited} columns={movementColumns}
+                                onsave={updateMovements} onrowaction={handleRowAction} show-row-number-column
+                                hide-checkbox-column></lightning-datatable>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    -->
+        <template if:true={showReports}>
+
+            <div class="movementBox">
+                <div class="headerBox">
+                    <h1>Mats Received&nbsp;({matsReceived.movementSummary.qtyCount})</h1>
+                    <!--
+                <template if:true={isToday}>
+                    <lightning-button label="Add Delivery" icon-name="utility:add" onclick={addDelivery} variant="brand"></lightning-button>
+                </template>
+            -->
+                </div>
+                <template if:true={hasDeliveries}>
+                    <template for:each={matsReceived.movementRecords} for:item="movement">
+                        <div key={movement.jobIdentifier}>
+                            <div class="slds-notify slds-notify_alert" role="alert">
+                                <h2>{movement.jobIdentifier}&nbsp;&nbsp;</h2>
+                                <lightning-icon icon-name="utility:truck" size="x-small"
+                                    class="whiteIcon"></lightning-icon>
+                                <h2>&nbsp;&nbsp;{report.Yard__r.Name}</h2>
+                            </div>
+                            <div class="movementTable">
+                                <lightning-datatable key-field="Id" data={movement.items}
+                                    draft-values={movements_edited} columns={receivedColumns} onsave={updateMovements}
+                                    onrowaction={handleRowAction} show-row-number-column
+                                    hide-checkbox-column></lightning-datatable>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={hasDeliveries}>
+                    <div class="slds-illustration slds-illustration_small" aria-hidden="true">
+                        <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt="" />
+                        <div class="slds-text-color_weak">
+                            <h3 class="slds-text-heading_medium">No Deliveries</h3>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="movementBox">
+                <div class="headerBox">
+                    <h1>Mats Shipped&nbsp;({matsShipped.movementSummary.qtyCount})</h1>
+                    <!--
+                <template if:true={isToday}>
+                    <lightning-button label="Add Shipment" icon-name="utility:add" onclick={addShipment} variant="brand"></lightning-button>
+                </template>
+            -->
+                </div>
+                <template if:true={hasShipments}>
+                    <template for:each={matsShipped.movementRecords} for:item="movement">
+                        <div key={movement.jobIdentifier}>
+                            <div class="slds-notify slds-notify_alert" role="alert">
+                                <h2>{report.Yard__r.Name}&nbsp;&nbsp;</h2>
+                                <lightning-icon icon-name="utility:truck" size="x-small"
+                                    class="whiteIcon"></lightning-icon>
+                                <h2>&nbsp;&nbsp;{movement.jobIdentifier}</h2>
+                            </div>
+                            <div class="movementTable">
+                                <lightning-datatable key-field="Id" data={movement.items}
+                                    draft-values={movements_edited} columns={shippedColumns} onsave={updateMovements}
+                                    onrowaction={handleRowAction} show-row-number-column
+                                    hide-checkbox-column></lightning-datatable>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={hasShipments}>
+                    <div class="slds-illustration slds-illustration_small" aria-hidden="true">
+                        <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt="" />
+                        <div class="slds-text-color_weak">
+                            <h3 class="slds-text-heading_medium">No Shipments</h3>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <template if:true={hasGradedToday}>
+                <div class="movementBox">
+                    <div class="headerBox">
+                        <h1>Graded Today&nbsp;({matsGradedToday.movementSummary.qtyCount})</h1>
+                    </div>
+                    <template for:each={matsGradedToday.movementRecords} for:item="movement">
+                        <div key={movement.jobIdentifier}>
+                            <div class="slds-notify slds-notify_alert" role="alert">
+                                <h2>{movement.jobIdentifier}&nbsp;&nbsp;</h2>
+                                <lightning-icon icon-name="utility:truck" size="x-small"
+                                    class="whiteIcon"></lightning-icon>
+                                <h2>&nbsp;&nbsp;{report.Yard__r.Name}</h2>
+                            </div>
+                            <div class="movementTable">
+                                <lightning-datatable key-field="Id" data={movement.items}
+                                    draft-values={movements_edited} columns={receivedColumns} onsave={updateMovements}
+                                    onrowaction={handleRowAction} show-row-number-column
+                                    hide-checkbox-column></lightning-datatable>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:false={hasGradedToday}>
+                        <div class="slds-illustration slds-illustration_small" aria-hidden="true">
+                            <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt="" />
+                            <div class="slds-text-color_weak">
+                                <h3 class="slds-text-heading_medium">No Deliveries</h3>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:true={hasAdjustments}>
+                <div class="adjustmentBox">
+                    <div class="headerBox">
+                        <h1>Adjustments</h1>
+                    </div>
+                    <lightning-datatable key-field="Id" data={adjustments} columns={inventoryColumns}
+                        draft-values={counts_edited} onsave={updateCounts} show-row-number-column
+                        hide-checkbox-column></lightning-datatable>
+                </div>
+            </template>
+
+            <div class="countBox">
+                <div class="headerBox">
+                    <h1>Beginning Inventory</h1>
+                </div>
+                <lightning-datatable key-field="Id" data={beginningInventory} columns={inventoryColumns}
+                    show-row-number-column hide-checkbox-column></lightning-datatable>
+            </div>
+
+            <div class="countBox">
+                <div class="headerBox">
+                    <h1>Ending Inventory</h1>
+                    <template if:true={isToday}>
+                        <lightning-button label="Add Adjustment" icon-name="utility:replace" onclick={addAdjustment}
+                            variant="neutral" icon-position="right" class="adjustment-button"
+                            disabled={isFieldService}></lightning-button>
+                    </template>
+                </div>
+                <lightning-datatable key-field="Id" data={endingInventory} columns={inventoryColumns}
+                    draft-values={counts_edited} onsave={updateCounts} show-row-number-column
+                    hide-checkbox-column></lightning-datatable>
+            </div>
+
+            <!-- Comments box -->
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-textarea name="Notes__c" label="Notes/Comments/Issues" value={report.Notes__c}
+                        onchange={updateReport}></lightning-textarea>
+                </div>
+            </div>
+
+            <!-- SIGNATURE PAD -->
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-2">
+                    <template if:true={report.Employee_Signature__c}>
+                        <img src={report.Employee_Signature__c} height="100%" width="100%" />
+                    </template>
+                    <template if:false={report.Employee_Signature__c}>
+                        <span>Please sign below</span>
+                        <div class="m-signature-pad">
+                            <canvas class="reportSignature" id="reportCanvas"></canvas>
+                        </div>
+                    </template>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-grid slds-grid_vertical" style="height:100%;">
+                        <div class="slds-col">
+                            <lightning-input name="Empire_Mat_Employee__c" label="Name" variant="label-stacked"
+                                value={report.Empire_Mat_Employee__c} onchange={updateReport}></lightning-input>
+                        </div>
+                        <template if:true={hasAttachments}>
+                            <template for:each={report.ContentDocumentLinks} for:item="docLink">
+                                <div key={docLink.Id}>
+                                    <div class="slds-col">
+                                        <lightning-tile label={docLink.documentTitle} href={docLink.documentLink} type="media">
+                                            <lightning-icon slot="media" icon-name="standard:work_order_item"></lightning-icon>
+                                            <p class="slds-truncate" title="Click to view paper copy">Click to view paper copy</p>
+                                        </lightning-tile>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <div class="slds-col" style="height:100%;">
+                            <div class="slds-align_absolute-center" style="height: 100%">
+                                <template if:true={isToday}>
+                                    <lightning-button label="Save" variant="brand" onclick={save}></lightning-button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </template>
+
+        <template if:true={showUngraded}>
+            <template if:true={matsUngraded}>
+                <div class="ungradedBox">
+                    <div class="headerBox">
+                        <h1>Mats Ungraded&nbsp;({matsUngraded.movementSummary.ungradedCount})</h1>
+                    </div>
+                    <template for:each={matsUngraded.movementRecords} for:item="movement">
+                        <div key={movement.jobIdentifier}>
+                            <div class="slds-notify slds-notify_alert" role="alert">
+                                <h2>{movement.jobIdentifier}&nbsp;&nbsp;</h2>
+                                <lightning-icon icon-name="utility:truck" size="x-small"
+                                    class="whiteIcon"></lightning-icon>
+                                <h2>&nbsp;&nbsp;{report.Yard__r.Name}</h2>
+                            </div>
+                            <div class="movementTable">
+                                <lightning-datatable key-field="Id" data={movement.items}
+                                    draft-values={movements_edited} columns={receivedColumns} onsave={updateMovements}
+                                    onrowaction={handleRowAction} show-row-number-column
+                                    hide-checkbox-column></lightning-datatable>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template if:false={hasUngraded}>
+                <div class="slds-illustration slds-illustration_small" aria-hidden="true">
+                    <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt="" />
+                    <div class="slds-text-color_weak">
+                        <h3 class="slds-text-heading_medium">All Loads Graded!</h3>
+                    </div>
+                </div>
+            </template>
+        </template>
+
+        <template if:true={showModal}>
+            <div class="slds-modal slds-fade-in-open my-modal" role="dialog" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">{modalHeader}</h2>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" size="small" class="whiteIcon"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <template if:true={showFlow}>
+                            <lightning-flow flow-api-name={flowApiName} flow-input-variables={flowInputs}
+                                onstatuschange={handleFlowStatusChange}></lightning-flow>
+                        </template>
+                        <!--
+                        <template if:true={showCommodities}>
+                            <lightning-combobox label="Update Commodity" options={commodityOptions} value={selectedCommodity}
+                                onchange={handleCommodityChange}></lightning-combobox>
+                            <template if:true={showProductLookup}>
+                                <lightning-record-edit-form record-id={itemToUpdate.Id} object-api-name="Item__c">
+                                    <lightning-input-field field-name="Product__c" onchange={logProduct}></lightning-input-field>
+                                </lightning-record-edit-form>
+                            </template>
+                        </template>
+                        <template if:true={showSignatureBox}>
+                            <template if:true={hasSigned}>
+                                <h3>Signed On: <lightning-formatted-date-time value={signDate}></lightning-formatted-date-time></h3>
+                                <img src={signatureToShow}></img>
+                            </template>
+                            <template if:false={hasSigned}>
+                                <span>Please sign below</span>
+                                <div class="m-signature-pad">
+                                    <canvas class="loadSignature" id="loadCanvas"></canvas>
+                                </div>
+                            </template>
+                        </template>
+                    -->
+                    </div>
+                    <!--
+                    <template if:true={showFooter}>
+                        <div class="slds-modal__footer">
+                            <lightning-button variant="neutral" label="Close" onclick={closeModal}></lightning-button>
+                            <lightning-button variant="brand" label="Save" onclick={saveModalData}></lightning-button>
+                        </div>
+                    </template>
+                -->
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </template>
+    <template if:false={hasData}>
+        <div class="datalessBox">
+            <div class="slds-illustration slds-illustration_large" aria-hidden="true">
+                <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt="" />
+                <div class="slds-text-color_weak">
+                    <h3 class="slds-text-heading_medium">{reportTitle}&nbsp;Not Found...</h3>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

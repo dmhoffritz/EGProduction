@@ -1,0 +1,27 @@
+<aura:component controller="driverPortal_Cont">
+    <aura:attribute name="loadId" type="String" default="" />
+    <aura:attribute name="loadNum" type="String" default="" />
+    <aura:attribute name="loadLane" type="String" default="" />
+    <aura:attribute name="loadStatus" type="String" default="" />
+
+    <aura:attribute name="iconName" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <div class="slds-grid" style="background: black; padding: 1em; border-radius: 2em;">
+        <div class="slds-col slds-align_absolute-center">
+            <img src="{!$Resource.Empire_Logo_Lockup_Green_New}" height="125" width="125" />
+        </div>
+        <div class="slds-col slds-align_absolute-center">
+            <button type="button" class="slds-button slds-button_success" onclick="{!c.viewBOL}">View BOL</button>
+        </div>
+    </div>
+    <div class="slds-grid slds-grid_vertical">
+        <div class="slds-col slds-align_absolute-center headerInfoBox" style="background: #66cc33">
+            <h2>Load #: {!v.loadNum}&nbsp;&nbsp;<lightning:badge label="{!v.loadStatus}" iconName="{!v.iconName}" iconPosition="end"/></h2>
+        </div>
+        <div class="slds-col slds-align_absolute-center headerInfoBox" style="background: #000000">
+            <h2>{!v.loadLane}</h2>
+        </div>
+    </div>
+</aura:component>

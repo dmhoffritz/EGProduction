@@ -1,0 +1,88 @@
+<aura:component controller="Carrier_Registration_V2">
+    <aura:attribute name="Carrier" type="FreightTM__Carrier__c" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="isBroker" type="Boolean" default="false" />
+
+    <aura:attribute name="stateOptions" type="List" default="[]" />
+    <aura:attribute name="selectedStates" type="List" default="[]" />
+
+    <aura:attribute name="termsToggle" type="Boolean" default="false" />
+    <aura:attribute name="agreeCheck" type="Boolean" default="false" />
+
+    <aura:registerEvent name="navRegistration" type="c:navRegistration" />
+    <aura:registerEvent name="checkboxChange" type="c:checkboxChange" />
+
+    <h2>Please Verify Company Info Below</h2>
+
+    <div class="c-container">
+        <lightning:layout verticalAlign="stretch" multipleRows="true" class="x-large">
+            <lightning:layoutItem flexibility="auto" padding="around-small" class="custom-box">
+                <lightning:input style="width: 100%" name="companyName" readonly="true" value="{!v.Carrier.Name}"
+                    label="Carrier" />
+                <lightning:input name="primaryContact" label="Company Contact"
+                    value="{!v.Carrier.FreightTM__Primary_Contact__c}"
+                    placeholder="{!v.Carrier.FreightTM__Primary_Contact__c}" />
+                <lightning:input type="tel" name="carrierPhone" label="Phone" value="{!v.Carrier.FreightTM__Phone__c}"
+                    placeholder="{!v.Carrier.FreightTM__Phone__c}" />
+                <lightning:input type="email" name="carrierEmail" label="Email" value="{!v.Carrier.FreightTM__Email__c}"
+                    placeholder="{!v.Carrier.FreightTM__Email__c}" />
+
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="around-small" class="custom-box">
+                <lightning:dualListbox class="stateListBox" name="operationalStates"
+                    label="Select which states you operate in by moving them to the box on the right"
+                    sourceLabel="Non-Operational States" selectedLabel="Operational States" options="{!v.stateOptions}"
+                    value="{!v.selectedStates}" onchange="{!c.handleSelection}" />
+                <!--
+                <lightning:inputAddress class="addressBox" addressLabel="Address" streetLabel="Street" cityLabel="City"
+                    countryLabel="Country" provinceLabel="State" postalCodeLabel="Zip Code"
+                    street="{!v.Carrier.FreightTM__Address__c}" city="{!v.Carrier.FreightTM__City__c}"
+                    province="{!v.Carrier.FreightTM__State_Province__c}" country="United States"
+                    postalCode="{!v.Carrier.FreightTM__Zip_Code__c}" provinceOptions="{!v.stateOptions}"
+                    countryDisabled="true" />
+                -->
+                <div class="slds-align_absolute-center" style="height: 300px; width: 100%; display: grid;">
+                    <div>
+                    <span style="color:white">
+                        By checking the box below and clicking Verify, you are agreeing to our
+                        <a onclick="{!c.showTerms}" style="color: lightblue">Terms of Use</a>
+                    </span>
+                    </div>
+                    <div>
+                    <lightning:input class="checkboxCSS" type="checkbox" label="I agree" name="agree" value="" checked="{!v.agreeCheck}" required="true" onchange="{!c.toggleButton}"/>
+                    </div>
+                    <aura:if isTrue="{!v.termsToggle}">
+                        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+                            aria-labelledby="modal-heading-01" aria-modal="true">
+                            <div id="modalContent" class="slds-modal__container">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                                    <lightning:icon iconName="utility:close" iconSize="small" />
+                                    <span class="slds-assistive-text">Cancel and close</span>
+                                </button>
+                                <div class="slds-modal__header">
+                                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Terms of Use</h1>
+                                </div>
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                    <iframe id="termsFrame" src="https://yourempiregroup.secure.force.com/carrier/Portal_Terms" width="100%"
+                                        height="600" />
+                                </div>
+                                <div class="slds-modal__footer">
+                                    <lightning:button variant="success" label="Done" onclick="{!c.closeModal}" />
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                    </aura:if>
+                    <div>
+                    <lightning:button aura:id="verifyButton" variant="success" label="Verify" value="Verify" onclick="{!c.saveCarrier}" disabled="true"/>
+                    </div>
+                </div>
+
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+
+</aura:component>

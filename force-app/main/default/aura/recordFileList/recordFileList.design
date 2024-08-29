@@ -1,0 +1,4 @@
+<design:component label="Load File List">
+    <design:attribute name="recordId" label="Load ID" />
+    <design:attribute name="userType" label="User Type" />
+</design:component>

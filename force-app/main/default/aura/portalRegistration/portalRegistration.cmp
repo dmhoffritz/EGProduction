@@ -1,0 +1,47 @@
+<aura:component controller="Carrier_Registration_V2">
+    <aura:attribute name="Carrier" type="FreightTM__Carrier__c" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="newUser" type="Portal_User_Registration__c" />
+
+    <aura:attribute name="firstName" type="String" default="" />
+    <aura:attribute name="lastName" type="String" default="" />
+    <aura:attribute name="email" type="String" default="" />
+    <aura:attribute name="phone" type="String" default="" />
+    <aura:attribute name="password" type="String" default="" />
+    <aura:attribute name="confirmPassword" type="String" default="" />
+
+    <aura:attribute name="passwordError" type="Boolean" default="false" />
+
+    <h2>Carrier Portal Sign-Up</h2>
+        
+    <div class="c-container">
+        <lightning:layout verticalAlign="stretch" multipleRows="true" class="x-large">
+            <lightning:layoutItem flexibility="auto" padding="around-small" class="custom-box">
+                <span class="headerCSS">User Info</span>
+                <lightning:input name="firstName" label="First Name" value="{!v.firstName}"
+                    placeholder="John" required="true"/>
+                <lightning:input name="lastName" label="Last Name" value="{!v.lastName}" 
+                    placeholder="Doe" required="true"/>
+                <lightning:input type="tel" name="userPhone" label="Phone" value="{!v.phone}"
+                    placeholder="000-000-0000" required="true"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="around-small" class="custom-box">
+                    <span class="headerCSS">Login Credentials</span>
+                    <br />
+                    <lightning:input type="email" name="userEmail" label="Email" value="{!v.email}" placeholder="jdoe@yahoo.com" required="true"/>
+                    <aura:if isTrue="{!v.passwordError}">
+                        <span style="color: red">PASSWORDS DO NOT MATCH</span>
+                    </aura:if>
+                    <lightning:input type="password" name="password" label="Password" value="{!v.password}" required="true"/>
+                    <lightning:input type="password" name="confirmPassword" label="Confirm Password" value="{!v.confirmPassword}" required="true"/>
+                    <div>
+                        <lightning:button variant="success" label="Register" value="Register"
+                            onclick="{!c.registerUser}" />
+                    </div>
+    
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+</aura:component>

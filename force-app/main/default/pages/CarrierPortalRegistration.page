@@ -1,0 +1,411 @@
+<apex:page id="Carrier" showHeader="false" standardController="FreightTM__Carrier__c" extensions="Carrier_Registration" applyBodyTag="false"
+    lightningStylesheets="false" standardStylesheets="true" title="{!$Label.site.register}">
+
+    <apex:stylesheet value="{!$Resource.Portal_Fonts}" />
+    <apex:includeLightning />
+
+
+    <style type="text/CSS">
+        @import url('https://fonts.googleapis.com/css?family=Roboto'); * { margin: 0; padding: 0; box-sizing: border-box; font-family:
+        'open-sans';} body { font-family: 'Roboto', sans-serif; background-color: transparent;
+        <!--font: 13px/20px PTSansRegular,Arial,Helvetica,sans-serif;-->
+        color: #505050;
+        <!--display: block;-->
+        font-weight: 600; font-size: 13px; font-style: normal; float: none; line-height: 1.1; margin: 0 auto; padding: 0px; background-color:
+        transparent; background-image:url("{!$Resource.Birds_Eye}"); width: 100%; -webkit-appearance: none;
+        <!-- to override iOS default btn style -->
+        -moz-appearance: none;
+        <!-- to override iOS default btn style -->
+        } .register_box { text-align: left; padding: 55px; color: white; width: 75%; margin-left: 12.5%; background-color: rgb(0,
+        0, 0, 0.75); } .form { width: 100%; } .home { margin: 0 auto; text-align: center; background-color: rgb(38, 75, 20,
+        0.9); } .homepg { margin-top: 100px; text-align: left; padding: 55px; background-color: #fff;
+        <!--box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.19);-->
+        color: #333; } .input, .inputarea { background-color: #fff; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing:
+        border-box; border-radius: 6px; color: #333; display: block; float: none; font-size: 1em; border: 1px solid #ddd;
+        padding: 6px 10px 6px; width: 90%; margin: 3px 0; line-height: 1.1; background-image: linear-gradient(transparent,
+        transparent);
+        <!-- to remove top shadow on iOS -->
+        } .button:disabled, button[disabled] { background: lightgrey !important; cursor: not-allowed; } .button { background: #66cc33
+        !important; font-family: 'Industry' !important; cursor: pointer; border: none; border-radius: 3px; color: #fff; font-size:
+        22px; font-weight: 500; padding: 6px 10px 6px; width: 100%; letter-spacing: 1.5px; -webkit-appearance: none; -moz-appearance:
+        none; } .required { color: #ff0000; font-weight: 400; } .formHeader { font-size: 28px; color: #62BF34; font-family:
+        'Industry' !important; } .inputLabel { font-size: 16px; color:white; } .register_box td { width: 50%; } .register_box
+        tr { width: 100%; } h1 { text-align: center; } .errorMessage { text-decoration: underline; font-family: 'open-sans';
+        font-size: 16px; color: red; }
+
+    </style>
+
+    <head>
+        <apex:slds />
+        <apex:panelGrid cellpadding="0" cellspacing="0" width="100%" border="0" columns="3" style="background-color: rgb(0, 0, 0, 0.85);"
+            id="head1">
+            <!-- id="theHeader" -->
+            <apex:image url="{!$Resource.Empire_Portal_Logo}" style="align: left;" alt="Salesforce" width="175" height="50" title="Empire"
+            />
+        </apex:panelGrid>
+    </head>
+
+    <script>
+
+        function disableButton() {
+            var actionButton = document.getElementById('Carrier:j_id8:verification');
+            console.log(actionButton);
+            actionButton.disabled = true;
+        }
+    </script>
+
+    <body onload="disableButton();">
+        <apex:form styleClass="form">
+
+            <div class="home">
+
+                <apex:outputPanel rendered="{!verifyCarrier}">
+
+                    <div class="register_box">
+
+                        <h1>
+                            <apex:outputText styleClass="formHeader" value="Please Verify Company Info Below" />
+                            <br/>
+                            <br/>
+                            <apex:outputPanel rendered="{!error}">
+                                <apex:outputText styleClass="errorMessage" value="Failed to verify Carrier" />
+                            </apex:outputPanel>
+                        </h1>
+
+                        <table styleClass="form" width="100%">
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Company Name" for="cName" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="Carrier Co., LLC" value="{!carrierName}" id="cName" disabled="true" styleClass="input"
+                                    />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Street" for="Street" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="123 Seasame St" value="{!carrierAddress}" id="Street" required="true" styleClass="input"
+                                    />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Company Contact" for="cContact" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="John Doe" value="{!carrierPrimaryContact}" id="cContact" required="true" styleClass="input"
+                                    />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="City" for="City" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="City" value="{!carrierCity}" id="City" styleClass="input" maxlength="30" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Company Phone" for="Phone" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="000-000-0000" value="{!carrierPhone}" id="Phone" required="true" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="State" for="State" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:selectList multiselect="false" size="1" id="State" styleClass="input" value="{!state}">
+                                        <apex:selectOptions value="{!states}" />
+                                    </apex:selectList>
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Email" for="Email" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="johndoe@gmail.com" value="{!carrierEmail}" id="Email" required="true" styleClass="input"
+                                    />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Zip" for="Zip" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="00000" value="{!carrierZip}" id="Zip" styleClass="input" maxlength="30" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr style="justify-content: left;">
+                                <td>
+                                    <c:MultiselectPicklist leftLabel="Non-Operational States" leftOption="{!states}" rightLabel="Operational States" rightOption="{!selectedStates}"
+                                        size="14" width="100px" />
+                                </td>
+                                <td style="float: right; width: 100%;">
+                                    <input type="checkbox" id="consentCheck" value="false" onchange="agreeCheck();" />
+                                    <span style="color: white">
+                                        <span class="required">&nbsp;*</span>By checking this box and selecting Verify, you are agreeing to our&nbsp;
+                                        <a href="#" style="color: lightblue" onclick="termsModal();">
+                                            Terms of Use
+                                        </a>
+                                    </span>
+                                    <apex:commandButton id="verification" style="color: black; font-size: 18px;" value="Verify" action="{!updateCarrier}" styleClass="button cap"
+                                    />
+                                    <div class="slds-scope">
+                                        <div id="terms" />
+                                    </div>
+                                </td>
+                                <script>
+                                    function termsModal() {
+                                        $Lightning.use("c:lightningCarrierPortal", function () {
+                                            $Lightning.createComponent("c:termsModal",
+                                                {},
+                                                "terms",
+                                                function (cmp) {
+                                                    console.log("Calling back termsModal from VF");
+                                                });
+                                        });
+                                    }
+
+
+                                    function agreeCheck() {
+                                        var checkbox = document.getElementById('consentCheck');
+                                        var actionButton = document.getElementById('Carrier:j_id8:verification');
+                                        console.log(actionButton);
+                                        if (checkbox.checked == true) {
+                                            actionButton.disabled = false;
+                                        } else {
+                                            actionButton.disabled = true;
+                                        }
+                                    }
+                                </script>
+                            </tr>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+
+                <apex:outputPanel rendered="{!verifyBilling}">
+
+                    <div class="register_box">
+
+                        <table styleClass="form" width="100%">
+                            <tr>
+                                <td style="width: 50%">
+                                    <apex:commandButton value="<-- Back" action="{!goBack}" styleClass="button" style="background: lightgrey; width: fit-content;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h1>
+                                        <apex:outputText style="float: left" styleClass="formHeader" value="Please Verify Billing Info Below" />
+                                        <br/>
+                                        <br/>
+                                    </h1>
+                                    <apex:outputPanel rendered="{!error}">
+                                        <apex:outputText styleClass="errorMessage" value="Failed to verify Billing Info" />
+                                    </apex:outputPanel>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Factoring? Y/N" for="isFactoring" />
+                                    <span class="required">&nbsp;*</span>
+                                    <input type="checkbox" value="factoringCheck" id="isFactoring" styleClass="input" onchange="checkboxChange();" />
+                                </td>
+                            </tr>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <script>
+
+                                function checkboxChange() {
+                                    var checkbox = document.getElementById('isFactoring');
+                                    var picklist = document.getElementById('Carrier:j_id8:factoringComp');
+                                    console.log(picklist);
+                                    if (checkbox.checked == true) {
+                                        picklist.disabled = false;
+                                    } else {
+                                        picklist.disabled = true;
+                                        picklist.value = '--Select a Factoring Company--';
+                                    }
+                                }
+
+                                function picklistChange() {
+                                    var picklist = document.getElementById('Carrier:j_id8:factoringComp');
+                                    console.log(picklist);
+                                    console.log(picklist.value);
+                                }
+
+                            </script>
+                            <tr>
+                                <td id="factorerPicklist">
+                                    <apex:outputLabel styleClass="inputLabel" value="Factoring With" for="factoringComp" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:selectList disabled="true" multiselect="false" size="1" id="factoringComp" styleClass="input" value="{!factorer}" onchange="picklistChange();">
+                                        <apex:selectOptions value="{!factoringNames}" />
+                                    </apex:selectList>
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing Street" for="bStreet" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="123 Seasame St" value="{!billingAddress}" id="bStreet" required="true" styleClass="input"
+                                    />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing Contact" for="bContact" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="John Doe" value="{!billingContact}" id="bContact" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing City" for="bCity" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="City" value="{!billingCity}" id="bCity" styleClass="input" maxlength="30" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing Phone" for="bPhone" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="000-000-0000" value="{!billingPhone}" id="bPhone" required="true" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing State" for="bState" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:selectList multiselect="false" size="1" id="bState" styleClass="input" value="{!state}">
+                                        <apex:selectOptions value="{!states}" />
+                                    </apex:selectList>
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing Email" for="bEmail" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="johndoe@gmail.com" value="{!billingEmail}" id="bEmail" required="true" styleClass="input"
+                                    />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Billing Zip" for="bZip" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="00000" value="{!billingZip}" id="bZip" styleClass="input" maxlength="30" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td>
+                                    <apex:commandButton style="width: 50%; float: right; margin-right: 10%;" value="Verify" action="{!updateBilling}" styleClass="button cap"
+                                    />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </apex:outputPanel>
+
+                <apex:outputPanel rendered="{!registerUser}">
+                    <div class="register_box">
+                        <table styleClass="form" width="100%">
+                        <!--
+                            <tr>
+                                <td style="width: 50%">
+                                    <apex:commandButton value="<-- Back" action="{!goBack}" styleClass="button" style="background: lightgrey; width: fit-content" />
+                                </td>
+                            </tr>
+                       -->
+                            <tr>
+                                <td>
+                                    <h1>
+                                        <apex:outputText styleClass="formHeader" value="Carrier Portal Registration" />
+                                        <br/>
+                                        <br/>
+                                        <apex:outputPanel rendered="{error}">
+                                            <apex:outputText styleClass="errorMessage" value="Failed to Register for Portal" />
+                                        </apex:outputPanel>
+                                    </h1>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Broker? Y/N" for="isBroker" />
+                                    <span class="required">&nbsp;*</span>
+                                    <input type="checkbox" value="{!isBroker}" id="isBroker" styleClass="input" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="First Name" for="fName" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="John" value="{!first_name}" id="fName" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Password" for="pWord" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputSecret value="{!password}" id="pWord" required="true" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Last Name" for="lName" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="Doe" value="{!last_name}" id="lName" required="true" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Confirm Password" for="confirm" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputSecret value="{!confirmPassword}" id="confirm" styleClass="input" maxlength="30" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="E-Mail" for="userEmail" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="jDoe123@gmail.com" value="{!email}" id="userEmail" required="true" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel styleClass="inputLabel" value="Phone" for="userPhone" />
+                                    <span class="required">&nbsp;*</span>
+                                    <apex:inputText html-placeholder="000-000-0000" value="{!phone}" id="userPhone" required="true" styleClass="input" />
+                                    <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td>
+                                    <apex:commandButton style="width: 50%; float: right; margin-right: 10%;" value="Register" action="{!registerUser}" styleClass="button cap"
+                                    />
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </apex:outputPanel>
+
+            </div>
+
+        </apex:form>
+
+    </body>
+
+    <footer>
+        <c:SiteFooter >
+        </c:SiteFooter>
+    </footer>
+
+    <!-- </apex:composition> -->
+</apex:page>

@@ -1,0 +1,14 @@
+<apex:page standardController="Opportunity" contentType="application/vnd.ms-excel">
+    <apex:pageBlock title="Job Loads">
+        <apex:relatedList pageSize="1000" list="Bids.Loads__r" />
+    <apex:pageBlockTable value="{!Opportunity.Loads__r}" var="item">
+        <apex:column value="{!item.Name}"/>
+        <apex:column value="{!item.FreightTM__Carrier_Obj__c}"/>
+        <apex:column value="{!item.FreightTM__Status__c}"/>
+        <apex:column value="{!item.FreightTM__Calendar_Load__c}"/>
+        <apex:column value="{!item.Quantity__c}"/>
+        <apex:column value="{!item.FreightTM__Commodity__c}"/>
+        <apex:column value="{!item.FreightTM__Delivery_Arrival__c}"/>
+    </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:page>

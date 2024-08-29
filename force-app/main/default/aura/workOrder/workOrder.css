@@ -1,0 +1,60 @@
+.THIS.orderCard {
+    border: 2px solid lightgrey !important;
+    box-shadow: var(--slds-c-card-shadow, var(--sds-c-card-shadow, var(--lwc-cardShadow, 0 2px 2px 0 rgba(0, 0, 0, 0.10)))) !important;
+}
+
+.THIS .slds-scrollable_x {
+    overflow-x: hidden;
+}
+
+/*
+.THIS span {
+    color: black;
+}
+*/
+
+.THIS .cardHeader {
+    color: blue;
+    font-weight: bold;
+}
+
+.THIS .layoutContent {
+    position: relative;
+    top: 0;
+    width: 100%;
+}
+
+
+.THIS .row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+@media screen and (min-width: 48em) {
+    .THIS .slds-modal__container {
+        width: auto !important;
+        max-width: max-content !important;
+        min-width: 30%;
+    }
+}
+
+.THIS .slds-card__header-title {
+    display: block !important;
+}
+
+.THIS .yellowBadge {
+    background: yellow !important;
+    color: black;
+}
+
+.THIS .greenBadge {
+    background: #66cc33 !important;
+    color: white;
+}
+
+.THIS .redBadge {
+    background: red !important;
+    color: white;
+}

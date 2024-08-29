@@ -1,0 +1,63 @@
+<aura:component controller="CarrierPortal_Cont">
+    <aura:attribute name="userType" type="String" />
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:attribute name="load" type="FreightTM__Load__c" default="{}" />
+
+    <aura:attribute name="initializationComplete" type="Boolean" default="false" />
+
+    <!-- MAP ATTRIBUTES -->
+    <aura:attribute name="mapMarkers" type="Object" />
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <!-- LOAD DETAILS -->
+    <aura:if isTrue="{!v.initializationComplete}">
+        <div class="slds-grid slds-wrap slds-grid_pull-padded-medium" style="justify-content:center">
+
+            <!-- RECORD HEADER -->
+            <div class="slds-col slds-size_8-of-12 slds-p-horizontal_medium" style="background-color: none">
+                <c:recordHeader>
+                    <aura:set attribute="load" value="{!v.load}" />
+                </c:recordHeader>
+            </div>
+            <!-- END RECORD HEADER -->
+
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <!-- PROGRESS BAR -->
+            <div class="slds-col slds-size_8-of-12 slds-p-horizontal_medium">
+                <c:recordProgress>
+                    <aura:set attribute="load" value="{!v.load}" />
+                </c:recordProgress>
+                <c:embeddedFlow>
+                    <aura:set attribute="recordId" value="{!v.load.Id}" />
+                    <aura:set attribute="flowName" value="Carrier_Portal_Stage_Assigned" />
+                </c:embeddedFlow>
+            </div>
+            <!-- END PROGRESS BAR -->
+
+            <!-- ALERTS 
+            <div class="slds-col slds-size_4-of-12 slds-p-horizontal_medium">
+                <c:recordAlerts>
+                    <aura:set attribute="load" value="{!v.load}"/>
+                </c:recordAlerts>
+            </div>
+            END ALERTS -->
+
+            <!-- LOAD INFO TABS -->
+            <div class="slds-col slds-size_8-of-12">
+                <c:recordInfo>
+                    <aura:set attribute="load" value="{!v.load}" />
+                    <aura:set attribute="userType" value="{!v.userType}" />
+                </c:recordInfo>
+            </div>
+            <!-- END LOAD INFO -->
+
+        </div>
+    </aura:if>
+    <!-- END LOAD DETAILS -->
+</aura:component>

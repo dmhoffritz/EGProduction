@@ -1,0 +1,100 @@
+<aura:component controller="CarrierPortal_Cont"
+    implements="lightning:availableForFlowScreens,lightning:availableForFlowActions,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="docType" type="String" />
+    <aura:attribute name="label" type="String" />
+    <aura:attribute name="fileName" type="String" />
+    <aura:attribute name="uploading" type="Boolean" default="false" />
+    <aura:attribute name="fileUploaded" type="Boolean" default="false" />
+    <aura:attribute name="showModal" type="Boolean" default="false" />
+    <aura:attribute name="vendorInvoice" type="String" default="" />
+    <aura:handler event="aura:waiting" action="{!c.waiting}" />
+    <aura:handler event="aura:doneWaiting" action="{!c.doneWaiting}" />
+    <aura:if isTrue="{!v.uploading}">
+        <lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
+    <aura:dependency resource="markup://c:onsave" type="EVENT" />
+
+    <aura:registerEvent name="savedFile" type="c:onsave" />
+    <aura:if isTrue="{!v.docType == 'Invoice'}">
+        <div>
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                    <div class="slds-file-selector slds-file-selector_files">
+                        <div class="slds-file-selector__dropzone">
+                            <input onchange="{!c.getFileName}" aura:id="file"
+                                class="slds-file-selector__input slds-assistive-text" type="file"
+                                id="file-upload-input-01"
+                                aria-labelledby="file-selector-primary-label file-selector-secondary-label" />
+                            <label class="slds-file-selector__body" for="file-upload-input-01"
+                                id="file-selector-secondary-label">
+                                <span class="slds-file-selector__button slds-button slds-button_neutral">
+                                    <lightning:icon iconName="utility:upload" size="xx-small"
+                                        alternativeText="upload" />Upload&nbsp;{!v.docType}
+                                </span>
+                                <span class="slds-file-selector__text slds-medium-show"
+                                    style="color:blue">{!v.fileName}</span>
+                                <span>
+                                    <ui:button label="Upload" press="{!c.showModal}" />
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!v.showModal}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="max-width: 50%;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick="{!c.closeModal}">
+                        <lightning:icon iconName="action:close" size="x-small" />
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Invoice #</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:input label="Invoice #" value="{!v.vendorInvoice}" />
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick="{!c.closeModal}">Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick="{!c.save}">Save</button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </aura:if>
+    </aura:if>
+
+    <aura:if isTrue="{!v.docType == 'POD'}">
+        <div>
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                    <div class="slds-file-selector slds-file-selector_files">
+                        <div class="slds-file-selector__dropzone">
+                            <input onchange="{!c.getFileName}" aura:id="pod_file"
+                                class="slds-file-selector__input slds-assistive-text" type="file"
+                                id="file-upload-input-02"
+                                aria-labelledby="file-selector-primary-label file-selector-secondary-label" />
+                            <label class="slds-file-selector__body" for="file-upload-input-02"
+                                id="file-selector-secondary-label">
+                                <span class="slds-file-selector__button slds-button slds-button_neutral">
+                                    <lightning:icon iconName="utility:upload" size="xx-small"
+                                        alternativeText="upload" />Upload&nbsp;{!v.docType}
+                                </span>
+                                <span class="slds-file-selector__text slds-medium-show"
+                                    style="color:blue">{!v.fileName}</span>
+                                <span>
+                                    <ui:button label="Upload" press="{!c.save}" />
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

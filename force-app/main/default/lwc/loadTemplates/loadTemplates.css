@@ -1,0 +1,24 @@
+.slds-media__body {
+    margin-top: 6px;
+}
+
+.tableControls {
+    position: relative;
+    width: 100%;
+}
+
+.refreshBtn {
+    position: absolute;
+    right: 0.25vw;
+    bottom: 0;
+}
+
+.itemTable {
+    max-height: 50vh !important;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.whiteIcon {
+    --sds-c-icon-color-foreground-default: white;
+}

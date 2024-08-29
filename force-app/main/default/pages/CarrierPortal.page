@@ -1,0 +1,885 @@
+<apex:page controller="CarrierPortal_Cont" id="carrierPortal" showheader="false" sidebar="false" cache="true" expires="900"
+    docType="html-5.0" applyBodyTag="false" applyHtmlTag="false" lightningStylesheets="true" standardStylesheets="false">
+    <!--applyHtmlTag="false"-->
+    <apex:slds />
+    <apex:includeLightning />
+
+    <head>
+        <title>Carrier Portal</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <apex:stylesheet value="{!$Resource.Portal_Fonts}" />
+
+
+
+        <style type="text/CSS">
+
+            <!-- Check coolors.co/62bf34 for color wave -->
+
+            @import url('https://fonts.googleapis.com/css?family=Roboto'); * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'industry';} body
+            { font-family: 'Roboto', sans-serif; background-color: transparent;
+            <!--font: 13px/20px PTSansRegular,Arial,Helvetica,sans-serif;-->
+            color: #505050;
+            <!--display: block;-->
+            font-weight: 600; font-size: 13px; font-style: normal; float: none; line-height: 1.1; margin: 0 auto; padding: 0px; background-color:
+            transparent; background-image:url("{!$Resource.Birds_Eye}"); width: 100%; -webkit-appearance: none;
+            <!-- to override iOS default btn style -->
+            -moz-appearance: none;
+            <!-- to override iOS default btn style -->
+            } .form { width: 100%; } .login_box { text-align: left; padding: 55px; color: red; background-color: rgb(0, 0, 0, 0.6); }
+
+        .center {
+        text-align: center;
+        }
+        #header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 120px;
+            width: 100%;
+            background-color: black;
+        }
+
+        #container { 
+            position: absolute;
+            top: 120px;
+            left: 0;
+            right: 0;
+            bottom: 110px;
+            overflow-y: auto;
+            width: 100%;
+            background-color: rgb(38, 75, 20, 0.9);
+        }
+
+        #footer { 
+            color: #ccc; 
+            text-align: center; 
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            height: 110px;
+            background-color:black;
+        }
+
+        .cap {
+        text-transform: uppercase;
+        }
+        .ls {
+        letter-spacing: 1px;
+        padding-bottom: 10px;
+        }
+        .buttonRB {
+        background-color: #62BF34;
+        border: none;
+        border-radius: 5px;
+        color: black;
+        font-size: 1em;
+        font-weight: bolder;
+        width: fit-content;
+        height: auto;
+        margin: auto;
+        letter-spacing: 1.5px;
+        }
+        
+        .buttonRB:hover {
+        transform: scale(0.9);
+        }
+        
+        td {
+        padding: 3px 0px;
+        line-height: px;
+        }
+        tdadj {
+        padding: 0px;
+        line-height: 2px;
+        }
+        h2 {
+            font-family: 'Industry';
+        margin-top: 12px;
+        margin-bottom: 10px;
+        letter-spacing: 1.2px;
+        color:#fff;
+        }
+
+        #loginHeader {
+            font-size: 24px;
+            margin-top: 0px;
+            color: #66cc33;
+            text-align: center;
+        
+        }
+
+        hr {
+        border-top: 1px solid #black;
+        margin: 20px 0px;
+        } 
+            .nav-bar { width: 100%; padding-bottom: 0px; background-color: transparent; z-index: auto; position: relative; } .ftmlogo-nav
+            { margin: 10px 10px 8px 2%; text-align: left; display: inline-block; } .navright { text-align: right; } .navbtns
+            { border: 2px solid black; border-radius: 5px; cursor: pointer; font-size: 1.0em; font-weight: 600; padding:
+            5px 15px;
+            <!--width: 30%;-->
+            <!--height: 60px;-->
+            letter-spacing: 0.5px; display: inline-block; margin-left: 0px; vertical-align: top; -webkit-appearance: none;
+            <!-- to override iOS default btn style -->
+            -moz-appearance: none;
+            <!-- to override iOS default btn style -->
+            } .navbtns:hover { transform: scale(1.1); } .navbtns:focus { outline: none; } .btnactive { color: #62BF34; } .nav-bar .nav-search
+            { float: right; display: inline-block; margin-top: 22px; } .home { margin: 0 auto; text-align: center; max-width:
+            600px; }
+            <!--    
+        .homepg {
+        margin-top: 100px; 
+        text-align: left;
+        padding: 55px;
+        background-color: #fff;
+        color: #333;
+        }
+        .tablelist {
+        background-color: #eee;
+        padding: 0px 0px 0px 30px;
+        }
+        .loadbox {
+        padding: 15px 4%;
+        background-color: transparent;
+        z-index: 1;
+        position: relative;
+        }
+        .loadboxwidth { 
+        width:fit-content;
+        margin:0 auto;
+        }
+        .loadbox table {
+        background-color: #e6f0ef;
+        padding: 2px 0px;
+        }
+        .loadbox h3 {
+        background-color: #62BF34;
+        border-radius: 4px 4px 0px 0px;
+        color: #fff;
+        padding: 10px;
+        font-family: 'Roboto', sans-serif;
+        
+        font-weight: 400;
+        font-size: 20px;
+        font-style: normal;
+        width: 25%;
+        float: left;
+        }
+        .padd {
+        padding: 0px 10px;
+        } -->
+            .required { color: #ff0000; font-weight: 400; } .input, .inputarea { background-color: #fff; box-sizing: border-box; -webkit-box-sizing:
+            border-box; -moz-box-sizing: border-box; border-radius: 6px; color: #333; display: block; float: none; font-size:
+            1em; border: 1px solid #ddd; padding: 6px 10px 6px; width: 100%; margin: 3px 0; line-height: 1.1; background-image:
+            linear-gradient(transparent, transparent);
+            <!-- to remove top shadow on iOS -->
+            }
+        .input {
+            font-family: 'open-sans';
+        }
+        <!--
+        .input_date {
+        background-color: #fff;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        border-radius: 6px;
+        color: #333;
+        font-size: 1em;
+        border: 1px solid #ddd;
+        width: auto;
+        margin: auto;
+        line-height: 1.1;
+        background-image: linear-gradient(transparent, transparent); <!-- to remove top shadow on iOS -->
+            } --> .inputarea { height: 70px; font-family: 'Roboto', sans-serif; } .outputarea { background-color: #fff; box-sizing: border-box;
+            border-radius: 2px; color: #333; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; display: block;
+            float: none; font-size: 16px; border: 1px solid #ccc; padding: 6px 10px; width: 100%; height: 130px; margin:
+            3px 0; line-height: 1.3; overflow: scroll; }
+
+            <!--       .filterButton {
+        background-color: #62BF34;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        font-size: 1em;
+        font-weight: 500;
+        padding: 6px 10px 6px;
+        height: 25px;
+        letter-spacing: 1.5px;
+        margin: auto;
+
+        } -->
+
+            .button { background-color: #62BF34; border: none; border-radius: 3px; color: #fff; font-size: 1em; font-weight: 500; padding:
+            6px 10px 6px; width: 100%; margin: auto; letter-spacing: 1.5px; } .button:hover { background-color: #4c7bad;
+            }
+            <!--
+        .btn-back {
+        background-color: #ccc;
+        border: none;
+        border-radius: 0px;
+        color: #333;
+        font-size: 1em;
+        font-weight: 500;
+        padding: 10px 15px;
+        width: 100%;
+        height: 40px;
+        margin: 0 auto;
+        letter-spacing: 1.5px;
+        }
+        .btn-SaveFile {
+        background-color: #62BF34;
+        border: none;
+        border-radius: 4px 4px 4px 4px;
+        color: black;
+        font-size: 1em;
+        font-weight: 500;
+        padding: 10px 15px;
+        margin: 5px;
+        cursor: pointer;
+        letter-spacing: 1.5px;
+        }
+        
+        .btn-SaveFile:hover {
+        background-color: lightgreen;
+        }
+        
+        .btn-back:hover {
+        background-color: #bbb;
+        }
+        .btn-back-single {
+        text-align: right; 
+        margin: 0 auto;
+        width: 200px;
+        float: right;
+        }
+        .btn-docs, .btn-docs-file {
+        font-size: 13px; 
+        font-weight: bold; 
+        padding: 4px;
+        vertical-align: top;
+        }
+        .btn-docs-file {
+        color: black;
+        border: 1px solid #999;
+        background-image: linear-gradient(#ddd, #fcfcfc);
+        width:36px; 
+        text-decoration:none; 
+        display:inline-block; 
+        text-align:center;
+        }
+        .btn-docs:hover, .btn-docs-file:hover {
+        background-color: #777;
+        color: #fcba03;
+        }
+        .btn-docs-file:hover {
+        background-image: none;
+        }
+        .picklist{
+        font-size: 16px;
+        line-height: 1.6;
+        padding: 10px 8px 10px 14px;
+        height: 26px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        overflow: hidden;
+        position: relative;
+        background-color: #f7f7f7;
+        }
+        .picklist .select{
+        width: 126.3%;
+        }
+        .picklist .select select{
+        background: transparent;
+        line-height: 1.6;
+        border: 0;
+        padding: 0;
+        border-radius: 0;
+        width: 80%;
+        position: relative;
+        z-index: 10;
+        font-size: 1em;
+        }
+        .loadcancel {
+        padding: 5px 0 5px 20px;
+        margin: 0;
+        }
+        .nomatch {
+        background-color: #fff !important;
+        } -->
+            .errorMsg { color: #d93232; font-weight: bold; text-align: center; margin: 0 auto; vertical-align: middle; padding-top: 20px;
+            } .red { color: red; } .green { color: red; background-color: black; } .msgs { font-weight: bolder; font-size:
+            16px; text-align: center; margin: 0 auto; float: center; width: 100%; }
+            <!--
+        .loadinfo  {
+        background-color: #4d514b;
+        text-align: center;
+        padding-top: 25px;
+        padding-left: 0;
+        padding-right: 0;
+        margin: 0;
+        width: 100%;
+        color: #fff;
+        }
+        .att table, .att th, .att td {
+        border-collapse: collapse;
+        width: 100%; 
+        }
+        .txtcolor {
+        color: #3570ce;
+        }
+        #filter-area table,
+        #filter-area tr,
+        #filter-area td {
+        block-inline;
+        }
+        
+        
+        
+        .filter {
+        float: right;
+        background-color: rgb(0, 0, 0, 0.8);
+        border: none;
+        border-radius: 4px 4px 0px 0px;
+        color: white;
+        font-size: 1em;
+        padding-inline: 5px 10px;
+        width: 55%;
+        height: 40px;
+        display: inline-flex;
+        letter-spacing: 1.5px;
+        -webkit-appearance: none;
+        }
+        
+        
+        
+        .fcolumn {
+        width: 20%;
+        }
+        <!-- Clear floats after the fcolumns -->
+            .frow:after { content: ""; display: table; clear: both; } --> .slds-button { min-width: 80px; display:inline; height:35px;
+            margin-top:5px; } 
+
+            <!--
+        .customPopup{
+        background-color: lightgrey;
+        border-style: solid;
+        border-radius: 10px;
+        border-width: 1px;
+        left: 45%;
+        position: fixed;
+        padding: 5px;
+        box-shadow: 0px 3px 7px rgba(1, 1, 1, 5);
+        background: #fff;
+        width: 850px;
+        margin-left: -200px;
+        top: 10px;
+        }
+        
+        .invoicePopup {
+        background-color: lightgrey;
+        border-style: solid;
+        border-radius: 10px;
+        border-width: 1px;
+        left: 45%;
+        position: relative;
+        padding: 5px;
+        box-shadow: 0px 3px 7px rgba(1, 1, 1, 5);
+        background: #fff;
+        width: 1150px;
+        margin-left: -500px;
+        top: 10px;
+        }
+        
+        .invoicePopup .close{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transition: all 200ms;
+        font-size: 20px;
+        text-decoration: none;
+        color: #333;
+        }
+        
+        .customPopup .close{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transition: all 200ms;
+        font-size: 20px;
+        text-decoration: none;
+        color: #333;
+        }
+        
+        .invoicePopup .close:hover{
+        color: red;
+        }
+        .customPopup .close:hover{
+        color: red;
+        }
+        
+        .alignCenter {
+        position: absolute;
+        width: 500px;
+        height: 200px;
+        z-index: 15;
+        top: 50%;
+        left: 50%;
+        margin: -100px 0 0 -150px;
+        background: (0, 0, 0, 0.8);
+        }
+        
+        #map {
+        font-size:12px;
+        line-height:normal !important;
+        height:300px;
+        background:transparent;
+        
+        @media only screen 
+        and (max-width: 900px), 
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+        
+        .btn-back-single {
+        min-width:200px;
+        width: 100%;
+        } -->
+
+            .button { background-color: #62BF34; border: none; border-radius: 3px; color: #fff; font-size: 1em; font-weight: 500; margin:
+            auto; letter-spacing: 1.5px; -webkit-appearance: none; }
+
+            <!-- Responsive layout - makes multiple fcolumns stack on top of each other instead of next to each other 
+        .fcolumn {
+        width: 100%;
+        }
+        
+        .datatbl table, .datatbl thead, .datatbl tbody, .datatbl th, .datatbl tr, .datatbl td {
+        }
+        
+        .datatblc table, .datatblc thead, .datatblc tbody, .datatblc th, .datatblc tr, .datatblc td {
+        }
+        
+        
+        
+        .datatbl thead tr, .datatblc thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        }
+        
+        .datatbl tr, .datatblc tr {
+        margin: 0 0 1rem 0;
+        }
+        
+        .datatbl tr:nth-child(odd), .datatblc tr:nth-child(odd) {
+        background: #ddd;
+        }
+        
+        .datatbl td, .datatblc td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        }
+        
+        .datatbl td:before, .datatblc td:before {
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        }
+        
+        .effect {
+        text-align: center;
+        display: inline-block;
+        position: relative;
+        text-decoration: none;
+        color: $link-text-color;
+        text-transform: capitalize;
+        font: {
+        family: 'Roboto', sans-serif;
+        size: 18px;
+        }
+        padding: 20px 0px;
+        width: 150px;
+        border-radius: $border-radius;
+        overflow: hidden;
+        }
+        
+        
+        
+        .effect.effect-1 {
+        transition: all 0.2s linear 0s;
+        }
+        
+        .effect.effect-1:before {
+        font-family: FontAwesome;
+        font-size: 15px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        height: 100%;
+        width: 40px;
+        transition: all 0.2s linear 0s;
+        }
+        
+        .effect.effect-1:hover {
+        text-indent: -20px;
+        
+        .effect.effect-1:before {
+        opacity: 1;
+        text-indent: 0px;
+        }
+-->
+
+        #Menu, #Test, #LoadDetail, #HomeApp, #LoadApp, #CarrierProfApp, #ProfileApp {
+            font-family: 'industry' !important;
+        } 
+
+        </style>
+
+        <script>
+            function redirhome() {
+                window.location = "/";
+            }
+        </script>
+
+        <!-- HEADER NAV -->
+        <script>
+            function toggleAlert() {
+                var alert_div = document.getElementById("alertDiv");
+                if (alert_div.style.display == "") {
+                    alert_div.style.display = "none";
+                } else {
+                    alert_div.style.display = "";
+                }
+            }
+        </script>
+        <div id="header">
+        <!-- DISPLAY IF ON LOGIN PAGE -->
+        <apex:outputPanel rendered="{!login_page}">
+            <apex:panelGrid cellpadding="0" cellspacing="0" width="100%" border="0" columns="3" style="background-color: rgb(0, 0, 0, 0.85);"
+                id="head1">
+                <!-- id="theHeader" -->
+                <apex:image url="{!$Resource.Empire_Portal_Logo}" style="align: left;" alt="Salesforce" width="175" height="50" title="Empire"
+                />
+            </apex:panelGrid>
+        </apex:outputPanel>
+
+        <!-- DISPLAY IF LOGGED IN -->
+        <apex:outputPanel rendered="{!IF(login_page == false, true, false)}">
+            <div class="slds-scope" id="alertDiv">
+                <div class="slds-notify slds-notify_alert" role="alert">
+                    <span class="slds-assistive-text">info</span>
+                    <span class="slds-icon_container slds-icon-utility-user slds-m-right_x-small" title="Description of icon when needed">
+
+                    </span>
+                    <h2>{!'Logged in as ' + first_name + ' ' + last_name + ' (' + user_email + ').'}
+                        <a href="https://yourempiregroup.secure.force.com/carrier"> Logout</a>
+                    </h2>
+                    <div class="slds-notify__close">
+                        <a href="#" style="text-decoration: none" onclick="toggleAlert();">X</a>
+                    </div>
+                </div>
+            </div>
+            <!-- <apex:panelGrid cellpadding="0" cellspacing="0" width="100%" border="0" columns="3" style="background-color: rgb(0, 0, 0, 0.85);" id="head2">-->
+            <!-- id="theHeader" -->
+            <table style="background-color: rgb(0, 0, 0, 0.85);" width="100%">
+                <tbody>
+                    <tr>
+                        <td style="width:15%; padding: 0; margin: 0;">
+                            <apex:image url="{!$Resource.Empire_Portal_Logo}" style="align: left" alt="Salesforce" width="175" height="50" title="Empire"
+                            />
+                        </td>
+                        <td>
+                            <apex:form >
+                                <apex:commandButton value="Home" action="{!redirectHome}" styleClass="navbtns cap" />
+                                <!-- <apex:commandButton value="Invoicing" action="{!redirectInvoice}" styleClass="navbtns cap" /> -->
+                            </apex:form>
+                        </td>
+                        <td>
+                            <div class="slds-scope" style="text-align: right;">
+
+                                <div id="Test" />
+                                <script>
+
+                                    $Lightning.use("c:lightningCarrierPortal", function () {
+                                        $Lightning.createComponent("c:carrierSearchBar",
+                                            {
+                                                recordId: "{!record_id}",
+                                                userType: "{!recordType}"
+                                            },
+                                            "Test",
+                                            function (cmp) {
+                                                $A.eventService.addHandler({ "event": "c:navLoad", "handler": navigateLoad });
+                                            });
+                                    });
+
+
+
+                                    var navigateLoad = function (event) {
+                                        var divs = ["HomeApp", "userInfo", "companyInfo", "LoadApp"];
+                                        var navLocation = event.getParam("navItem");
+                                        var loadId = event.getParam("recordId");
+                                        console.log("Navigating to load detail page...");
+                                        for (var i = 0; i < divs.length; i++) {
+                                            if (divs[i] == "LoadApp") {
+                                                var activate_div = document.getElementById(divs[i]);
+                                                activate_div.style.display = "";
+                                            } else {
+                                                var deactivate_div = document.getElementById(divs[i]);
+                                                deactivate_div.style.display = "none";
+                                            }
+                                        }
+                                        document.getElementById("LoadApp").innerHTML = '';
+                                        $Lightning.use("c:lightningCarrierPortal", function () {
+                                            $Lightning.createComponent("c:LoadDetail",
+                                                {
+                                                    userType: "{!recordType}",
+                                                    recordId: loadId
+                                                },
+                                                "LoadApp",
+                                                function (cmp) {
+
+                                                });
+                                        });
+
+                                    }
+
+                                </script>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-scope" style="text-align: right;">
+
+                                <div id="Menu" />
+                                <script>
+                                    var navigateMenu = function (event) {
+                                        var divs = ["HomeApp", "userInfo", "companyInfo", "LoadApp"];
+                                        var navLocation = event.getParam("navItem");
+                                        var loadId = event.getParam("recordId");
+
+                                        if (navLocation == "my_profile") {
+                                            //destroy current view and show my profile page
+                                            console.log("Navigating to my profile page...");
+                                            for (var i = 0; i < divs.length; i++) {
+                                                if (divs[i] == "userInfo") {
+                                                    var activate_div = document.getElementById(divs[i]);
+                                                    activate_div.style.display = "";
+                                                } else {
+                                                    var deactivate_div = document.getElementById(divs[i]);
+                                                    deactivate_div.style.display = "none";
+                                                }
+                                            }
+
+                                        } else if (navLocation == "company_profile") {
+                                            //destroy current view and show my profile page
+                                            console.log("Navigating to company profile page...");
+                                            for (var i = 0; i < divs.length; i++) {
+                                                if (divs[i] == "companyInfo") {
+                                                    var activate_div = document.getElementById(divs[i]);
+                                                    activate_div.style.display = "";
+                                                } else {
+                                                    var deactivate_div = document.getElementById(divs[i]);
+                                                    deactivate_div.style.display = "none";
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+
+
+                                    $Lightning.use("c:lightningCarrierPortal", function () {
+                                        $Lightning.createComponent("c:CarrierMenu",
+                                            {
+                                                user_id: "{!user_id}",
+                                                first_name: "{!first_name}",
+                                                last_name: "{!last_name}"
+                                            },
+                                            "Menu",
+                                            function (cmp) {
+                                                $A.eventService.addHandler({ "event": "c:navEvent", "handler": navigateMenu });
+
+                                            });
+                                    });
+                                </script>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </apex:outputPanel>
+        </div>
+        <!-- END HEADER -->
+    </head>
+    <!-- END PAGE HEADER -->
+
+    <body>
+        <div id="container">
+
+            <!-- CARRIER LOGIN -->
+            <apex:outputPanel layout="block" rendered="{!login_page}">
+                <apex:form >
+                    <div class="homeContainer">
+
+                        <div class="home">
+
+                            <div class="login_box">
+
+                                <table styleClass="form" width="100%">
+                                    <img style="text-align: left" src="{!$Resource.Empire_Logo_Icon_New}" height="50" width="50" />
+
+                                    <h2 id="loginHeader">
+                                        Portal Login
+                                    </h2>
+
+                                    <apex:outputText rendered="{!msg}">
+                                        <tr>
+                                            <td>
+                                                <apex:outputText style="font-size: 16px; text-align: center; text-decoration: underline" value="Incorrect Username or Password"></apex:outputText>
+                                            </td>
+                                        </tr>
+                                    </apex:outputText>
+
+                                    <tr>
+                                        <td>
+                                            <apex:outputLabel style="font-size: 16px; color: white;" value="Email" for="CoName" />
+                                            <span class="required">&nbsp;*</span>
+                                            <apex:inputText html-placeholder="johndoe@gmail.com" value="{!username}" id="CoName" required="true" styleClass="input" />
+                                            <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <apex:outputLabel style="font-size: 16px; color: white" value="Password" for="Pin" />
+                                            <span class="required">&nbsp;*</span>
+                                            <apex:inputSecret html-placeholder="Password" value="{!password}" id="Pin" styleClass="input" maxlength="30" />
+                                            <span style="width: 100px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <a style="color:lightblue" href="https://yourempiregroup.secure.force.com/carrier/Site_ForgotPassword" target="_blank">Forgot Password</a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <apex:commandButton value="Track My Orders" action="{!Login}" style="float: right;" styleClass="button cap" />
+                                            <!-- reRender="recMatch, recNotMatch" -->
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <!-- login_box -->
+                        </div>
+                        <!-- home -->
+                    </div>
+                    <!-- homeContainer -->
+                </apex:form>
+            </apex:outputPanel>
+            <!-- END CARRIER LOGIN -->
+
+            <!-- HOME PAGE -->
+            <div class="slds-scope">
+                <apex:outputPanel rendered="{!home_page}">
+                    <div id="HomeApp" />
+                    <div id="LoadApp" />
+
+
+                    <script>
+                        var homeNav = function (event) {
+                            var navLocation = event.getParam("navItem");
+                            var loadId = event.getParam("recordId");
+                            if (navLocation == "load_detail") {
+                                $Lightning.use("c:lightningCarrierPortal", function () {
+                                    $Lightning.createComponent("c:LoadDetail",
+                                        {
+                                            userType: "{!recordType}",
+                                            recordId: loadId
+                                        },
+                                        "LoadApp",
+                                        function (cmp) {
+                                            var home_div = document.getElementById("HomeApp");
+                                            home_div.style.display = "none";
+                                        });
+                                });
+
+                            }
+                        }
+
+                        $Lightning.use("c:lightningCarrierPortal", function () {
+                            $Lightning.createComponent("c:Carrier_Home",
+                                {
+                                    userId: "{!user_id}",
+                                    recordId: "{!record_id}",
+                                    recordType: "{!recordType}"
+                                },
+                                "HomeApp",
+                                function (cmp) {
+                                    $A.eventService.addHandler({ "event": "c:navEvent", "handler": homeNav });
+                                }
+                            );
+                        }); 
+                    </script>
+
+                    <div id="userInfo" style="display:none">
+                        <div id="ProfileApp" />
+
+
+                        <script>
+                            $Lightning.use("c:lightningCarrierPortal", function () {
+                                $Lightning.createComponent("c:MyProfile_App",
+                                    { profile_id: "{!JSENCODE(user_id)}" },
+                                    "ProfileApp",
+                                    function (cmp) {
+                                    });
+                            }); 
+                        </script>
+                    </div>
+                    <div id="companyInfo" style="display:none">
+                        <div id="CarrierProfApp" />
+
+
+                        <script>
+                            $Lightning.use("c:lightningCarrierPortal", function () {
+                                $Lightning.createComponent("c:CarrierCompanyProfile_App",
+                                    {
+                                        profile_id: "{!JSENCODE(user_id)}",
+                                        userType: "{!recordType}"
+                                    },
+                                    "CarrierProfApp",
+                                    function (cmp) {
+                                    });
+                            }); 
+                        </script>
+                    </div>
+                </apex:outputPanel>
+
+
+
+
+            </div>
+        </div>
+
+    </body>
+
+    <footer id="footer">
+        <c:SiteFooter />
+
+    </footer>
+</apex:page>

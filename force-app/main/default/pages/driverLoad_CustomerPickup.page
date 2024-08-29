@@ -1,0 +1,1106 @@
+<apex:page standardController="FreightTM__Load__c" extensions="driverLoad" showheader="false" sidebar="false" cache="true" docType="html-5.0" applyBodyTag="false" lightningStylesheets="false" standardStylesheets="false">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style type="text/CSS">
+            @import url('https://fonts.googleapis.com/css?family=Roboto');
+            * {
+            margin: 0;
+            padding: 0;
+            }
+            body {
+            font-family: 'Roboto', sans-serif;
+            color: #575a60;
+            font-weight: 700;
+            font-size: 13px;
+            font-style: normal;
+            float: none;
+            line-height: 1.1;
+            margin: 0 auto;
+            padding: 0px;
+            max-width: 765px;
+            width: 100%;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            }
+            .center {
+            text-align: center;
+            }
+            .widthcenter {
+            width:100%;
+            text-align:center;
+}           }
+            .cap {
+            text-transform: uppercase;
+            }
+            .ls {
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            }
+            .form {
+            width: 100%;
+            }
+            
+            td {
+            padding: 6px 0px;
+            <!-- width: 765px; -->
+            }
+            h2 {
+            letter-spacing: 1px;
+            }
+            .home {
+            padding: 20px 5px;
+            }
+            .loadbox {
+            margin: 10px 0;
+            padding: 5px;
+            background-color: #eee;
+            }
+            .loadbox table {
+            background-color: #eee;
+            padding: 5px;
+            }
+            .loadbox h3 {
+            background-color: #ccc;
+            padding: 10px;
+            }
+            .padd {
+            padding: 0px 10px;
+            }
+            .required {
+            color: #ff0000;
+            font-weight: 400;
+            }
+            .input, .inputarea {
+            background-color: #eee;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            border-radius: 5px;
+            color: #333;
+            display: block;
+            float: none;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+            width: 100%;
+            margin: 3px 0;
+            line-height: 1.1;
+            background-image: linear-gradient(transparent, transparent); <!-- to remove top shadow on iOS -->
+            }
+            .input {
+            height: 45px;
+            }
+            .inputarea {
+            height: fixed;
+            font-family: 'Roboto', sans-serif;
+            }
+            .outputarea {
+            background-color: #fff;
+            box-sizing: border-box;
+            border-radius: 2px;
+            color: #333;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            display: block;
+            float: none;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            width: 100%;
+            height: 130px;
+            margin: 3px 0;
+            line-height: 1.3;
+            overflow: scroll;
+            }
+            .button {
+            background-color: #62BF34;
+            border: none;
+            border-radius: 18px;
+            color: #333;
+            font-size: 2em;
+            font-weight: 500;
+            padding: 10px 15px;
+            width: 100%;
+            height: 60px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            
+            box-shadow:0 9px #999;
+            }
+            
+            .button2 {
+            background-color: #62BF34;
+            border: none;
+            border-radius: 18px;
+            color: #333;
+            font-size: 2em;
+            font-weight: 500;
+            padding: 10px 15px;
+            width: 50%;
+            height: 60px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            
+             box-shadow: 0 9px #999;
+            }
+            
+            .button3 {
+            background-color: #f0655b;
+            border: none;
+            border-radius: 18px;
+            color: #000000;
+            font-size: 2em;
+            font-weight: 500;
+            padding: 10px 15px;
+            width: 100%;
+            height: 60px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            
+            box-shadow: 0 9px #999;
+            }
+            
+            .saveButton {
+                text-align: center;
+                float: right;
+                background-color: #62BF34;
+                border: none;
+                border-radius: 12px;
+                color: #333;
+                font-size: 16px;
+                font-weight: 750;
+                padding: 0px 0px;
+                width: 30%;
+                height: 25px;
+                margin: 0 auto;
+                letter-spacing: 1.5px;
+                -webkit-appearance: none; <!-- to override iOS default btn style -->
+                -moz-appearance: none; <!-- to override iOS default btn style -->
+                
+                box-shadow:0 4px #999;
+            }
+            
+            #clearSigPButton, #clearSigDButton, #clearSigCButton {
+                text-align: center;
+                float: left;
+                background-color: red;
+                border: none;
+                border-radius: 12px;
+                color: white;
+                font-size: 16px;
+                font-weight: 750;
+                padding: 0px 0px;
+                width: 30%;
+                height: 25px;
+                margin: 0 auto;
+                letter-spacing: 1.5px;
+                -webkit-appearance: none; <!-- to override iOS default btn style -->
+                -moz-appearance: none; <!-- to override iOS default btn style -->
+                
+                box-shadow:0 4px #999;
+            }
+            
+            .buttonLink {
+            background-color: #62BF34;
+            text-decoration: none;
+            border: none;
+            border-radius: 12px;
+            color: #333;
+            font-size: 1em;
+            font-weight: 1000;
+            padding: 10px 15px;
+            width: 25%;
+            height: 100px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            
+            
+            }
+            
+            .delayButton {
+            background-color: red;
+            border: none;
+            border-radius: 18px;
+            color: #333;
+            font-size: 2em;
+            font-weight: 500;
+            padding: 10px 15px;
+            width: 100%;
+            height: 60px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            
+            box-shadow:0 9px #999;
+            }
+            
+            .button:hover, .buttonLink:hover, .delayButton:hover, .saveButton:hover{
+            background-color: #3e8e41;
+            }
+            
+            .btn-back {
+            background-color: #ccc;
+            border: none;
+            border-radius: 0px;
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+            padding: 10px 15px;
+            width: 100%;
+            height: 40px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            }
+            .btn-back:hover {
+            background-color: #3e8e41;
+            }
+            
+            .button:disabled, .delayButton:disabled, .saveButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            }
+            
+            .button:active, .button2:active, .button3:active .delayButton:active, .saveButton:active, #clearSigPButton:active, #clearSigDButton:active, #clearSigCButton:active{
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+            }
+            
+            .click_call{
+            background-color: #62BF34;
+            border: none;
+            border-radius: 12px;
+            color: #333;
+            font-size: 1em;
+            font-weight: 1000;
+            padding: 10px 15px;
+            width: 25%;
+            height: 100px;
+            margin: 0 auto;
+            letter-spacing: 1.5px;
+            -webkit-appearance: none; <!-- to override iOS default btn style -->
+            -moz-appearance: none; <!-- to override iOS default btn style -->
+            } 
+      
+            .picklist{
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 10px 8px 10px 14px;
+            height: 26px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            background-color: #eee;
+            }
+            .picklist .select{
+            width: 126.3%;
+            }
+            .picklist .select select{
+            background: transparent;
+            line-height: 1.6;
+            border: 0;
+            padding: 0;
+            border-radius: 0;
+            width: 80%;
+            position: relative;
+            z-index: 10;
+            font-size: 1em;
+            }
+            .loadcancel {
+            padding: 5px 0 5px 20px;
+            margin: 0;
+            }
+            <!-- ORIG -->
+            body, .nomatch {
+            background-color: #fff !important;
+            }
+            .errorMsg {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin: 0 auto;
+            }
+            .red {
+            color: red;
+            }
+            .green {
+            color: green;
+            }
+            .error_message {
+            font-weight: bold;
+            text-align: center;
+            margin: 0 auto;
+            width: 100%;
+            }
+            .loadinfo  {
+            background-color: fffffff;
+            text-align: center;
+            padding-top: 0px;
+            padding-left: 0;
+            padding-right: 0;
+            margin: 0;
+            width: 100%;
+            color: #fff;
+            }
+            .att table, .att th, .att td {
+            border-collapse: collapse;
+            width: 100%; 
+            }
+            .empire_logo {
+            margin:0 auto;
+            text-align: center;
+            padding-bottom: 20px;
+            }
+            .txtcolor {
+            color: #3570ce;
+            }
+            @media screen and (max-width: 700px) {
+            .mobile-show {
+            visibility: visible;
+            }
+            .mobile-hide {
+            visibility: hidden;
+            display: none;
+            }
+            }
+            @media screen and (min-width: 701px) {
+            .mobile-show {
+            visibility: hidden;
+            display: none;
+            }
+            .mobile-hide {
+            visibility: visible;
+            }
+            }
+            
+            .m-signature-pad--body-first canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 97%;
+            height: 200px;
+            border: 4px solid #CCCCCC;
+            background-color: #ebebeb;
+            border-radius: 30px 30px;
+            }
+            
+            .m-signature-pad--body-second canvas {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 97%;
+            height: 200px; 
+            border: 4px solid #0000;
+            border-radius: 30px 10px;
+            }
+         
+           
+            
+        </style>
+        
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js">
+        </script>
+        
+    </head>
+    
+    <apex:form id="form_id">
+    
+    <body onload="onLoadFunctions()">
+    
+    <!-- LOCATION TRACKER JAVASCRIPT -->
+            <script>
+            <apex:repeat value="{!loadRec}" var="load">
+            
+            var watchID = null;
+            var lastUpdateTime;
+            <!--60000 ms = 1 min-->
+            var minFrequency = 1800000; <!--update location every 30 min-->
+            
+           function getLocation() {
+                
+                if (navigator.geolocation && ("{!load.FreightTM__Status__c}" != "Delivered")) {
+                    watchID = navigator.geolocation.watchPosition(showPosition, showError);
+                } 
+                
+                else if ("{!load.FreightTM__Status__c}" == "Delivered"){
+                    return;
+                }
+                
+                else { 
+                    alert("Geolocation is not supported by this browser.");
+                }
+            }
+            
+            function showPosition(position) {
+                
+                current_coords = position.coords.latitude +','+' '+ position.coords.longitude;
+                
+                var now = new Date();
+                
+                if((lastUpdateTime && (now.getTime() - lastUpdateTime.getTime()) < minFrequency) || ("{!load.FreightTM__Status__c}" == "Delivered"))
+                {
+                    navigator.geolocation.clearWatch(watchID);
+                    return;
+                }
+                
+                else
+                {
+                    getLocation();
+                    lastUpdateTime = now;
+               
+                    storeCoords(current_coords);
+                }
+            }
+            
+            function showError(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        x.innerHTML = "User denied the request for Geolocation."
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        x.innerHTML = "Location information is unavailable."
+                        break;
+                    case error.TIMEOUT:
+                        x.innerHTML = "The request to get user location timed out."
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        x.innerHTML = "An unknown error occurred."
+                        break;
+                }
+            }
+            
+            <!--JAVASCRIPT to properly detect which device the user is using -->
+            
+            var device = '';
+            
+            var isDevice = {
+                Mobile:function() {
+                    return navigator.userAgent.match(/Mobi/i);
+                },
+                Android:function() {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                BB:function() {
+                    return navigator.userAgent.match(/Blackberry|BB10/i);
+                },       
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                },
+                Opera: function() {
+                    return navigator.userAgent.match(/Opera Mini/i);
+                },
+                Windows: function() {
+                    return navigator.userAgent.match(/IEMobile/i);
+                }
+            };
+
+            function checkDevice(){
+                if(isDevice.Mobile()) device = 'Mobile';
+                    else device = 'Non mobile';
+   
+                if( isDevice.iOS() ) device = 'iOS';
+                    else if( isDevice.Android() ) device = 'Android';
+                    else if( isDevice.BB() ) device = 'BB';
+                    else if( isDevice.Opera() ) device = 'Opera';
+                    else if( isDevice.Windows() ) device = 'Windows';
+    
+
+                passDeviceToController(device);
+             
+            }           
+            
+            function addLoadEvent(newFunc){
+                var oldOnLoad = window.onload;
+                if(typeof window.onload != 'function'){
+                    window.onload = newFunc;
+                }
+                else{
+                    window.onload = function(){
+                        if(oldOnLoad){
+                            oldOnLoad();
+                        }
+                        newFunc();
+                    } <!-- END function -->
+                } <!-- END else -->
+            } <!-- END addLoadEvent -->
+                 
+            
+            function onLoadFunctions() {
+                checkDevice();
+                getLocation();
+                <!-- alert initial page load -->
+                if("{!load.FreightTM__Status__c}" == "Dispatched" && ("{!driver_signature}" == null || "{!driver_signature}" == '')){
+                    alert("Welcome to Empire Group's Driver Portal!\n\nTo get started, sign your name on the canvas provided and click 'Save'.");
+                }
+                
+                <!-- alert driver signature -->
+                if("{!load.FreightTM__Status__c}" == "Dispatched" && "{!driver_signature}" != null && "{!driver_signature}" != ''){
+                    alert("Perfect!\n\nYour signature was uploaded successfully");
+                }
+                
+                <!-- alert pickup signature -->
+                if("{!load.FreightTM__Status__c}" == "Loaded In Transit" && "{!shipper_signature}" != null && "{!shipper_signature}" != ''){
+                    alert("Perfect!\n\nPickup contact signature uploaded successfully");
+                }
+                
+                
+                <!-- alert receiver signature -->
+                if("{!load.FreightTM__Status__c}" == 'Delivered' && "{!receiver_signature}" != null && "{!receiver_signature}" != ''){
+                    alert("Perfect!\n\nDelivery contact signature uploaded successfully");
+                    first = false;
+                }
+                
+                <!-- alert on delivered -->
+                if("{!load.FreightTM__Status__c}" == "Delivered") {
+                    alert("Thank you for hauling with Empire!\n\nClick 'View BOL' link above to access a PDF ticket\n\nIf necessary, you may upload any files using the buttons below");
+                }
+                
+            }
+                        
+            
+            </apex:repeat>
+            </script>
+            
+            <apex:actionFunction action="{!storeCoordinates}" name="storeCoords" reRender="out">
+                <apex:param name="message" value=""  assignTo="{!lat_long}"/>
+            </apex:actionFunction>            
+            <!-- END OF LOCATION TRACKER -->
+             
+            <apex:actionFunction action="{!storeDeviceType}" name="passDeviceToController" rerender="form_id">
+                <apex:param name="device" value=""/>
+            </apex:actionFunction>       
+            <!-- END OF DEVICE DETECTION--> 
+            
+         <!--   
+        <div class="empire_logo">
+            <div align="right">
+                <apex:commandButton value="View BOL" action="{!redirect_customerPickup}" styleClass="buttonLink"/> <br/><br/>
+            </div>
+            <apex:image url="{!$Resource.Empire_group_logo}" width="100"/> 
+            
+
+        </div>-->
+        
+        <table width="100%">
+        <tr>
+            <!-- <td width="33%"></td> -->
+            <td width="50%" align="center">
+                <div class="empire_logo">
+                    <apex:image url="{!$Resource.Empire_Logo_Lockup_Green_New}" height="100" width="100"/>
+                </div>
+            </td>
+            <td width="50%" align="center">
+                <apex:commandLink target="_blank" value="View BOL" action="{!redirect}" style="font-size: 1.3em;" styleClass="buttonLink"/>
+            </td>
+        </tr>
+        </table>
+                
+        
+            
+        <apex:outputPanel layout="block" styleClass="loadinfo" >
+            <apex:repeat value="{!loadRec}" var="load">
+                <div style="background-color: #478fc9; margin: 0; padding: 10px 0; font-size: 24px">
+                    Load #:&nbsp;<apex:outputField value="{!load.Name}" />   
+                </div>
+                
+                <div style="background-color: #2e2663; margin: 0; padding: 10px 0; font-size: 24px">
+                    <apex:outputField value="{!load.FreightTM__Calendar_Load__c}" />
+                </div>
+                
+                <div style="background-color: #62BF34; margin: 0; padding: 10px 0; font-size: 24px">
+                    Status:&nbsp;<apex:outputField value="{!load.FreightTM__Status__c}" />  
+                </div>
+  
+                <br /><br />
+        </apex:repeat>    
+        </apex:outputPanel>
+        <!-- END HEADER HTML -->
+      
+         <!-- SIGNATURE INSTRUCTION HTML -->
+        <apex:outputpanel rendered="{!IF(status_pickup == true, true, false)}" layout="none">
+        <apex:outputText style="color:Red; font-size: 20px; align: center" rendered="{!IF(shipper_sign_isEmpty && signature_access == true, true, false)}" value="PLEASE HAVE THE ONSITE PICKUP CONTACT SIGN INSIDE THE BOX BELOW"></apex:outputText>
+        </apex:outputpanel>
+        <apex:outputpanel rendered="{!IF(status_delivery == true, true, false)}" layout="none">
+        <apex:outputText style="color:Red; font-size: 20px; align: center" rendered="{!IF(receiver_sign_isEmpty && signature_access == true, true, false)}" value="PLEASE HAVE THE ONSITE DELIVERY CONTACT SIGN INSIDE THE BOX BELOW"></apex:outputText>
+        </apex:outputpanel>   
+        <apex:outputPanel layout="block">
+        <br/>
+        <!-- END SIGNATURE INSTRUCTION -->
+        
+         <!-- DISPATCHED SIGNATURE HTML MARKUP -->
+         <apex:outputpanel rendered="{!IF(driver_sign_isFull != true, true, false)}" layout="none">
+
+                <div style="text-align: center;">
+                    <span class="cap ls red" style="font-size: 20px">DRIVER</span> <br />
+                    <span class="cap ls red" style="font-size: 20px">*SIGNATURE REQUIRED*</span><br />
+
+                </div>
+                <br/>
+                <apex:includeScript value="{!$Resource.signature_pad }"/>
+                
+             
+                <apex:outputpanel rendered="{!IF(driver_sign_isFull != true, true, false)}" layout="none">
+                    <div id="signature-pad-pickup" class="m-signature-pad-pickup">
+                        <div class="m-signature-pad--body-first">
+                            <canvas id="canvasPickup"></canvas>
+                        </div>
+                    </div>
+
+                    <br/>    
+                    <input id="clearSigPButton" styleClass="clearSigButton" type="button" name="SigCap" onclick="clearPickupPad();" value="Clear"/>
+                    <apex:inputHidden id="driver_signature" value="{!driver_signature}" />
+                    <apex:actionStatus id="saveStatusDriver">
+                    <apex:facet name="stop">
+                    <apex:commandButton status="saveStatusDriver" value="Save" styleClass="saveButton" action="{!storeSignatures}" onclick="saveSign();" oncomplete="window.location.reload();" />
+                    </apex:facet>
+                    <apex:facet name="start">
+                    <apex:commandButton value="Saving..." disabled="true" status="saveStatusDriver" styleClass="saveButton"/>
+                    </apex:facet>
+                    </apex:actionStatus>
+                </apex:outputpanel>
+                
+                
+                
+                <apex:outputpanel rendered="{!IF(driver_sign_isFull == true, true, false)}" layout="none">
+                    <apex:image id="thePickupImage" value="{!driver_signature}" width="100%" height="200"/>
+                    <br/>
+                    <!--<apex:commandButton value="Clear Driver Signature" action="{!clearPickup}" styleClass="text-align: center;" /> -->
+                    <apex:outputText style="color: Green" value="Driver Signature Uploaded Successfully!"></apex:outputText>
+                    
+                </apex:outputpanel><br/><br/>
+            
+            <table width="100%" style="collapse;">
+                <apex:repeat value="{!loadRec}" var="load">
+                <tr>
+                    <td class="cap ls" style="font-size: 16px">Print Name:&nbsp;<apex:inputField value="{!load.Driver_Name__c}" style="width: 150px; height: 25px" ignoreEditPermissionForRendering="true"/></td>
+                       
+                </tr>
+                
+                <tr>
+                    <td class="cap ls" style="font-size: 16px">Date:&nbsp;<apex:outputText value="{0, date,M/d/yy h:mm a}"><apex:param value="{!load.Date__c + offset}"/></apex:outputText></td>
+                </tr>
+
+                </apex:repeat>
+                </table>
+                <br/><br/>
+                
+            </apex:outputpanel>
+            <!-- END DISPATCHED HTML -->
+            
+        
+
+            <!-- DELAYED INFO HTML MARKUP -->
+            <apex:outputpanel rendered="{!IF(status_delayed == true, true, false)}" layout="none">
+            <apex:repeat value="{!loadRec}" var="load">
+               <div style="text-align: center;">
+                <span class="cap ls red" style="font-size: 20px">FILL IN ALL 3 BELOW</span>
+                </div>
+                   <br/>
+                <span class="cap ls" style="font-size: 16px; margin: 3px 0;">Reason for the Delay:</span>
+                   <br/>
+                <div class="picklist">
+                    <div class="select">
+                        <apex:inputField value="{!load.Delayed_Reason__c}" ignoreEditPermissionForRendering="true"/></div>
+                   </div><br /><br />
+                 <div class="cap ls" style="font-size: 16px">Delayed Reason: Add Comments Here&nbsp;<apex:inputField value="{!load.FreightTM__Driver_Remarks__c}" styleClass="inputarea" ignoreEditPermissionForRendering="true"/></div>
+                   <br />
+                <div class="cap ls" style="font-size: 16px">Expected Delivery Time <br/><apex:inputField value="{!load.ETA__c}" type="datetime-local" ignoreEditPermissionForRendering="true"/></div>
+                   <br />
+                </apex:repeat>
+                <apex:commandButton value="Save & Submit"  action="{!storeSignatures}" styleClass="button3 cap" onclick="saveSign();" oncomplete="window.location.reload()" /><br /><br /><br />
+            </apex:outputpanel>
+            
+            <br/>
+            <!-- END DELAYED HTML -->
+            
+            
+        
+        <!-- ERROR MESSAGE HTML -->
+        <apex:outputPanel rendered="{!reset_message}">
+            <span class="error_message red"><apex:pageMessages /></span>
+            <div class="error_message green" style="margin: 15px 0 5px 0;"><apex:outputText value="{!SUBSTITUTE(JSENCODE(error_message), '\\n', '<br/>')}" escape="false" /></div>
+        </apex:outputPanel>
+        <!-- END ERROR MESSAGE -->
+      
+        
+            
+           
+            <!-- JAVASCRIPT for user to properly edit signature pads -->
+            <script type="text/javascript">
+            
+            try{
+                // Pickup
+                var pickupCanvas = document.getElementById("canvasPickup"),
+                    pickupSignaturePad;
+                var pickupSignaturePad = new SignaturePad(pickupCanvas);
+                pickupSignaturePad.minWidth = 2;
+                pickupSignaturePad.maxWidth = 4;
+                pickupSignaturePad.penColor = "#000000";
+                pickupSignaturePad.backgroundColor = "#FFFFFF";
+                pickupSignaturePad.toDataURL();
+                window.onresize = resizeCanvas;
+                resizeCanvas(pickupCanvas);
+            }catch(e){}
+            
+            try{
+                // Delivery
+                var deliveryCanvas = document.getElementById("canvasDeliery"),
+                    deliverySignaturePad;
+                var deliverySignaturePad = new SignaturePad(deliveryCanvas);
+                deliverySignaturePad.minWidth = 2;
+                deliverySignaturePad.maxWidth = 4;
+                deliverySignaturePad.penColor = "#000000";
+                deliverySignaturePad.backgroundColor = "#FFFFFF";
+                deliverySignaturePad.toDataURL();
+                window.onresize = resizeCanvas;
+                resizeCanvas(deliveryCanvas);
+            }catch(e){}
+            
+            try{
+                // Consignee
+                var deliveryConsignee = document.getElementById("canvasConsignee"),
+                    ConsigneeSignaturePad;
+                var ConsigneeSignaturePad = new SignaturePad(deliveryConsignee);
+                ConsigneeSignaturePad.minWidth = 2;
+                ConsigneeSignaturePad.maxWidth = 4;
+                ConsigneeSignaturePad.penColor = "#000000";
+                ConsigneeSignaturePad.backgroundColor = "#FFFFFF";
+                ConsigneeSignaturePad.toDataURL();
+                window.onresize = resizeCanvas;
+                resizeCanvas(deliveryConsignee);
+            }catch(e){}
+            
+            function resizeCanvas(canvas) {
+                var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+            }
+            
+            function clearPickupPad(){
+                
+                pickupSignaturePad.clear();
+                document.getElementById("{!$Component.driver_signature}").value = '';
+            }
+            
+            function clearDeliveryPad(){
+                
+                deliverySignaturePad.clear();
+                document.getElementById("{!$Component.shipper_signature}").value = '';
+            }
+            
+            function clearConsigneePad(){
+                
+                ConsigneeSignaturePad.clear();
+                document.getElementById("{!$Component.receiver_signature}").value = '';
+            }
+
+            
+            function saveSign(){
+            
+                try{
+                    $('#driverButton').on('click', function() {
+                        $(this).prop('disabled', true); });
+                }catch{}
+                
+                try{
+                    $('#pickupButton').on('click', function() {
+                        $(this).prop('disabled', true); });
+                }catch{}
+                
+                try{
+                    $('#deliveryButton').on('click', function() {
+                        $(this).prop('disabled', true); });
+                }catch{}
+                
+                try{ 
+                    var pickupStrDataURI = pickupSignaturePad.toDataURL();
+                    if (!pickupSignaturePad.isEmpty()) {
+                        document.getElementById("{!$Component.driver_signature}").value = pickupStrDataURI;
+                    }
+                }catch{}
+                    
+                    try{
+                    var deliveryStrDataURI = deliverySignaturePad.toDataURL();
+                if (!deliverySignaturePad.isEmpty()) {
+                    document.getElementById("{!$Component.shipper_signature}").value = deliveryStrDataURI;
+                }
+            }catch{}
+                
+                try{
+                    var ConsigneeStrDataURI = ConsigneeSignaturePad.toDataURL();
+                if (!ConsigneeSignaturePad.isEmpty()) {
+                    document.getElementById("{!$Component.receiver_signature}").value = ConsigneeStrDataURI;
+                }
+            }catch{}
+                
+                }
+                </script>
+                <!-- END SIGNATURE JAVASCRIPT -->
+                
+               
+                
+                
+            <br />
+
+        </apex:outputPanel><br/>
+ 
+
+    </body>
+    
+
+    
+    <!-- DISPATCHER INFO HTML -->
+           <apex:repeat value="{!loadRec}" var="load">
+                <div class="widthcenter inputarea" style="font-size: 18px">
+                <apex:outputPanel >
+                    <h3><span class="txtcolor" style="font-size: 18px">Dispatcher Info: </span></h3>
+                    <table table-layout="fixed" width="100%">
+                        <tr width="100%">
+                            <td width="50%" colspan="2" align="left">
+                                 <span class="txtcolor" white-space="nowrap" style="font-size: 16px">Dispatcher Contact:</span><br /><apex:outputField value="{!load.FreightTM__Dispatch__r.Name}"/>
+                            </td>
+                            
+                            <td width="50%" colspan="2" align="right">
+                                <apex:outputLink value="tel:{!new_num}" target="_blank" styleClass="click_call">Click to Call</apex:outputLink>
+                                <!-- <span class="txtcolor" white-space="nowrap" style="font-size: 16px">Dispatcher Phone:</span><br /><apex:outputText value="{!new_num}"/> -->
+                            </td>
+                            
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+                </div>
+            </apex:repeat>
+        <br />
+        <!-- END DISPATCHER INFO -->
+       
+       <!-- SPECIFIED INSTRUCTION HTML -->
+           <apex:repeat value="{!loadRec}" var="load">
+                <div class="widthcenter inputarea" style="font-size: 18px">
+                <apex:outputPanel >
+                    <h3><span class="txtcolor" style="font-size: 18px">IMPORTANT DELIVERY INSTRUCTIONS</span></h3> 
+                        <apex:outputField value="{!load.FreightTM__Remarks__c}"/>
+                </apex:outputPanel>
+                </div>
+            </apex:repeat>
+        <!-- END SPECIFIED INSTRUCTION -->
+        
+         
+            
+            <!-- LOAD INFO HTML MARKUP --> 
+            <div class="loadbox">
+                <h3>#1 PICKUP</h3> 
+                <table table-layout="fixed" width="100%">
+                
+                         <!-- MAP W DIRECTIONS HTML MARKUP -->
+                         <tr>
+                            <td colspan="4" width="100%" align="center">
+                                <apex:map id="pickup_map" width="100%" height="100%" mapType="hybrid" zoomLevel="16" center="{!pickup_street},{!pickup_city},{!pickup_state}" rendered="{!IF(shipper_sign_isEmpty, true, false)}"> 
+                                    <apex:mapMarker title="Pickup Location" position="{!pickup_street},{!pickup_city},{!pickup_state}"/>
+                                </apex:map> 
+                            </td> 
+                        </tr>
+                        
+                        
+                        <tr>
+                            <apex:repeat value="{!loadRec}" var="load">
+                            <td colspan="4" width="100%" align="center">
+                                <apex:outputLink styleClass="buttonLink" value="maps://maps.google.com/maps?daddr={!pickup_lat},{!pickup_long}&amp;ll=" target="_blank" rendered="{!IF(device_type == 'iOS' && shipper_sign_isEmpty, true, false)}">Go to Pickup Location</apex:outputLink>
+                                <apex:outputLink styleClass="buttonLink" value="http://maps.google.com/maps?daddr={!pickup_lat},{!pickup_long}&amp;ll=" target="_blank" rendered="{!IF(device_type != 'iOS' && shipper_sign_isEmpty, true, false)}">Go to Pickup Location</apex:outputLink>
+                            </td>
+                            </apex:repeat>
+                        </tr>
+                        <!-- END MAP W DIRECTIONS -->
+                        
+                        <!-- PICKUP INFO HTML -->
+                        <apex:repeat value="{!loadRec}" var="load">
+                        <tr>
+                            <td width="100%" valign="top" align="center" colspan="4">
+                                <span class="txtcolor">Address:</span><br />
+                                <apex:outputPanel >
+                                   <apex:outputLink value="maps://maps.google.com/maps?daddr={!pickup_lat},{!pickup_long}&amp;ll=" target="_blank" rendered="{!IF(device_type == 'iOS', true, false)}">
+                                   {!load.FreightTM__Pickup_Address__c}<br />
+                                   {!load.FreightTM__Pickup_City__c},&nbsp;{!load.FreightTM__Pickup_State__c}&nbsp;{!load.FreightTM__Pickup_Zip_Code__c}<br />
+                                   {!load.FreightTM__Pickup_Country__c}
+                                   </apex:outputLink>
+                    
+                                   <apex:outputLink value="http://maps.google.com/maps?daddr={!pickup_lat},{!pickup_long}&amp;ll=" target="_blank" rendered="{!IF(device_type != 'iOS', true, false)}">
+                                   {!load.FreightTM__Pickup_Address__c}<br />
+                                   {!load.FreightTM__Pickup_City__c},&nbsp;{!load.FreightTM__Pickup_State__c}&nbsp;{!load.FreightTM__Pickup_Zip_Code__c}<br />
+                                   {!load.FreightTM__Pickup_Country__c}
+                                   </apex:outputLink>
+                                </apex:outputPanel>
+                            </td>  
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="1" white-space="nowrap" align="left" width="50%"><span class="txtcolor">Pickup Contact:</span><br /><apex:outputField value="{!load.FreightTM__Pickup_Contact__c}"/></td>
+                            <td colspan="2" white-space="nowrap" align="right" width="50%"><span class="txtcolor">Pickup Phone:</span><br /><apex:outputField value="{!load.FreightTM__Pickup_Phone__c}"/></td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="1" white-space="nowrap" align="left"><span class="txtcolor">Pickup By:</span><br /><apex:outputField value="{!load.Pickup_By__c}"/></td>
+                            <td colspan="2" white-space="nowrap" align="right"><span class="txtcolor">Pickup Ref. #:</span><br /><apex:outputField value="{!load.FreightTM__Pickup_Ref__c}"/></td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="4" align="center"><span class="txtcolor">Pickup Instructions: <br /></span><apex:outputField value="{!load.FreightTM__Pickup_Remarks__c}"/></td> <br /> 
+                        </tr>
+                        </apex:repeat>
+                        
+            </table>
+            <!-- END PICKUP INFO -->
+            
+            <br />
+
+            
+             <!-- ARRIVED FOR PICKUP STATUS BUTTON -->
+             <apex:commandButton value="Arrived for Pickup" action="{!StatusArrived}" styleClass="button cap" onclick="saveSign();" oncomplete="window.location.reload()" disabled="{!IF(driver_sign_isEmpty || shipper_sign_isFull, true, false)}"/><br /> <br />
+             <!-- END STATUS BUTTON -->
+             <br />
+             
+             <!-- ARRIVED FOR PICKUP SIGNATURE HTML MARKUP -->
+             <apex:outputPanel rendered="{!IF(shipper_sign_isFull == true, true, false)}" layout="none">
+                <apex:outputText style="color: Green" value="Pickup Contact Signature Uploaded Successfully!"></apex:outputText>
+            </apex:outputPanel>
+            
+            <apex:outputpanel id="theForm" rendered="{!IF(status_pickup == true, true, false)}" layout="none">
+            
+                <div style="text-align: center;">
+                    <span class="cap ls red" style="font-size: 20px">PICKUP CONTACT</span><br />
+                    <span class="cap ls red" style="font-size: 20px">*SIGNATURE REQUIRED*</span><br />
+                </div>
+                <br/>
+                <apex:includeScript value="{! $Resource.signature_pad }"/>
+                
+                
+                <apex:outputpanel rendered="{!IF(shipper_sign_isFull != true, true, false)}" layout="none">
+                    
+                    <div id="signature-pad-delivery" class="m-signature-pad-delivery">
+                         <div class="m-signature-pad--body-first">
+                            <canvas id="canvasDeliery"></canvas>
+                        </div>
+                    </div>
+                    <br/>
+                    
+                    <input id="clearSigDButton" style="text-align: center;" type="button" name="SigCap" onclick="clearDeliveryPad();" value="Clear"/>
+                    <apex:inputHidden id="shipper_signature" value="{!shipper_signature}" />
+                    <apex:actionStatus id="saveStatusPickup">
+                    <apex:facet name="stop">
+                    <apex:commandButton status="saveStatusPickup" value="Save" styleClass="saveButton" action="{!storeSignatures}" onclick="saveSign();" oncomplete="window.location.reload();" />
+                    </apex:facet>
+                    <apex:facet name="start">
+                    <apex:commandButton value="Saving..." disabled="true" status="saveStatusPickup" styleClass="saveButton"/>
+                    </apex:facet>
+                    </apex:actionStatus>
+                </apex:outputpanel>
+                
+                
+               <apex:outputpanel rendered="{!IF(shipper_sign_isFull == true, true, false)}" layout="none">
+                    <apex:image id="theDeliveryImage" value="{!shipper_signature}" width="100%" height="200"/>
+                    <br/> 
+                    <apex:commandButton value="Clear Signature" action="{!clearDelivery}" styleClass="clearSigButton" />
+                </apex:outputpanel><br/><br/>
+           
+           <table width="100%" style="border-collapse: collapse;">
+               <apex:repeat value="{!loadRec}" var="load">
+                <tr>
+                    <td class="cap ls" style="font-size: 14px">Print Name:&nbsp;<apex:inputField value="{!load.FreightTM__Pickup_Contact__c}" style="width: 150px; height: 25px" ignoreEditPermissionForRendering="true"/></td>
+                        
+                </tr>
+                
+                <tr>
+                    <td class="cap ls" style="font-size: 14px">Date:&nbsp;<apex:outputText value="{0, date,M/d/yy h:mm a}"><apex:param value="{!load.Shipper_Date__c + offset}"/></apex:outputText></td>
+                </tr>
+                
+                </apex:repeat>
+                </table>
+                <br/><br/>
+               
+               
+            </apex:outputpanel>
+          
+                       
+            </div>
+            <!-- END ARRIVED FOR PICKUP -->   
+            
+            <!-- COMMODITY HTML MARKUP -->
+            <div class="loadbox">
+                <h3>COMMODITY ITEMS</h3> 
+                <table>
+                    <apex:repeat value="{!loadRec}" var="load">
+                        <tr>
+                            <td width="15%" valign="top"><span class="txtcolor">Quantity:</span><br /><apex:outputField value="{!load.Quantity__c}"/></td>
+                            <td width="70%" valign="top"><span class="txtcolor">Commodity:</span><br /><apex:outputField value="{!load.FreightTM__Commodity__c}"/></td>
+                            <td width="15%" valign="top"><span class="txtcolor">Mat Type:</span><br /><apex:outputField value="{!load.Mat_Type__c}"/></td>
+                        </tr>
+                        
+                    </apex:repeat>
+                </table> 
+            </div>
+            <!-- END COMMODITY -->
+            
+            <br />
+    <!-- END OF LOAD INFO -->
+    
+    </apex:form>
+    
+    <!-- UPLOAD FILES HTML MARKUP -->
+    <apex:outputPanel rendered="true">                  
+     <apex:form >
+        
+        <apex:actionregion >  
+            <div style="font-size: 16px">
+                <span class="cap ls" style="font-size: 18px">Upload Files:</span><br />
+                <apex:repeat value="{!fileList}" var="fl">
+                    <apex:inputFile value="{!fl.VersionData}" filename="{!fl.Title}"  accept="docx, txt, xlsx, pdf" filesize="800" size="80" style="padding: 5px 0; font-size: 18px"/>
+                </apex:repeat>
+                <apex:commandButton value="Add More Files" action="{!AddAttachs}" styleClass="cap"/><br />
+                <small>Maximum total file size limit is 25MB.</small>
+            </div>
+        </apex:actionregion><br/>
+        <apex:commandButton value="Save Driver Docs"  action="{!SaveFiles}" styleClass="button cap" disabled="{!IF(status_delivered != true, true, false)}"/><br/><br/>
+        
+    </apex:form>
+    <!-- END UPLOAD FILES -->
+    
+    <br/>  
+    
+
+    </apex:outputPanel>
+    
+   
+            
+            <!--
+/* ***************************************************************** */
+-->
+            
+            
+            <!--
+/* ***************************************************************** */
+-->
+            
+
+    
+    
+
+</apex:page>
+
+<!--oncomplete="window.location.reload()"
+onclick="refreshPage()"
+-->

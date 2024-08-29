@@ -1,0 +1,57 @@
+<!--
+  @description       : 
+  @author            : Ethan Myers
+  @group             : 
+  @last modified on  : 05-11-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+        <span class="slds-assistive-text">warning</span>
+        <span class="slds-icon_container slds-icon-utility-warning slds-var-m-right_x-small"
+            title="Description of icon when needed">
+            <lightning-icon icon-name="utility:warning" size="small"></lightning-icon>
+        </span>
+        <h2>THESE ARE LOAD ORDER TEMPLATES FOR CLONING ONLY</h2>
+    </div>
+    <template if:true={loads}>
+        <lightning-layout key-field="Id" data={loads} columns={columns} show-row-number-column hide-checkbox-column="true"
+            onrowaction={handleRowAction} draft-values={draftValues} onsave={handleSaveEdition}></lightning-layout>
+    </template>
+
+    <!-- MODAL -->
+    <template if:true={screenFlow}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container">
+                <button title="None" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick={handleModalClose}>
+                    <lightning-icon icon-name="utility:close" size="medium" class="whiteIcon"></lightning-icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                    <span class="slds-text-align_left slds-var-m-left_x-small">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Clone Load</h1>
+                </div>
+                <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                    <lightning-flow onstatuschange={handleFlowStatusChange} flow-api-name={flowApiName}
+                        flow-input-variables={inputVariables}>
+                    </lightning-flow>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template if:true={loading}>
+        <div class="demo-only demo-only_viewport demo--inverse" style="position:relative">
+            <div class="slds-spinner_container slds-is-fixed">
+                <div role="status" class="slds-spinner slds-spinner_medium">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

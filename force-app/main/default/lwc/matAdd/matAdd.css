@@ -1,0 +1,5 @@
+.deleteButton {
+    --slds-c-icon-color-foreground: red;
+    float: right;
+    --lwc-buttonColorBorderPrimary: transparent !important;
+}

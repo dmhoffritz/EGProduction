@@ -1,0 +1,34 @@
+.slds-media__body {
+    margin-top: 6px;
+}
+
+
+
+.tableControls {
+    position: relative;
+    width: 100%;
+}
+
+.refreshBtn {
+    float: right;
+    margin-right: 1em;
+}
+
+.lgc-bg {
+    background-color: rgb(242 242 242);
+}
+
+.itemTable {
+    height: 50vh !important;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.tableCSS table thead tr th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.whiteIcon {
+    --sds-c-icon-color-foreground-default: white;
+}

@@ -1,0 +1,21 @@
+<aura:component >
+    <aura:attribute name="user_id" type="String"/>
+    <aura:attribute name="first_name" type="String" default=" "/>
+    <aura:attribute name="last_name" type="String" default=" "/>
+    
+    <aura:attribute name="full_name" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:registerEvent name="menuNav" type="c:navEvent"/>
+    
+    <div class="slds-p-around_medium lgc-bg" style="margin-right: 30px">
+        <lightning:buttonMenu aura:id="btn-menu" class="button-menu" label="{!v.full_name}" alternativeText="Show menu" variant="border-filled" iconSize="small" iconName="utility:settings"
+                              onselect="{! c.handleSelect }">
+            <lightning:menuItem value="my_profile" label="My Profile" iconName="utility:user_role"/>
+            <lightning:menuItem value="company_profile" label="Company Profile" iconName="utility:company"/>
+            <lightning:menuItem value="logout" label="Logout" iconName="utility:logout"/>
+        </lightning:buttonMenu>
+    </div>
+    
+</aura:component>

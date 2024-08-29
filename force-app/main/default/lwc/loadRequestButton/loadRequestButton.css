@@ -1,0 +1,11 @@
+.buttonCSS {
+    --sds-c-button-brand-color-background: #66cc33 !important;
+    --slds-c-button-brand-text-color: black;
+    font-weight: bold;
+}
+
+.buttonCSS .slds-button__icon {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    fill: black !important;
+}

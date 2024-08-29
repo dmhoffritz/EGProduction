@@ -1,0 +1,89 @@
+.THIS {
+}
+.THIS.c-container {
+    border: 1px solid #d8dde6;
+    margin: 10px 0 20px 0;
+}
+.THIS .header-column {
+    padding: 0 2rem;
+}
+.THIS .field-title {
+    font-size: .75rem;
+    line-height: 1.25;
+    color: #54698d;
+    margin-bottom: .25rem;
+}
+.THIS input {
+   
+}
+.THIS.demo-only.info_panel {
+    width:100%; 
+    margin:auto; 
+    background-color:rgb(0,0,0,0.9); 
+    color:white; 
+    padding:10px; 
+    border-radius:10px
+}
+.THIS.pdBody {
+    margin: 7px 12px 7px;
+    padding: 0;
+}
+.THIS.pbSubheader {
+    border-top: 0;
+    color:white;
+    border-width: 2px 0 0;
+    border-style: solid;
+    padding: 4px 3px;
+}
+.THIS.pbSubsection {
+    display: block;
+}
+.THIS .detailList {
+    width: 100%;
+    
+}
+.THIS table {
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-color: grey;
+
+}
+
+.THIS .table_data {
+    width: max-content;
+    padding: 10px;
+}
+
+.THIS .contact_panel {
+    display:none;
+}
+
+.THIS .billing_panel {
+    display:none;
+}
+
+.THIS .credential_panel {
+    display:none;
+}
+
+.THIS .insurance_panel {
+    display:none;
+}
+
+.THIS label {
+    color: white;
+}
+
+/*** SUCCESS & ERROR TOASTS ***/
+.THIS .success-icon {
+    background-color: #62BF34;
+}

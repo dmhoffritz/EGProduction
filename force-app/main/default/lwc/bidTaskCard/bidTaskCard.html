@@ -1,0 +1,126 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-14-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <li>
+        <article class={cardCSS}>
+            <div class="slds-page-header" onclick={toggleBody}>
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-opportunity">
+                                    <lightning-icon icon-name="standard:opportunity"></lightning-icon>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span>{task.Type}</span>
+                                            <span class="slds-page-header__title" title={bid.Name}>{bid.Name}</span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__controls">
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li>
+                                        <button class="slds-button slds-button_neutral" onclick={updateStatus}>Update Bid Status</button>
+                                    </li>
+                                    <li>
+                                        <button class="slds-button slds-button_neutral" onclick={viewQuote}>View Quote</button>
+                                    </li>
+                                    <li>
+                                        <button class="slds-button slds-button_neutral" onclick={viewBid}>View Details</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-meta">
+                        <p class="slds-page-header__meta-text"><lightning-badge label={dueDate}
+                                class={badgeCSS}></lightning-badge> {bid.Account_Name__c} • {task.Who.Name}</p>
+                    </div>
+                </div>
+            </div>
+            <template if:true={showBody}>
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-3" style="padding: 1em;">
+                        <!--
+                        <h2><b>1st Follow-up</b></h2>
+                        <ul>
+                            <li>• Confirm receipt of bid</li>
+                            <li>• Ask if there are any questions, comments, or feedback</li>
+                            <li>• Ask when their bid is due & when they expect an award decision</li>
+                            <li>• Confirm project schedule start and finish dates</li>
+                        </ul>
+                        <h2><b>Weekly Bid Status</b></h2>
+                        <ul>
+                            <li>• Review list of open bids with customer</li>
+                            <li>• Ask for updates on each project: award status, what they’re hearing, etc.</li>
+                            <li>• Ask if they are bidding any other projects: clearing, matting, SWPPP, racking, pipe haul, stringing, etc.</li>
+                            <li>• Ask if there’s anything else we can do to help</li>
+                        </ul>
+                        --> 
+                        <h2>
+                            Please followup with <b>{task.Who.Name}</b> on bid, <b>{bid.Name}</b>, kicking off on&nbsp;
+                            <b><lightning-formatted-date-time value={bid.CloseDate}></lightning-formatted-date-time></b>&nbsp;
+                            in <b>{bid.Project_Location__c}</b>. The bid's status is
+                            currently shown as <b>{bid.StageName}</b>. Provide any details regarding the
+                            followup and be sure to update the bid's status once known.
+                        </h2>
+                    </div>
+                    <div class="slds-col slds-size_2-of-3">
+                        <lightning-flow flow-api-name="Bid_Complete_Followup_Action" flow-input-variables={taskFlowInput}
+                            onstatuschange={handleFollowupStatusChange}></lightning-flow>
+                    </div>
+                </div>
+            </template>
+
+        </article>
+    </li>
+
+    <!-- modal start -->
+    <template if:true={isShowModal}>
+        <!--
+                    I Used SLDS for this code
+                    Here is link https://www.lightningdesignsystem.com/components/modals/
+                    -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                        onclick={hideModalBox}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{modalHeading}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-flow flow-api-name={flowAPIName} flow-input-variables={flowInputs}
+                        onstatuschange={handleStatusChange}></lightning-flow>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    
+    </template>
+    <!-- modal end -->
+</template>

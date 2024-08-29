@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Event template">
+    <aura:attribute name="checkboxValue" type="Boolean" default="false" access="global" />
+</aura:event>

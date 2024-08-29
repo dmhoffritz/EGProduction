@@ -1,0 +1,59 @@
+<aura:component controller="CarrierPortal_Cont">
+    <aura:attribute name="userId" type="String" />
+    <aura:attribute name="recordId" type="String" default=""/>
+    <aura:attribute name="recordType" type="String" default=""/>
+    <aura:attribute name="loadId" type="String" default=""/>
+    <aura:attribute name="showPickers" type="Boolean" default="true"/>
+    <aura:attribute name="showLoad" type="Boolean" default="false"/>
+
+    <aura:attribute name="disputedLoads" type="FreightTM__Load__c[]" />
+    <aura:attribute name="displayDisputes" type="Boolean" default="false" />
+    <aura:attribute name="columns" type="List" />
+    
+    <aura:handler name="handleLoadSelection" event="c:navEvent" action="{!c.initializeLoad}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <!--
+    <aura:if isTrue="{!v.displayDisputes}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 100%; max-width: none">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick="{!c.closeModal}">
+                    <lightning:icon iconName="action:close" size="x-small" />
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Disputed Invoices</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:datatable
+                        keyField="id"
+                        data="{!v.disputedLoads}"
+                        columns="{!v.columns}"
+                        onrowaction="{!c.handleRowAction}"
+                        hideCheckboxColumn="true"
+                        />
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+-->
+
+    <aura:if isTrue="{!v.showPickers}">
+        <c:Carrier_Home_App>
+            <aura:set attribute="user_id" value="{!v.userId}"/>
+            <aura:set attribute="record_id" value="{!v.recordId}"/>
+            <aura:set attribute="userType" value="{!v.recordType}"/>
+        </c:Carrier_Home_App>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showLoad}">
+    	<c:LoadDetail>
+            <aura:set attribute="recordId" value="{!v.loadId}"/>
+        </c:LoadDetail>
+    </aura:if>
+    
+</aura:component>

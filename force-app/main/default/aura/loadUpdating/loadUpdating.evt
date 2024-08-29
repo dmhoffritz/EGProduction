@@ -1,0 +1,1 @@
+<aura:event type="APPLICATION" description="Fire this event to let parent component know when load is updating"/>

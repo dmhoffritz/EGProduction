@@ -1,0 +1,17 @@
+<apex:component id="headerComponent">
+  <apex:panelGrid cellpadding="0" cellspacing="0" width="100%" border="0" columns="2" style="text-align: left; color: #fff; background-color: rgb(0, 0, 0, 0.85);" id="head1"> <!-- id="theHeader" -->
+    <!-- <apex:image url="{!$Site.Prefix}/img/sites/force_logo.png" style="align: left;" alt="Salesforce" width="233" height="55" title="Salesforce"/> -->
+    <apex:image url="{!$Resource.Empire_Portal_Logo}" style="align: left;" alt="Salesforce" width="175" height="50" title="Salesforce"/>
+    <apex:panelGrid cellpadding="0" cellspacing="0" width="100%" border="0" columns="1" style="text-align: right;" id="Links">
+   <!--   <apex:panelGroup rendered="{!AND(ISPICKVAL($User.UserType,'Guest'), $Site.LoginEnabled)}">
+        
+        <apex:outputLink value="/site/SiteLogin.apexp">{!$Label.site.login_button}</apex:outputLink>
+        <apex:outputText value=" | "/>
+        <apex:outputLink value="/site/ForgotPassword.apexp">{!$Label.site.forgot_your_password_q}</apex:outputLink>
+        <apex:outputText value=" | " rendered="{!$Site.RegistrationEnabled}"/>
+        <apex:outputLink value="/site/SiteRegister.apexp" rendered="{!$Site.RegistrationEnabled}">{!$Label.site.new_user_q}</apex:outputLink>
+        
+      </apex:panelGroup> -->
+    </apex:panelGrid>
+  </apex:panelGrid>
+</apex:component>

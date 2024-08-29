@@ -1,0 +1,52 @@
+.tile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+}
+
+.commodity-label, .quantity-label {
+    font-weight: bold;
+}
+
+.tile-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.input-value {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.input-value.a-grade,
+.input-value.b-grade,
+.input-value.cull {
+    margin-right: 0;
+}
+
+@media (max-width: 767px) {
+    .input-row {
+        flex-direction: column;
+    }
+
+    .input-value {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .input-value.a-grade,
+    .input-value.b-grade,
+    .input-value.cull {
+        margin-right: 10px;
+        margin-bottom: 0;
+    }
+}

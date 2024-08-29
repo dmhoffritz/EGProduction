@@ -1,0 +1,54 @@
+.card-collapse {
+    max-height: 10em;
+    overflow-y: scroll;
+    transition: max-height 2s ease-in;
+}
+
+.card-expand {
+    max-height: 100em !important;
+    transition: max-height 2s ease-out;
+}
+
+.mainHeader {
+    width: 100%;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+    .slds-list_horizontal {
+        display: block;
+    }
+
+    .stretchMobile {
+        width: 100% !important;
+    }
+}
+
+@media only screen and (min-width: 48em) {
+    .slds-modal_containter {
+        width: 75%;
+        max-width: 50rem;
+    }
+}
+
+.slds-page-header:hover {
+    background: white;
+    cursor: pointer;
+}
+
+.slds-page-header__detail-row {
+    margin: 0 !important;
+}
+
+.badge-red {
+    --sds-c-badge-color-background: red;
+    color: white;
+}
+
+.badge-yellow {
+    --sds-c-badge-color-background: yellow;
+}
+
+.badge-green {
+    --sds-c-badge-color-background: #66cc33;
+}

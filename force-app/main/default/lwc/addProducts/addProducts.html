@@ -1,0 +1,91 @@
+<template>
+
+    <!-- MODAL TO CAPTURE MAT LINE INPUTS -->
+    <template if:true={showModal}>
+        <c-mat-add onclose={closeModal} onsubmission={storeMatLine}></c-mat-add>
+    </template>
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning-icon icon-name="standard:orders"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Products">Products</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- HEADER BUTTONS GO HERE -->
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <template if:true={matData}>
+
+        <template for:each={matData} for:item="mat">
+            <!-- More complex content -->
+            <div key={mat.id} class="slds-p-around_medium lgc-bg">
+                <c-mat-add mat-item={mat} onupdate={updateProductList} ondelete={deleteProduct}></c-mat-add>
+            </div>
+
+        </template>
+    </template>
+
+    <!--Button to add another MAT Tile-->
+    <!-- Neutral variant (default) -->
+    <lightning-button label="Add Product" title="Add Product" icon-name="utility:add" class="slds-m-left_x-small"
+        onclick={addMatItem}>
+    </lightning-button>
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning-icon icon-name="standard:service_crew"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name-title">
+                            <h1>
+                                <span class="slds-page-header__title slds-truncate" title="Services">Services</span>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <c-service-selection onserviceaddition={addService}></c-service-selection>
+
+    <br />
+    <lightning-textarea name="description" label="Comments for Estimator"
+        placeholder="Enter any addtional notes here..." value={rfpDescription} onchange={updateDescription}>
+    </lightning-textarea>
+    <br />
+
+    <button class="slds-button slds-button_brand" onclick={handleFinish} style="width:100%;">
+        Submit RFP&nbsp;
+        <lightning-icon icon-name="utility:download" alternative-text="submit" title="Submit RFP" size="xx-small"
+            class="submit-icon"></lightning-icon>
+    </button>
+
+
+
+</template>

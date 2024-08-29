@@ -1,0 +1,37 @@
+<aura:component controller="Carrier_Registration_V2">
+
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="Carrier" type="FreightTM__Carrier__c" />
+
+    <aura:attribute name="isBroker" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:dependency resource="markup://c:navRegistration" type="EVENT" />
+    <aura:handler event="c:navRegistration" action="{!c.nav}" />
+
+    <aura:dependency resource="markup://c:checkboxChange" type="EVENT" />
+    <aura:handler event="c:checkboxChange" action="{!c.handleBrokerIndication}" />
+
+    <!-- Page Triggers -->
+    <aura:attribute name="initialized" type="Boolean" default="false" />
+    <aura:attribute name="verifyCarrier" type="Boolean" default="true" />
+    <aura:attribute name="verifyBilling" type="Boolean" default="false" />
+    <aura:attribute name="registerUser" type="Boolean" default="false" />
+
+    <aura:if isTrue="{!v.initialized}">
+        <div class="slds-align_absolute-center" style="height: 100%;">
+            <div class="content">
+                <aura:if isTrue="{!v.verifyCarrier}">
+                    <c:carrierVerification Carrier="{!v.Carrier}" />
+                </aura:if>
+                <aura:if isTrue="{!v.verifyBilling}">
+                    <c:billingVerification Carrier="{!v.Carrier}" />
+                </aura:if>
+                <aura:if isTrue="{!v.registerUser}">
+                    <c:portalRegistration Carrier="{!v.Carrier}"/>
+                </aura:if>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

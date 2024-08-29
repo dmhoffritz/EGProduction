@@ -1,0 +1,123 @@
+<aura:component >
+    <!-- CURRENT USER ATTR -->
+    <aura:attribute name="userId" type="String" />
+    
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    
+    <aura:attribute name="dataGroupedByJob" type="Object" />
+    <aura:attribute name="editedDataGroupedByJob" type="Object" />
+    
+    <!-- SELECTION -->
+    <aura:attribute name="selectedRows" type="List"/>
+    <aura:attribute name="selectedLoads" type="List"/>
+    <aura:attribute name="selectionIds" type="Id[]"/>
+    
+    <!-- INLINE EDITING -->
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="FreightTM__Load__c[]" default="[]"/>
+    
+    <!-- SORTING -->
+    <aura:attribute name="defaultSortDirection" type="String" default="asc"/>
+    <aura:attribute name="sortDirection" type="String" default="asc"/>
+    <aura:attribute name="sortedBy" type="String" />
+    
+    <!-- MODAL VIEW -->
+    <aura:attribute name="displayBatch" type="Boolean" default="false"/>
+    
+    <!-- EVENT REGISTRATION -->
+    <aura:dependency resource="markup://c:flowFinished" type="EVENT" />
+    <aura:handler event="c:flowFinished" action="{!c.closeModal}"/>
+    
+    <aura:registerEvent name="loadNav" type="c:navLoad" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    
+    <!-- 
+    <lightning:button label="Invoice Selected Loads" onclick="{!c.handleSelection}"/>
+    <lightning:datatable style="width: max-content"
+                         class="tableCSS"
+                         data="{! v.data }"
+                         columns="{! v.columns }"
+                         keyField="Id"
+                         onrowaction="{! c.handleRowAction }"
+                         onrowselection="{!c.handleSelect}"
+                         />
+	-->
+    
+  <aura:iteration items="{!v.dataGroupedByJob}" var="company">
+      <h1 class="company-header">{!company.companyName}</h1>
+      <aura:iteration items="{!company.jobs}" var="job">
+    <div class="lane-header">
+      <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+          <div class="slds-page-header__col-title">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning:icon iconName="standard:tour" size="medium" />
+              </div>
+              <div class="slds-media__body">
+                <div class="slds-page-header__name">
+                  <div class="slds-page-header__name-title">
+                    <h1>
+                      <span>Job</span>
+                      <span class="slds-page-header__title slds-truncate" title="{!job.jobNumber}">{!job.jobNumber}</span>
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slds-page-header__col-actions">
+              <div class="slds-page-header__control">
+                <ul class="slds-button-group-list">
+                  <li>
+                      <button class="slds-button slds-button_neutral" onclick="{!c.invoiceSelectedLoads}" name="{!job.jobNumber}">Invoice Selected Loads</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+          
+    <div class="datatable-container">
+      <lightning:datatable
+        keyField="Id"
+        id="{!job.jobNumber}"
+        data="{!job.tableData.data}"
+        columns="{!job.tableData.columns}"
+        showRowNumberColumn="true"
+        onrowaction="{! c.handleRowAction }"
+        onrowselection="{!c.handleSelect}"
+        selectedRows="{!job.tableData.selectedRows}"
+        class="tableCSS"
+        />
+    </div>
+      </aura:iteration>
+  </aura:iteration>
+    
+    
+    <aura:if isTrue="{!v.displayBatch}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 80%">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeModal}">
+                    <lightning:icon iconName="action:close" size="x-small"/>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Batch Invoice</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c:embeddedFlow>
+                        <aura:set attribute="user_id" value="{!v.userId}"/>
+                        <aura:set attribute="flowName" value="Carrier_Portal_Batch_Invoice_V4"/>
+                        <aura:set attribute="loads" value="{!v.selectedLoads}"/>
+                    </c:embeddedFlow>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+</aura:component>

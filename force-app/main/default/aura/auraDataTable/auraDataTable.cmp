@@ -1,0 +1,98 @@
+<aura:component controller="CarrierPortal_Cont">
+    <ltng:require styles="{!$Resource.Portal_Fonts}" />
+
+    <!-- Variables -->
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="savedData" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="userId" type="String" />
+    <aura:attribute name="loadType" type="String" default="New" />
+
+    <!-- INLINE EDITING -->
+    <aura:attribute name="errors" type="Object" default="[]" />
+    <aura:attribute name="draftValues" type="FreightTM__Load__c[]" default="[]" />
+
+    <aura:attribute name="updatedLoads" type="FreightTM__Load__c[]" default="[]" />
+    <aura:attribute name="displaySuccess" type="Boolean" default="false" />
+    <aura:attribute name="displayError" type="Boolean" default="false" />
+
+    <!-- SORTING -->
+    <aura:attribute name="defaultSortDirection" type="String" default="asc" />
+    <aura:attribute name="sortedDirection" type="String" default="asc" />
+    <aura:attribute name="sortedBy" type="String" />
+
+    <!-- MODAL VIEW -->
+    <aura:attribute name="displayForm" type="Boolean" default="false" />
+    <aura:attribute name="formURL" type="String" />
+    <aura:attribute name="formToDisplay" type="String" />
+    <aura:attribute name="displayRateCon" type="Boolean" default="false" />
+    <aura:attribute name="rateConURL" type="String" />
+    <aura:attribute name="loadName" type="String" />
+
+    <lightning:navigation aura:id="navService" />
+    <lightning:notificationsLibrary aura:id="notifLib" />
+
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }" />
+
+    <aura:registerEvent name="loadNav" type="c:navLoad" />
+    <aura:registerEvent name="onsave" type="c:onsave" />
+    
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+	
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Updating loads..." size="small" />
+    </aura:if>
+
+    <!-- TOAST MSGS -->
+    <aura:if isTrue="{!v.displaySuccess}">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                <span class="slds-assistive-text">success</span>
+                <lightning:icon class="success-icon" iconName="action:check" size="x-small" />
+
+                <span
+                    class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top"
+                    title="Description of icon when needed">
+                </span>
+
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small ">Successfully updated loads</h2>
+                </div>
+                <div class="slds-notify__close">
+                    <a onclick="{!c.closeToast}" style="text-decoration: none; font-size: 20px">X</a>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- END TOAST MSGS -->
+
+    <!-- the container element determine the height of the datatable -->
+    <lightning:datatable class="tableCSS" data="{! v.data }" columns="{! v.columns }" keyField="Id"
+        errors="{! v.errors }" draftValues="{! v.draftValues }" onsave="{! c.handleSaveEdition }"
+        onrowaction="{! c.handleRowAction }" hideCheckboxColumn="true" showRowNumberColumn="true" selectableRows="false"
+        defaultSortDirection="{!v.sortedDirection}" sortedBy="{!v.sortedBy}" onsort="{!c.updateColumnSorting}" />
+
+
+    <aura:if isTrue="{!v.displayForm}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 50%">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick="{!c.closeModal}">
+                    <lightning:icon iconName="action:close" size="x-small" />
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                        {!v.loadName}&nbsp;-&nbsp;{!v.formToDisplay}</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <iframe height="600px" id="theIframe" src="{!v.formURL}" width="100%"></iframe>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+</aura:component>

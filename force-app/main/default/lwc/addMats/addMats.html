@@ -1,0 +1,80 @@
+<template>
+
+    <!-- MODAL TO CAPTURE MAT LINE INPUTS -->
+    <template if:true={showModal}>
+        <c-mat-add rfp-id={rfpId} onclose={closeModal} onsubmission={storeMatLine}></c-mat-add>
+    </template>
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning-icon icon-name="standard:orders"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name-title">
+                            <h1>
+                                <span class="slds-page-header__title slds-truncate" title="MATs">MATs</span>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <lightning-button label="Add MATs" icon-name="utility:add" icon-position="left"
+                            onclick={addMatItem}></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template if:true={matData}>
+        <lightning-datatable key-field="id" data={matData} columns={matColumns} onrowaction={handleRowAction}
+            hide-checkbox-column>
+        </lightning-datatable>
+    </template>
+
+
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning-icon icon-name="standard:service_crew"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name-title">
+                            <h1>
+                                <span class="slds-page-header__title slds-truncate" title="Services">Services</span>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <c-service-selection onserviceaddition={addService}></c-service-selection>
+
+
+    <!--
+    <template for:each={matItems} for:item="matItem">
+        <c-wire-get-picklist-values key={matItem.id} rfp-item-from-parent={matItem} item-id={matItem.id}
+            ongetproductid={updateItem} onitemremoval={removeItem}>
+        </c-wire-get-picklist-values>
+    </template>
+-->
+    <button class="slds-button slds-button_brand" onclick={handleFinish} style="width:100%;">
+        Submit RFP&nbsp;
+        <lightning-icon icon-name="utility:download" alternative-text="submit" title="Submit RFP" size="xx-small" class="submit-icon"></lightning-icon>
+    </button> 
+
+
+
+</template>

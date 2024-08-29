@@ -1,0 +1,28 @@
+.slds-page-header__detail-row {
+    margin: 0 !important;
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pending-badge {
+    --sds-c-badge-color-background: orange;
+}
+
+@media only screen and (max-width: 600px) {
+    .slds-page-header__detail-row {
+        display: block;
+    }
+
+    .slds-page-header__detail-block {
+        max-width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 1em;
+    }
+
+    .slds-button_neutral {
+        color: green;
+        width: 100%;
+    }
+}

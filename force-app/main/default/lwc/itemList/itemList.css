@@ -1,0 +1,54 @@
+.tile {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+.tile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+}
+
+.commodity,
+.quantity {
+    display: flex;
+    flex-direction: column;
+}
+
+.commodity-label,
+.quantity-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.input-value {
+    margin-right: 10px;
+}
+
+.badge {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.tile .slds-spinner_container {
+    position: revert;
+}
+
+.tile .slds-spinner {
+    position: revert;
+}
