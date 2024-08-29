@@ -33,7 +33,7 @@ public class ReverseGeo_Coordinates  {
         //String key='AIzaSyA1LzmP-MEyPNoOelRYwzZrLTf8bDn7ogU';
         
         //Map Plotter Key (Working)
-        String key = 'AIzaSyCuWLezbnyCuIUslh6xk32QPp7aDtpAiUM';
+        String key = 'GoogleAPIKeyHere';
         Http httpProtocol = new Http();
         // Create HTTP request to send.
         HttpRequest request = new HttpRequest();
